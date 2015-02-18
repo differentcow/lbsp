@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"    
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.lbsp.promotion.core.dao.TaskQueueDao">
+
+    <select id="getTaskQueueList" resultType="TaskQueueRsp">
+      select q.*,t.class_name as class_name,t.name as task_content
+      from task_queue q inner join task t on t.id = q.task_class
+      where 1=1
+        <if test="tq.task_name != null and tq.task_name != ''">
+            and q.task_name like "%"#{tq.task_name}"%"
+        </if>
+        <if test="tq.name != null and tq.name != ''">
+            and t.name like "%"#{tq.name}"%"
+        </if>
+        <if test="tq.start_date != null">
+            and q.last_update_date &gt;= #{tq.start_date}
+        </if>
+        <if test="tq.end_date != null">
+            and q.last_update_date &lt;= #{tq.end_date}
+        </if>
+        order by q.last_update_date desc
+        <if test="tq.start != null and tq.size != null">
+            limit #{tq.start},#{tq.size}
+        </if>
+     </select>
+
+    <select id="getTaskQueueListCount" resultType="Integer">
+        select count(distinct q.id)
+        from task_queue q inner join task t on t.id = q.task_class
+        where 1=1
+        <if test="tq.task_name != null and tq.task_name != ''">
+            and q.task_name like "%"#{tq.task_name}"%"
+        </if>
+        <if test="tq.name != null and tq.name != ''">
+            and t.name like "%"#{tq.name}"%"
+        </if>
+        <if test="tq.start_date != null">
+            and q.last_update_date &gt;= #{tq.start_date}
+        </if>
+        <if test="tq.end_date != null">
+            and q.last_update_date &lt;= #{tq.end_date}
+        </if>
+        order by q.last_update_date desc
+        <if test="tq.start != null and tq.size != null">
+            limit #{tq.start},#{tq.size}
+        </if>
+    </select>
+
+</mapper> 

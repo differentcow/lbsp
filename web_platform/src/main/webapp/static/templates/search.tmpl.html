@@ -1,0 +1,29 @@
+<!-- Modal -->
+<div class="modal fade"  data-bind="attr:{id:id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel" data-bind="text:title"></h4>
+            </div>
+            <div class="modal-body">
+                <label class="control-label" data-bind="text:conditionLabel"></label>
+                <div class="has-feedback">
+                <input type="text" class="form-control" data-bind="value:condition">
+                <span class="fa fa-search form-control-feedback form-control-icon" data-bind="click:search"></span>
+                </div>
+                <div data-bind="visible:searchLoading" style="display: none">
+
+                    查询中...
+
+                </div>
+                <div class="list-group" data-bind="foreach:results">
+
+                        <a  data-bind="text:name,attr:{id:id},click:function(){ $parent.afterSelected($element)}"  class="list-group-item"> </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

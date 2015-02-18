@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <title>系统功能</title>
+    <link href="../../static/shared/adex/css/style.css" rel="stylesheet">
+    <link href="../../static/shared/adex/css/style-responsive.css" rel="stylesheet">
+    <link href="../../static/css/mid-doc.css" rel="stylesheet">
+    <link href="../../static/css/input-select.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../../static/shared/adex/js/html5shiv.js"></script>
+    <script src="../../static/shared/adex/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="panel">
+    <div class="panel-heading" style="background-color: #65CEA7;color: #ffffff;">
+        <h3 class="panel-title">
+            <i class="fa fa-circle-o"></i>
+            参数设置
+        </h3>
+    </div>
+    <div class="panel-body">
+        <legend>参数信息</legend>
+        </section>
+        <form class="form-horizontal" id="editParam" method="post">
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span>参数名称：</label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="name" name="name" data-bind="value: paramView.name" class="form-control" type="text" maxlength="30" autofocus required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span>参数编码：</label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="code" name="code" data-bind="value: paramView.code" class="form-control" type="text" maxlength="20" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label">类型编辑方式</label>
+                <div class="col-sm-4 col-sm-6 col-lg-4">
+                    <select class="form-control" name="editway"
+                            data-bind="click:function(){typeWay(paramView.way())},options:wayOptions,optionsText:'text',optionsValue:'val',value: paramView.way"></select>
+                </div>
+            </div>
+            <div class="form-group" data-bind="visible:viewSelect()">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span> 参数类型</label>
+                <div class="col-sm-4 col-sm-6 col-lg-4">
+                    <select class="form-control" name="type" style="cursor: pointer;"
+                            data-bind="options:typeOptions,optionsText:'text',optionsValue:'val',value: paramView.type"></select>
+                </div>
+            </div>
+            <div class="form-group" data-bind="visible:viewEdit()">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span>类型编码：</label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input name="type_code" id="type_code" data-bind="event:{blur:autoCompleteCodeText},value: paramView.type_code" class="form-control" type="text" maxlength="30">
+                </div>
+            </div>
+            <div class="form-group" data-bind="visible:viewTextEdit()">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span>类型名称：</label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input name="type_meaning" id="type_meaning" data-bind="value: paramView.type_meaning" class="form-control" type="text" maxlength="30">
+                </div>
+            </div>
+            <div clss="form-group">
+                <div class="col-sm-offset-2 col-lg-offset-2 col-md-offset-2">
+                    <button type="submit" data-bind="visible:!isEdit() && canAdd()" class="btn btn-default" id="add">&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;</button>
+                    <button type="submit" data-bind="visible:isEdit() && canEdit()" class="btn btn-default" id="edit">&nbsp;&nbsp;编&nbsp;&nbsp;辑&nbsp;&nbsp;</button>
+                    <button type="button" class="btn btn-default" id="goback">返回列表</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="../../static/shared/js/require.js"></script>
+<script type="text/javascript" src="../../static/config.js"></script>
+<script type="application/javascript" src="../../static/js/viewmodels/sysadmin/param/paramViewModel.js"></script>
+</body>
+</html>

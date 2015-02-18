@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <!-- <link rel="shortcut icon" href="#" type="image/png"> -->
+    <title>系统功能</title>
+    <link href="../../static/shared/adex/css/style.css" rel="stylesheet">
+    <link href="../../static/shared/adex/css/style-responsive.css" rel="stylesheet">
+    <link href="../../static/css/mid-doc.css" rel="stylesheet">
+    <link href="../../static/shared/js/data-tables/DT_bootstrap.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="panel">
+    <div class="panel-heading" style="background-color: #65CEA7;color: #ffffff;">
+        <h3 class="panel-title">
+            <i class="fa fa-circle-o"></i>
+            任务列表
+        </h3>
+    </div>
+    <div class="panel-body">
+        <form id="theForm" class="form-horizontal" method="post">
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-1 col-xs-3 control-label">任务名称:</label>
+                <div class="col-sm-3  col-lg-3 col-xs-3 col-md-3">
+                	<input id="task_name" data-bind="value: task_name" class="form-control" type="text" maxlength="30">
+                </div>
+                <label class="col-sm-2 col-md-2 col-lg-1 col-xs-3 control-label">状态:</label>
+                <div class="col-sm-3  col-lg-3 col-xs-3 col-md-3">
+                    <select id="task_status" class="form-control" name="task_status" style="cursor: pointer;"
+                            data-bind="options:statusOptions,optionsText:'name',optionsValue:'code',value: task_status,optionsCaption: '-选择-'"></select>
+                </div>
+                <div class="col-sm-1 col-lg-1 col-md-1 col-xs-1">
+                    <button id="search" class="btn btn-default" type="button">查询</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-1 col-lg-1 col-md-1 col-xs-1" data-bind="visible:canAdd()">
+                    <button id="add" class="btn btn-default" type="button">添加工作任务</button>
+                </div>
+            </div>
+        </form>
+        <div class="adv-table">
+            <table class="display table table-bordered table-striped" id="dynamic-table">
+                <thead>
+                <tr>
+                    <th width="20%">任务名称</th>
+                    <th width="20%">工作内容</th>
+                    <th width="15%">状态</th>
+                    <th width="20%">执行策略</th>
+                    <th width="25%">操作</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 460px;">
+        <div class="modal-content">
+            <div class="modal-header"  style="background-color: #424F63;color: #ffffff">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="warnModalLabel">&nbsp;&nbsp;警&nbsp;&nbsp;告&nbsp;&nbsp;</h4>
+                <h4 class="modal-title" id="editModalLabel" style="display: none;">任务信息</h4>
+            </div>
+            <div class="modal-body" id="warnModal">
+                确定要删除该任务吗？
+            </div>
+            <div class="modal-body" id="editModal" style="height:220px;display: none;">
+                <form id="editForm" class="form-horizontal" method="post">
+                    <div class="form-group" data-bind="visible:isAdd()">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">任务名称：</label>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <input id="add_task_name" data-bind="value: add_task_name" class="form-control" type="text" maxlength="30">
+                        </div>
+                    </div>
+                    <div class="form-group" data-bind="visible:isEdit()">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">任务名称：</label>
+                        <div class="col-sm-8 col-md-8 col-lg-8 form-control-static" data-bind="text:add_task_name"> </div>
+                    </div>
+                    <div class="form-group" data-bind="visible:isAdd()">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">工作内容：</label>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <select id="task_class" class="form-control" name="task_class" style="cursor: pointer;"
+                                    data-bind="options:contextOptions,optionsText:'name',optionsValue:'id',value: task_class"></select>
+                        </div>
+                    </div>
+                    <div class="form-group" data-bind="visible:isEdit()">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">工作内容：</label>
+                        <div class="col-sm-8 col-md-8 col-lg-8 form-control-static" data-bind="text:task_content"> </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">时间策略：</label>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <select id="cron_choose" class="form-control" name="cron_choose" style="cursor: pointer;"
+                                    data-bind="event:{'change':chooseCron},options:cronOptions,optionsText:'name',optionsValue:'code',value: cron_choose"></select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="point" data-bind="visible:pointShow()">
+                        <div style="width: 95%;padding-left: 50px;margin-top: 10px;">
+                            <span id="mon">周一</span><input type="checkbox" name="date_choose" text="mon" value="2"/>&nbsp;&nbsp;
+                            <span id="tue">周二</span><input type="checkbox" name="date_choose" text="tue" value="3" />&nbsp;&nbsp;
+                            <span id="wed">周三</span><input type="checkbox" name="date_choose" text="wed" value="4" />&nbsp;&nbsp;
+                            <span id="thurs">周四</span><input type="checkbox" name="date_choose" text="thurs" value="5" />&nbsp;&nbsp;
+                            <span id="fri">周五</span><input type="checkbox" name="date_choose" text="fri" value="6" />&nbsp;&nbsp;
+                            <span id="sat">周六</span><input type="checkbox" name="date_choose" text="sat" value="7" />&nbsp;&nbsp;
+                            <span id="sun">周日</span><input type="checkbox" name="date_choose" text="sun" value="1" />
+                        </div>
+                        <div style="width: 95%;padding-left: 50px;margin-top: 10px;">
+                            <select id="hour" name="hour" style="cursor: pointer;width: 50px;"
+                                    data-bind="options:hourOptions,optionsText:'name',optionsValue:'code',value: hour_choose"></select>时
+                            <select id="min" name="min" style="cursor: pointer;width: 50px;"
+                                    data-bind="options:minOptions,optionsText:'name',optionsValue:'code',value: min_choose"></select>分
+                            <select id="sec" name="sec" style="cursor: pointer;width: 50px;"
+                                    data-bind="options:secOptions,optionsText:'name',optionsValue:'code',value: sec_choose"></select>秒
+                        </div>
+                    </div>
+                    <div class="form-group" id="period" data-bind="visible:periodShow()">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">时间相隔：</label>
+                        <div class="col-sm-8 col-md-8 col-lg-8 form-control-static">
+                            <input id="period_time" data-bind="value: period_time" style="width: 80px;" type="text" maxlength="5">
+                            <select id="unit" name="unit" style="cursor: pointer;width: 50px;" data-bind="options:unitOptions,optionsText:'name',optionsValue:'code',value: unit_choose"></select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="customer" data-bind="visible:customerShow()">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">Cron表达式：</label>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <input id="cron_expression" data-bind="value: cron_expression" class="form-control" placeholder="Cron Expression" type="text" maxlength="30">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="sure_btn">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--common scripts for all pages-->
+<script type="text/javascript" src="../../static/shared/js/require.js"></script>
+<script type="text/javascript" src="../../static/config.js"></script>
+<script type="text/javascript" src="../../static/js/viewmodels/sysadmin/task/taskListViewModel.js"></script>
+</body>
+</html>

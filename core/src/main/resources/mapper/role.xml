@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"    
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.lbsp.promotion.core.dao.RoleDao">
+	<select id="getRolesByUserId" resultType="Role">
+        select r.*
+        from user_role ur inner join role r on r.id = ur.role_id
+        where ur.user_id = #{userId}
+	</select>
+	
+	<select id="getRoleById" resultType="Role">
+        select r.*
+        from role r
+        where r.id = #{id}
+	</select>
+	
+	<select id="getAllRoles" resultType="Role">
+        select r.*
+        from role r
+	</select>
+	
+	<select id="getParentRoles" resultType="Role">
+	    select r.* from role r inner join role_parent p on r.id=p.parent_id
+	    where p.child_id=#{childId} 
+	</select>
+	
+	<select id="ifRoleIsParent" resultType="Role">
+	    select r.* from role r inner join role_parent rp on r.id=rp.child_id
+	    where rp.parent_id=#{roleId}
+	</select>
+	
+	<select id="getAllUsers" resultType="User">
+        select u.*
+        from user u
+	</select>
+	
+	<select id="getUserByRoleId" resultType="User">
+        select u.* from user u inner join user_role ur on u.id=ur.user_id
+	    where ur.role_id=#{roleId}
+	</select>
+	
+    <delete id="delRoleParentOfRole">
+	    delete from role_parent where child_id=#{roleId}
+	</delete>
+	
+	<delete id="delRoleParent">
+	    delete from role_parent where child_id=#{childId} and parent_id=#{parentId}
+	</delete>
+	
+	<insert id="addRoleParent">
+	    insert into role_parent(child_id,parent_id,create_date,operator)
+        values(#{childId},#{parentId},#{now},#{operatorId})
+	</insert>
+		
+	<delete id="delUserRole">
+	    delete from user_role where user_id=#{userId}
+	</delete>
+	
+	<delete id="delUserRoleOfRole">
+	    delete from user_role where role_id=#{roleId}
+	</delete>
+	
+	<delete id="delUserRoleByURId">
+	    delete from user_role where user_id=#{userId} and role_id=#{roleId}
+	</delete>
+	
+	<insert id="addUserRole">
+	    insert into user_role(user_id,role_id,create_date,operator)
+        values(#{userId},#{roleId},#{now},#{operatorId})
+	</insert>
+	
+	<delete id="delRoleOperOfRole">
+	    delete from role_oper where role_id=#{roleId}
+	</delete>
+	
+	<delete id="delRoleOper">
+	    delete from role_oper where role_id=#{roleId} and oper_id=#{operId}
+	</delete>
+	
+	<delete id="delRoleOperOfOperator">
+	    delete from role_oper where role_id=#{roleId} and operator=#{operatorId}
+	</delete>
+	
+	<insert id="addRoleOper">
+	    insert into role_oper(role_id,oper_id,create_date,operator)
+        values(#{roleId},#{operId},#{now},#{operatorId})
+	</insert>
+</mapper> 

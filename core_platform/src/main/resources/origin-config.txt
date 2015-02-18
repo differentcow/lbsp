@@ -1,0 +1,40 @@
+{
+"code":200,
+"config":[
+    {
+        "name":"barry",
+        "password":"123456",
+        "email":"different_cow@163.com"
+    },
+    {
+        "name":"jare",
+        "password":"123456",
+        "email":"178632902@qq.com"
+    },
+    {
+        "name":"hunter",
+        "password":"123456",
+        "email":"kingshunter@foxmail.com"
+    },
+    {
+        "name":"shencongyu",
+        "password":"123456",
+        "email":"372620726@qq.com"
+    },
+    {
+        "name":"deedeemix",
+        "password":"123456",
+        "email":"526078177@qq.com"
+    },
+    {
+        "name":"guisi",
+        "password":"123456",
+        "email":"13578010@qq.com"
+    },
+    {
+        "name":"firefly",
+        "password":"123456",
+        "email":"370034574@qq.com"
+    }
+    ]
+}

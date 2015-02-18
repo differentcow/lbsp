@@ -1,0 +1,40 @@
+.nav-btn {
+    height: 50px;
+    font-size: 16px;
+    padding: 15px;
+    cursor: pointer;
+    float: left;
+    color: #eeeeee;
+    -moz-transition: all 0.2s ease-out 0s;
+    -webkit-transition: all 0.2s ease-out 0s;
+    transition: all 0.2s ease-out 0s;
+    font-weight: bold;
+}
+
+.nav-btn:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav-bar  {
+	border-top: 1px solid #eeeeee;
+	background-color: #ffffff;
+}
+.nav-bar .nav-tabs {
+	height: 42px;
+}
+.nav-bar .panel-body{
+	padding: 0px;
+}
+
+.dataTables_paginate.paging_bootstrap.pagination li a {
+    padding: 3px 10px;
+}
+
+.adv-table table tr td {
+    padding: 6px 3px;
+}
+
+.adv-table table.display thead th {
+    padding: 6px 3px;
+}

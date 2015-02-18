@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"    
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.lbsp.promotion.core.dao.PrivilegeDao">
+
+    <select id="findOperateByFilter" resultType="OperateResource">
+        select t.*
+        from privilege p inner join
+        <if test="access == 'page'.toString()">
+            page_operate t on t.id = p.privilege_access_value
+        </if>
+        <if test="access == 'function'.toString()">
+            function_operate t on t.id = p.privilege_access_value
+        </if>
+        where
+        p.privilege_operation = #{operate}
+        and p.privilege_master = #{master}
+        and p.privilege_master_value in
+        <foreach collection="masterValues" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by p.last_update_date desc
+    </select>
+
+</mapper> 

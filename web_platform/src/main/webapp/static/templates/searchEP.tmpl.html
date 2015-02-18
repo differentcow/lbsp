@@ -1,0 +1,60 @@
+<!-- Modal -->
+<div class="modal fade" data-bind="attr:{id:id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"  data-bind="text:title"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-10 col-sm-10 col-lg-10">
+                    <div class="row">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label pull-left">所在地区：</label>
+
+                        <div class="col-sm-9 col-md-9 col-lg-9">
+                            <div class="col-sm-4 col-md-4 col-lg-4" style="padding-left: 0px;padding-right: 0px;">
+                                <select class="form-control" name="province"
+                                        data-bind="options:provinceOptions,optionsText:'name',optionsValue:'id',value: province,optionsCaption: '-选择-'"></select>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4" style="padding-left: 0px;padding-right: 0px;">
+                                <select class="form-control" name="city"
+                                        data-bind="options:cityOptions,optionsText:'name',optionsValue:'id',value: city,optionsCaption: '-选择-'"></select>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4" style="padding-left: 0px;padding-right: 0px;">
+                                <select class="form-control" name="area"
+                                        data-bind="options:areaOptions,optionsText:'name',optionsValue:'id',value: area,optionsCaption: '-选择-'"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3 col-md-3 col-lg-3 control-label">企业名称：</label>
+
+                        <div class="col-sm-9 col-md-9 col-lg-9">
+                            <input type="text" class="form-control" data-bind="value:name">
+                        </div>
+                    </div>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-lg-2">
+                            <button class="btn btn-success" type="button" data-bind="click:search"><i class="fa fa-search" ></i>查找</button>
+                        </div>
+                    </div>
+                </form>
+                <div data-bind="visible:searchLoading" style="display: none">
+
+                    查询中...
+
+                </div>
+                <div class="list-group" data-bind="foreach:results">
+
+                    <a data-bind="text:zh_name,attr:{id:id},click:function(){ $parent.afterSelected($element)}"
+                       class="list-group-item"> </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"    
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.lbsp.promotion.core.dao.GenericDao">
+	<insert id="insert" parameterType="BaseInsertEntity">
+		insert into ${table}(${keys})
+		values(${values})
+	</insert>
+	<update id="update" parameterType="BaseUpdateEntity">
+		update ${table} set ${kvs}
+		where ${where}
+	</update>
+	<update id="delete" parameterType="BaseDeleteEntity">
+		delete from ${table} where
+		${where}
+	</update>
+	<select id="selectCount" resultType="int" parameterType="BaseComplexEntity">
+		select count(1) from ${table}
+		<if test="where != null and where != ''">
+        	<![CDATA[where ${where}]]>
+		</if>
+	</select>
+	<select id="selectOneByFields" parameterType="BaseFindFieldsEntity"
+		resultType="map">
+		select ${fields} from ${table} where ${where}
+	</select>
+	<select id="selectListByFields" resultType="map">
+		select ${entity.fields} from ${entity.table}
+		<if test="entity.where != null and entity.where != ''">
+        	<![CDATA[ where ${entity.where}]]>
+		</if>
+		<if test="entity.orderBy != null and entity.orderBy != ''">
+			order by ${entity.orderBy}
+		</if>
+		<if test="entity.rowBounds!=null and entity.rowBounds != ''">
+			limit ${entity.rowBounds.offset},${entity.rowBounds.limit}
+		</if>
+	</select>
+	<insert id="insertAll" parameterType="BaseInsertAllEntity">
+	    insert into ${table}(${key}) values
+	    <foreach collection="values" separator="," open=" " close=" " item="item">
+			(${item})
+	    </foreach>
+	</insert>
+</mapper> 

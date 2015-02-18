@@ -1,0 +1,54 @@
+
+<html>
+<head>
+	<script type="text/javascript">	
+		var XMLHttpReq;  
+		function createXMLHttpRequest() {  
+			try {  
+				XMLHttpReq = new ActiveXObject("Msxml2.XMLHTTP");
+			}  
+			catch(E) {  
+				try {  
+					XMLHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+				}  
+				catch(E) {  
+					XMLHttpReq = new XMLHttpRequest();
+				}  
+			}  
+		  
+		}  
+		alert(121);
+		function sendAjaxRequest(url) {  
+			createXMLHttpRequest();
+			XMLHttpReq.open("post", url, true);  
+			XMLHttpReq.onreadystatechange = processResponse;
+			XMLHttpReq.send(null);  
+		}  
+		alert(120);
+		function processResponse() {  
+			if (XMLHttpReq.readyState == 4) {  
+				if (XMLHttpReq.status == 200) {  
+					var text = XMLHttpReq.responseText;  
+					alert(text);
+					
+					var cp = document.getElementById("ip_text");  
+					cp.value = text;  
+					
+				}  
+			}  
+		  
+		}
+		alert(124);
+		function demoTest(){
+			alert(123);
+			var _url = 'http://127.0.0.1:8085/demo/ip';
+			setInterval(function(){sendAjaxRequest(_url)},1000);
+		}
+	</script>
+</head>
+<body onload="demoTest()" >
+
+IP:<input type="text" id="ip_text" value="" />
+
+</body>
+</html>

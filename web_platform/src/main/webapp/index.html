@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>LBS Promotion管理平台</title>
+    <link href="./static/shared/adex/css/style.css" rel="stylesheet">
+    <link href="./static/shared/adex/css/style-responsive.css" rel="stylesheet">
+    <link href="./static/css/style.css" rel="stylesheet">
+    <link href="./static/shared/js/gritter/css/jquery.gritter.css" rel="stylesheet">
+    <link href="./static/shared/js/morris-chart/morris.css" rel="stylesheet"/>
+    <style type="text/css">
+     .index-panel-heading{
+         padding:10px 15px;
+         border-bottom:1px solid transparent;
+         border-top-left-radius:
+         3px;border-top-right-radius:3px;
+     }
+     .panel-index > .index-panel-heading{
+         border-color: #55BB99;
+         background-color: #65CEA7;
+         color: #FFFFFF;
+     }
+     .alert-index{
+         background-color: #65CEA7;
+         /* border-color: #55BB99; */
+         color: #FFFFFF;
+     }
+     .index-loading{
+         width:160px;
+         height:56px;
+         position: absolute;
+         top:50%;
+         left:50%;
+         line-height:56px;
+         color:#fff;
+         padding-left:60px;
+         font-size:15px;
+         background: #000 url(static/images/loading.gif) no-repeat 10px 50%;
+         opacity: 0.7;
+         z-index:9999;
+         -moz-border-radius:20px;
+         -webkit-border-radius:20px;
+         border-radius:20px;
+         filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+     }
+    </style>
+
+</head>
+<body class="sticky-header">
+
+<!-- left side start-->
+<div class="left-side sticky-left-side">
+
+    <!--logo and iconic logo start-->
+    <div class="logo">
+        <a href="index.html" style="margin-top: 8px;"><p style="font-size: 20px;;font-family: 'Open Sans', '微软雅黑', sans-serif;color: #cccccc;">LBS Promotion管理平台</p></a>
+    </div>
+
+    <div class="logo-icon text-center">
+        <a href="index.html"><img src="static/images/pic_logo_s.gif" alt=""></a>
+    </div>
+    <!--logo and iconic logo end-->
+
+    <div class="left-side-inner">
+        <!--sidebar nav start-->
+        <ul class="nav nav-pills nav-stacked custom-nav">
+            <!-- ko foreach: userMenus -->
+            <!-- ko if:subfunctions&&subfunctions().length>0 -->
+            <li class="menu-list">
+            	<a data-bind="click:function(){$parent.menuListClick($element)}" href="javascript:void(0)"><i class="fa" data-bind="css:icon"></i>
+                	<span data-bind="text:name"></span>
+                </a>
+                <ul class="sub-menu-list">
+                    <!-- ko foreach: subfunctions -->
+                    <li>
+                    	<a data-bind="click:function(){$root.menuClick($parent,$data)},text:name" href="javascript:void(0)"></a>
+                    </li>
+                    <!--/ko-->
+                </ul>
+            </li>
+            <!-- /ko -->
+            <!--/ko-->
+        </ul>
+        <!--sidebar nav end-->
+
+    </div>
+</div>
+<!-- left side end-->
+
+<!-- main content start-->
+<div class="main-content">
+
+<!-- header section start-->
+<div class="header-section">
+
+    <!--toggle button start
+    <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+    toggle button end-->
+    <!--notification menu start -->
+    <div class="menu-right">
+        <ul class="notification-menu">
+            <li>
+                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <!-- ko with:user -->
+                    <span id="switch_language">语言</span>
+                    <span class="caret"></span>
+                    <!-- /ko -->
+                </a>
+                <ul class="dropdown-menu dropdown-menu-usermenu pull-right" style="border:1px solid #55BB99;">
+                    <li><a href="#" data-bind="click:function(){changeLocale('zh_CN')}"><i class="fa fa-square"></i>简体中文</a>
+                    </li>
+                    <li><a href="#" data-bind="click:function(){changeLocale('en_US')}"><i class="fa fa-square"></i>English</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <!-- ko with:user -->
+                    <span data-bind="text:user.username"></span>
+                    <span class="caret"></span>
+                    <!-- /ko -->
+                </a>
+                <ul class="dropdown-menu dropdown-menu-usermenu pull-right" style="border:1px solid #55BB99;">
+                    <li><a href="personal/info.html" data-bind="click:showProfile"><i class="fa fa-user"></i><span id="modify_account">修改个人资料</span></a>
+                    </li>
+                    <li><a href="service/logout"><i class="fa fa-sign-out"></i><span id="login_out">注销</span></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!--notification menu end -->
+</div>
+<!-- header section end-->
+
+<!--body wrapper start-->
+<div class="wrapper">
+<div class="nav-bar" style="z-index:1000">
+    <div>
+        <section>
+            <header>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#home" data-toggle="tab">
+                            <i class="fa fa-home"></i>
+                            &nbsp;&nbsp;<span id="my_index">我的主页</span>&nbsp;&nbsp;
+                            <i class="fa fa-lock"></i>
+                        </a>
+                    </li>
+                    <!-- ko foreach: iframes -->
+                    <li>
+                        <a data-bind="attr:{href:ahref}" data-toggle="tab">
+                            <i data-bind="css:aicon"></i>
+                            &nbsp;&nbsp;<span data-bind="text:name"></span>&nbsp;&nbsp;
+                            <i class="fa fa-times" style="cursor: pointer" data-bind="click:$parent.closeIframe"></i>
+                        </a>
+                    </li>
+                    <!-- /ko -->
+                </ul>
+            </header>
+        </section>
+    </div>
+</div>
+
+<div class="tab-content" style="padding: 10px 0px 0px 0px;;">
+<div class="tab-pane active" id="home">
+    <div class="panel" style="min-height: 635px;">
+        <div class="panel-body" style="padding: 25px;">
+            <div class="alert alert-index">
+                <!-- ko with:user --> <span id="hello">您好</span>，
+                <span data-bind="text:user.username"></span>，
+                <!-- /ko -->
+                <span id="today_is">今天是</span>&nbsp;<span data-bind="text:currentDate"></span>
+            </div>
+            <div class="container-fluid" style="margin-top: 15px;">
+                <div id="loading" class="index-loading">加载中...</div>
+                <div id="portlet-content" class="row" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ko foreach: iframes -->
+<div class="tab-pane" data-bind="attr:{id:id}">
+    <iframe data-bind="attr:{name:id,src:src}" scrolling="no"></iframe>
+</div>
+<!-- /ko -->
+</div>
+
+</div>
+<!--body wrapper end-->
+</div>
+
+<!--footer section start-->
+<footer>
+    <span id="right_of">版权所有 © 2003-2015 广州市冲冲冲有限公司，并保留所有权利.</span>
+</footer>
+<!--footer section end-->
+<!-- Placed js at the end of the document so the pages load faster -->
+<script type="text/javascript" src="./static/shared/js/require.js"></script>
+<script type="text/javascript" src="./static/config.js"></script>
+<script type="text/javascript" src="./static/js/viewmodels/indexViewModel.js"></script>
+</body>
+</html>

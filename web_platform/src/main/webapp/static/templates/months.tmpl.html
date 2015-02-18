@@ -1,0 +1,22 @@
+
+
+
+<ul class="list-inline">
+    <li>
+        <button class="btn btn-default" type="button" data-bind="disable: older_disabled, click: clickOlder">&lt;</button>
+    </li>
+    <li>
+        <div class="btn-group" data-bind="foreach: month_chooses">
+            <button class="btn btn-default" type="button" data-bind="text: text, attr: {disabled: disabled}, click: $parent.clickMonth">
+                <!-- 绑定数据 -->
+            </button>
+        </div>
+    </li>
+    <li>
+        <button class="btn btn-default" type="button" data-bind="disable: newer_disabled, click: clickNewer">&gt;</button>
+    </li>
+    <li class="pull-right">
+        <h4 data-bind="text:currentMonth"></h4>
+    </li>
+</ul>
+
