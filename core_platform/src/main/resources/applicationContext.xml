@@ -27,12 +27,6 @@
                     <property name="excludes">
                         <list>
                             <value>/user/login</value>
-                            <value>/userInfo/old</value>
-                            <value>/userInfo/repeatAuth</value>
-                            <value>/userInfo/auth</value>
-                            <value>/userInfo/isAuthing</value>
-                            <value>/interApp/all</value>
-                            <value>/interLink/all</value>
                             <value>/param/types</value>
                             <value>/task/tasks</value>
                         </list>
