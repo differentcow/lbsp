@@ -21,7 +21,7 @@
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
         <!-- property name="defaultLocale" value="en"/> -->
     </bean>
-	
+
 	<bean class="com.lbsp.promotion.util.http.request.HttpRequestFactory">
 		<property name="url" value="${httpclient.url}"></property>
 	</bean>

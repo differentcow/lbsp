@@ -1,9 +1,16 @@
 /**
  * Created by Barry on 6/15/2014.
  */
-requirejs(['jquery', 'knockout', 'knockout-mapping','moment','userService','paramsService','commonUtil', 'gritter', 'amplify', 'scripts','moment_locale','morris'], function ($, ko, mapping,moment ,userService,paramsService,util) {
+requirejs(['jquery', 'knockout', 'knockout-mapping','moment','userService',
+    'paramsService','commonUtil', 'gritter', 'amplify', 'scripts',
+    'moment_locale','morris'],
+    function ($, ko, mapping,moment ,userService,paramsService,util) {
+
   var IndexViewModel = function () {
     var self = this;
+    this.sys_info;
+    this.pwd_sure;
+    this.personal_sure;
     this.userFunctions = ko.observableArray([]);
     this.userMenus = ko.observableArray([]);
     this.iframes = ko.observableArray([]);
@@ -22,12 +29,12 @@ requirejs(['jquery', 'knockout', 'knockout-mapping','moment','userService','para
 
     this.refreshHome = function(type,params){
         if(type == 'pwd'){
-            amplify.publish('status.alerts','系统信息','修改密码成功.');
+            amplify.publish('status.alerts',self.sys_info,self.pwd_sure);
             $('a[href=#home]').tab('show');
         }else if(type == 'account'){
             self.user().user.username(params.username);
             self.user().user.email(params.email);
-            amplify.publish('status.alerts','系统信息','账户资料修改成功.');
+            amplify.publish('status.alerts',self.sys_info,self.personal_sure);
             $('a[href=#home]').tab('show');
         }else{
             location.href = All580.serverName;
@@ -48,7 +55,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping','moment','userService','para
         return self.userFunctions.indexOf(needAuth)!=-1;
       }
 
-    }
+    };
 
     this.loadedI18nFinished = ko.observable(false);
     this.seti18nText = function(){
@@ -60,7 +67,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping','moment','userService','para
         $('#my_index').text(self.getI18nMessage('my.index.header'));
         $('#hello').text(self.getI18nMessage('my.index.text.hello'));
         $('#today_is').text(self.getI18nMessage('my.index.text.today.is'));
-        $('#right_of').text(self.getI18nMessage('my.index.text.right.of'));
+        $('#right_of').text(self.getI18nMessage('my.index.text.right.of',[new Date().getYear()]));
     };
     //加载配置文件
     this.i18n = function(){
@@ -80,6 +87,9 @@ requirejs(['jquery', 'knockout', 'knockout-mapping','moment','userService','para
 
                 util.loadI18n(locale,function(){
                     self.seti18nText();
+                    self.sys_info = self.getI18nMessage('common.sys.info');
+                    self.pwd_sure = self.getI18nMessage('password.modify.success');
+                    self.personal_sure = self.getI18nMessage('personal.modify.success');
                     return self.loadedI18nFinished(true);
                 });
             } else {

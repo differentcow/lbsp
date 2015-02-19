@@ -1,4 +1,5 @@
-requirejs(['jquery','knockout','loginService','commonUtil',"jquery-validate","jquery-cookie",'commonUtil'],function($,ko,loginService,util){
+requirejs(['jquery','knockout','loginService','commonUtil',"jquery-validate",
+    "jquery-cookie",'commonUtil'],function($,ko,loginService,util){
 
 
   var LoginViewModel = function(){
@@ -10,13 +11,47 @@ requirejs(['jquery','knockout','loginService','commonUtil',"jquery-validate","jq
     this.validateCode = ko.observable('');
     this.rememberPWD = ko.observable(false);
     this.expiryTime={};
+    this.check_pwd = '';
+    this.check_account = '';
+    this.check_min = '';
+    this.check_code = '';
+    this.text_account = '';
+    this.text_pwd = '';
+    this.text_code = '';
+      /*this.server_account = '';
+      this.server_code = '';
+      this.server_certify = '';
+      this.server_pwd = '';
+      this.server_post = '';*/
     this.loadValidateCode = function(){
       $('#validateCodeSrc > img').attr('src','../service/validateCode/generate?jsessionId='+Math.random())
     };
-//加载配置文件
-      this.i18n = function(){
-          util.loadI18n('',null);
-      }
+
+    //加载配置文件
+    this.i18n = function(){
+        util.loadI18n('',null);
+        self.text_account = $.i18n.prop('login.account');
+        self.text_pwd = $.i18n.prop('login.password');
+        self.text_code = $.i18n.prop('login.auth.code');
+        self.check_account = $.i18n.prop('login.check.username');
+        self.check_pwd = $.i18n.prop('login.check.password');
+        self.check_min = $.i18n.prop('login.check.password.minlength',[3]);
+        self.check_code = $.i18n.prop('login.check.validateCode');
+        /*self.server_account = $.i18n.prop('login.error.account.null');
+        self.server_code = $.i18n.prop('login.error.valid.code');
+        self.server_certify = $.i18n.prop('login.error.certify');
+        self.server_post = $.i18n.prop('login.error.post');
+        self.server_pwd = $.i18n.prop('login.error.password.null');*/
+        $('title,h3,span').each(function(){
+            var attr = $(this).attr('i18n');
+            if(attr !=null && attr != ''){
+                $(this).text($.i18n.prop(attr));
+            }
+        });
+        $('#userName').attr('placeholder',self.text_account);
+        $('#password').attr('placeholder',self.text_pwd);
+        $('#validateCode').attr('placeholder',self.text_code);
+    };
     this.setExpiryTime = ko.computed(function() {
       if (self.rememberPWD()) {
         self.expiryTime = {path: '/', expires: 14};
@@ -28,7 +63,8 @@ requirejs(['jquery','knockout','loginService','commonUtil',"jquery-validate","jq
     this.checkErrorMsg = ko.computed(function() {
       var error = util.getQueryString('error');
       if(error!=null){
-        self.error(error);
+        util.loadI18n('',null);
+        self.error($.i18n.prop(error));
         self.hasError(true);
       }
     });
@@ -90,12 +126,12 @@ requirejs(['jquery','knockout','loginService','commonUtil',"jquery-validate","jq
         }
       },
       messages: {
-        userName:  "请输入用户名",
+        userName:  loginViewModel.check_account,
         password: {
-          required: "请输入密码",
-          minlength: "密码最少为3位字符"
+          required: loginViewModel.check_pwd,
+          minlength: loginViewModel.check_min
         },
-        validateCode:  "请输入验证码"
+        validateCode: loginViewModel.check_code
       }
     });
   });

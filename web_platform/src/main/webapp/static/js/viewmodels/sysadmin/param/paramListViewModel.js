@@ -3,10 +3,16 @@
  */
 requirejs(['jquery','knockout','paramsService','commonUtil','amplify','DT-bootstrap','bootstrap'],
 		function($,ko,paramsService,util){
+            var sys_info = parent.app.getI18nMessage('common.sys.info');
+            var sys_error = parent.app.getI18nMessage('common.sys.error');
+            var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
+            var edit_ok = parent.app.getI18nMessage('common.sys.edit.text');
+            var edit_fail = parent.app.getI18nMessage('common.sys.edit.text');
+            var delete_tip = parent.app.getI18nMessage('param.delete.tip');
   var paramListViewModel = function() {
-
     var ep = this;
     this.paramView = new ParamView();
+    this.sel_text = ko.observable('-Select-');
     this.name = ko.observable('');
     this.code = ko.observable('');
     this.typeOptions = ko.observableArray([]);
@@ -34,8 +40,23 @@ requirejs(['jquery','knockout','paramsService','commonUtil','amplify','DT-bootst
         ep.canModify = true;
       }
     };
-
+      this.seti18nText = function(){
+          $('title,legend,label,span,div,th').each(function(){
+              var attr = $(this).attr('i18n');
+              if(attr !=null && attr != ''){
+                  $(this).text(parent.app.getI18nMessage(attr));
+              }
+          });
+          $('h4,button').each(function(){
+              var attr = $(this).attr('i18n');
+              if(attr !=null && attr != ''){
+                  $(this).html(parent.app.getI18nMessage(attr));
+              }
+          });
+      };
     this.init = function () {
+        ep.sel_text(parent.app.getI18nMessage("common.sys.select.text"));
+        ep.seti18nText();
         ep.initAuth();
         ep.loadTypeList();
     };
@@ -93,16 +114,16 @@ requirejs(['jquery','knockout','paramsService','commonUtil','amplify','DT-bootst
 		{ 	//创建时间
         	'sDefaultContent': '',
         	'fnRender': function (obj) {
-        		return All580.DPGlobal.formatDateTime(obj.aData.create_date, 'yyyy-MM-dd');
+        		return All580.DPGlobal.formatDateTime(obj.aData.create_date, 'yyyy-MM-dd HH:mm:ss');
         	}
 		},
 		{ 	//操作
         	'sDefaultContent': '',
         	'fnRender': function (obj) {
                 if(ep.canModify){
-                    return '<a href="edit.html?id=' + obj.aData.id + '&status=edit">编辑</a>';
+                    return '<a href="edit.html?id=' + obj.aData.id + '&status=edit">'+edit_ok+'</a>';
                 }else{
-                    return '不可编辑';
+                    return edit_fail;
                 }
             }
 		}
@@ -130,11 +151,11 @@ requirejs(['jquery','knockout','paramsService','commonUtil','amplify','DT-bootst
                   ep.params['has_count']=ep.has_count();
                   ep.datatable().fnDraw();
               }else{
-                  parent.amplify.publish('status.alerts','系统信息',response.msg);
+                  parent.amplify.publish('status.alerts',sys_info,submit_error);
                   console.log(response.msg);
               }
           }).fail(function (error) {
-              parent.amplify.publish('status.alerts','系统信息','删除参数失败');
+              parent.amplify.publish('status.alerts',sys_info,sys_error);
               console.log(error);
           });
       };
@@ -173,7 +194,7 @@ requirejs(['jquery','knockout','paramsService','commonUtil','amplify','DT-bootst
               }
           });
           if(ary.length <= 0){
-              parent.amplify.publish('status.alerts','删除参数失败','请选择要删除的数据');
+              parent.amplify.publish('status.alerts',sys_info,delete_tip);
               return;
           }
           epList.delIds(ary.toString());

@@ -1,7 +1,14 @@
 /**
  * Created by Barry on 6/16/2014.
  */
-requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUtil','amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers'], function ($, ko, mapping, paramsService, util) {
+requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUtil',
+    'amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers'],
+    function ($, ko, mapping, paramsService, util) {
+    var sys_info = parent.app.getI18nMessage('common.sys.info');
+    var sys_error = parent.app.getI18nMessage('common.sys.submit.fail');
+    var add_text = parent.app.getI18nMessage("common.sys.add.text");
+    var upt_text = parent.app.getI18nMessage("common.sys.upt.text");
+    var ok_text = parent.app.getI18nMessage("common.sys.success.text");
     var ParamViewModel = function () {
         var me = this;
         this.isEdit = ko.observable();
@@ -23,6 +30,17 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
           if (parent.app.checkAuth(me.editAuth)) {
             me.canEdit(true);
           }
+        };
+        this.seti18nText = function(){
+            $('title,legend,label,span').each(function(){
+                var attr = $(this).attr('i18n');
+                if(attr !=null && attr != ''){
+                    $(this).text(parent.app.getI18nMessage('param.'+attr));
+                }
+            });
+            $('#add').html(parent.app.getI18nMessage('common.btn.addBtn'));
+            $('#edit').html(parent.app.getI18nMessage('common.btn.editBtn'));
+            $('#goback').html(parent.app.getI18nMessage('common.btn.returnBtn'));
         };
         this.loadTypeList = function(){
             var deferred = paramsService.getParams(null);
@@ -46,9 +64,11 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
         };
 
         this.initTypeWay = function(){
+            var et = parent.app.getI18nMessage("param.type.had");
+            var ct = parent.app.getI18nMessage("param.type.customer");
             me.wayOptions([]);
-            me.wayOptions.push(new SelectModel('已有类型','had'));
-            me.wayOptions.push(new SelectModel('自定义类型','customer'));
+            me.wayOptions.push(new SelectModel(et,'had'));
+            me.wayOptions.push(new SelectModel(ct,'customer'));
             me.paramView.way('had');
         };
 
@@ -131,25 +151,25 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
           type:me.paramView.opType(),
           type_meaning:me.paramView.opText()
         };
-        var msg = '添加';
+        var msg = add_text;
         param_obj = mapping.toJSON(param_obj);
         var deferred = null;
         if(me.isEdit()){console.log(me.editParamId()+":id");
-            msg = '更新';
+            msg = upt_text;
             deferred = paramsService.modifyParam(param_obj, me.editParamId());
         }else{
             deferred = paramsService.addParam(param_obj);
         }
         $.when(deferred).done(function (response) {
           if(response.state.code==200000) {
-            console.log(msg + '成功');
+            console.log(msg + ok_text);
             me.backToList();
           }else{
-            parent.amplify.publish('status.alerts','系统信息',response.msg);
+            parent.amplify.publish('status.alerts',sys_info,sys_error);
             console.log(response.msg);
           }
         }).fail(function (error) {
-          parent.amplify.publish('status.alerts','系统信息',msg + '参数失败');
+          parent.amplify.publish('status.alerts',sys_info,msg + sys_error);
           console.log(error);
         });
       };
@@ -203,7 +223,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
               me.type_meaning(data.type_meaning);
             }
             if (typeof data.create_date != 'undefined') {
-              var date_str =  All580.DPGlobal.formatDateTime(data.create_date, 'yyyy-MM-dd');
+              var date_str =  All580.DPGlobal.formatDateTime(data.create_date, 'yyyy-MM-dd HH:mm:ss');
               me.create_date(date_str);
             }
             if (typeof data.description != 'undefined') {
@@ -213,7 +233,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
           }
         }
     };
-
+    var check_type_name = parent.app.getI18nMessage("param.type.name.not.null");
+    var check_type_code = parent.app.getI18nMessage("param.type.code.not.null");
     $.validator.addMethod("typeMeaning",function(value,element){
         if(paramViewModel.paramView.way() == 'customer'){
             if(value == null || value == ''){
@@ -221,7 +242,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
             }
         }
         return true;
-    },"类型名称不能为空");
+    },check_type_name);
 
     $.validator.addMethod("typeSelect",function(value,element){
         if(paramViewModel.paramView.way() == 'had'){
@@ -238,8 +259,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
             }
         }
         return true;
-    },"类型编码不能为空");
-
+    },check_type_code);
+    var check_required = parent.app.getI18nMessage("common.check.must.field");
     var paramViewModel = new ParamViewModel();
     paramViewModel.init();
     ko.applyBindings(paramViewModel);
@@ -262,7 +283,11 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
                   type_meaning:{
                       typeMeaning:true
                   }
-              },
+          },
+          messages:{
+            name:{required:check_required},
+            code:{required:check_required}
+          },
           showErrors:function(errorMap,errorList) {
               this.defaultShowErrors();
               util.adjustIframeHeight();

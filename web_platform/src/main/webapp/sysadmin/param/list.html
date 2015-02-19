@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <!-- <link rel="shortcut icon" href="#" type="image/png"> -->
-    <title>系统功能</title>
+    <title i18n="param.title">系统功能</title>
     <link href="../../static/shared/adex/css/style.css" rel="stylesheet">
     <link href="../../static/shared/adex/css/style-responsive.css" rel="stylesheet">
     <link href="../../static/css/mid-doc.css" rel="stylesheet">
@@ -16,37 +16,37 @@
     <div class="panel-heading" style="background-color: #65CEA7;color: #ffffff;">
         <h3 class="panel-title">
             <i class="fa fa-circle-o"></i>
-            参数设置
+            <span i18n="param.label">参数设置</span></h3>
         </h3>
     </div>
     <div class="panel-body">
         <form id="theForm" class="form-horizontal" method="post">
             <div class="form-group">
-                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label">参数名称:</label>
+                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="param.name" >参数名称:</label>
                 <div class="col-sm-3  col-lg-3 col-xs-3 col-md-3">
                 	<input id="name" data-bind="value: name" class="form-control" type="text" maxlength="30">
                 </div>
-                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label">参数编码:</label>
+                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="param.code">参数编码:</label>
                 <div class="col-sm-3  col-lg-3 col-xs-3 col-md-3">
                     <input id="code" data-bind="value: code" class="form-control" type="text" maxlength="30">
                	</div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label">参数类型:</label>
+                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="param.type">参数类型:</label>
                 <div class="col-sm-3  col-lg-3 col-xs-3 col-md-3">
                     <select id="status" class="form-control" name="type"
-                            data-bind="options:typeOptions,optionsText:'text',optionsValue:'val',value: paramView.type,optionsCaption: '-选择-'"></select>
+                            data-bind="options:typeOptions,optionsText:'text',optionsValue:'val',value: paramView.type,optionsCaption: sel_text()"></select>
                 </div>
 				<div class="col-sm-1 col-lg-1 col-md-1 col-xs-1">
-					<button id="search" class="btn btn-default" type="button">查询</button>
+					<button id="search" class="btn btn-default" type="button" i18n="common.btn.nospace.queryBtn">查询</button>
 				</div>
             </div>
             <div class="form-group">
                 <div class="col-sm-1 col-lg-1 col-md-1 col-xs-1" data-bind="visible:viewDel()">
-                    <button id="delete" class="btn btn-default" type="button">&nbsp;&nbsp;删&nbsp;&nbsp;除&nbsp;&nbsp;</button>
+                    <button id="delete" class="btn btn-default" type="button" i18n="common.btn.deleteBtn">&nbsp;&nbsp;删&nbsp;&nbsp;除&nbsp;&nbsp;</button>
                 </div>
                 <div class="col-sm-1 col-lg-1 col-md-1 col-xs-1" data-bind="visible:viewAdd()">
-                    <button id="add" class="btn btn-default" type="button">&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;</button>
+                    <button i18n="common.btn.addBtn" id="add" class="btn btn-default" type="button">&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;</button>
                 </div>
             </div>
         </form>
@@ -55,11 +55,11 @@
                 <thead>
                 <tr>
                     <th width="5%"><input style="margin-left:10px;cursor:pointer;" onclick="eachCheckBox(this);" type="checkbox"></th>
-                    <th width="25%">参数名称</th>
-                    <th width="15%">参数编码</th>
-                    <th width="20%">参数类型</th>
-                    <th width="20%">创建日期</th>
-                    <th width="15%">操作</th>
+                    <th width="25%" i18n="param.name.header">参数名称</th>
+                    <th width="15%" i18n="param.code.header">参数编码</th>
+                    <th width="20%" i18n="param.type.header">参数类型</th>
+                    <th width="20%" i18n="param.createDate.header">创建日期</th>
+                    <th width="15%" i18n="common.sys.operate.header">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -72,14 +72,14 @@
         <div class="modal-content">
             <div class="modal-header"  style="background-color: #424F63;color: #ffffff">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">警&nbsp;&nbsp;告</h4>
+                <h4 class="modal-title" id="myModalLabel" i18n="common.sys.alert.title">警&nbsp;&nbsp;告</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" i18n="param.sys.delete.alert">
                确定要删除选中参数？
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="sure_btn">确定</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" id="sure_btn" i18n="common.btn.nospace.sureBtn">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" i18n="common.btn.nospace.closeBtn">关闭</button>
             </div>
         </div>
     </div>

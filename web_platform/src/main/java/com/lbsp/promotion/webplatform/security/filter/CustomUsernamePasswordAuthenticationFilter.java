@@ -29,7 +29,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends
 	public Authentication attemptAuthentication(HttpServletRequest request,
 			HttpServletResponse response) throws AuthenticationException {
 		if (!request.getMethod().equals("POST")) {
-			throw new RequestMustPostException("请求必须为POST方式!");
+			throw new RequestMustPostException("login.error.post");
 		}
 		// 检测验证码
 		checkValidateCode(request);
@@ -41,7 +41,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends
 		username = username.trim();
 		BaseResult<UserRsp> result =  this.permissionService.checkUserNamePwd(username, password);
 		if(result.getResult() == null){
-			throw new UserNameOrPwdNotExistException("用户名或密码不存在");
+			throw new UserNameOrPwdNotExistException("login.error.certify");
 		}
 		// UsernamePasswordAuthenticationToken实现 Authentication
 		UsernamePasswordSecurityKeyToken authRequest = new UsernamePasswordSecurityKeyToken(
@@ -74,7 +74,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends
 		String validateCodeParameter = obtainValidateCodeParameter(request);
 		if (StringUtils.isEmpty(validateCodeParameter)
 				|| !sessionValidateCode.equalsIgnoreCase(validateCodeParameter)) {
-			throw new ValidateCodeErrorException("验证码错误！");
+			throw new ValidateCodeErrorException("login.error.valid.code");
 		}
 	}
 
@@ -82,7 +82,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends
 	protected String obtainPassword(HttpServletRequest request) {
 		String password = request.getParameter(PASSWORD);
 		if (password == null || "".equals(password)) {
-			throw new PasswordIsEmptyException("密码不能为空!");
+			throw new PasswordIsEmptyException("login.error.password.null");
 		}
 		return password;
 	}
@@ -91,7 +91,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends
 	protected String obtainUsername(HttpServletRequest request) {
 		String username = request.getParameter(USERNAME);
 		if (username == null || "".equals(username)) {
-			throw new UserNameIsEmptyException("用户名不能为空!");
+			throw new UserNameIsEmptyException("login.error.account.null");
 		}
 		return username;
 	}
