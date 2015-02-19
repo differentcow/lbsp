@@ -116,7 +116,7 @@ public class ParamController extends BaseController {
         if (paramService.updateParam(param)) {
             return this.createBaseResult("修改参数成功", true);
         }else{
-            return this.createBaseResult(GenericConstants.HTTP_STATUS_FAILURE,"修改参数失败", false);
+            return this.createBaseResult(GenericConstants.LBSP_STATUS_FAILURE,"修改参数失败", false);
         }
     }
 
