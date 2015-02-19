@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <title i18n="title">个人档案</title>
+    <link href="../static/shared/adex/css/style.css" rel="stylesheet">
+    <link href="../static/shared/adex/css/style-responsive.css" rel="stylesheet">
+    <link href="../static/css/mid-doc.css" rel="stylesheet">
+    <link href="../static/css/input-select.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../static/shared/adex/js/html5shiv.js"></script>
+    <script src="../static/shared/adex/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="panel">
+    <div class="panel-heading" style="background-color: #65CEA7;color: #ffffff;">
+        <h3 class="panel-title">
+            <i class="fa fa-circle-o"></i>
+            <span i18n="personal.password">个人密码</span>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <legend i18n="label">修改个人密码</legend>
+        </section>
+        <form class="form-horizontal" id="submitSure" method="post">
+            <div class="form-group" data-bind="visible:flow(1)">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="old">旧密码：</span></label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="oldpwd" name="oldpwd" data-bind="value: oldpwd" class="form-control" type="password" maxlength="30" autofocus required>
+                </div>
+            </div>
+            <div class="form-group" data-bind="visible:flow(2)">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="new">新密码：</span></label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="newpwd" name="newpwd" data-bind="value: newpwd" class="form-control" type="password" maxlength="30" autofocus required>
+                </div>
+            </div>
+            <div class="form-group" data-bind="visible:flow(2)">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="again">再次填写：</span></label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="repwd" name="repwd" data-bind="value: repwd" class="form-control" type="password" maxlength="30" required>
+                </div>
+            </div>
+            <div class="form-group" data-bind="visible:flow(2) && !filterCode()">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="auth.code">验证码：</span></label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="code" name="code" data-bind="value: code" class="form-control" type="text" maxlength="20" required>
+                    <label for="code"><span i18n="auth.code.tip">验证码已经发送至您的邮箱，请查收并在30分钟内填写.</span><a href="/#" data-bind="click:repeatAuth" i18n="reauth">重发验证码</a></label>
+                </div>
+            </div>
+            <div clss="form-group">
+                <div class="col-sm-offset-2 col-lg-offset-2 col-md-offset-2">
+                    <button type="submit" class="btn btn-default" id="next" data-bind="visible:flow(1)">&nbsp;&nbsp;下&nbsp;&nbsp;一&nbsp;&nbsp;步&nbsp;&nbsp;</button>
+                    <button type="submit" class="btn btn-default" id="sure" data-bind="visible:flow(2)">&nbsp;&nbsp;确&nbsp;&nbsp;认&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #424F63;color: #ffffff;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">系统信息</h4>
+            </div>
+            <div class="modal-body">
+                <span i18n="modify.success">修改密码成功</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" i18n="nospaceclose" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../static/shared/js/require.js"></script>
+<script type="text/javascript" src="../static/config.js"></script>
+<script type="application/javascript" src="../static/js/viewmodels/personal/pwdViewModel.js"></script>
+</body>
+</html>

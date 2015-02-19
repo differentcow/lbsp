@@ -1,20 +1,36 @@
 /**
  * Created by Barry on 6/16/2014.
  */
-requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonUtil','amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers'], function ($, ko, mapping, userinfoService, util) {
+requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonUtil',
+    'amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers'],
+    function ($, ko, mapping, userinfoService, util) {
+    var username_tip = parent.app.getI18nMessage('personal.username.check.tip');
+    var sys_info = parent.app.getI18nMessage('common.sys.info');
+    var sys_error = parent.app.getI18nMessage('common.sys.error');
+    var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
     var PersonalViewModel = function () {
         var me = this;
         this.userView = new UserView();
        //初始化
         this.init = function () {
+            me.seti18nText();
             me.loadInfo();
+        };
+        this.seti18nText = function(){
+            $('title,p,label,span').each(function(){
+                var attr = $(this).attr('i18n');
+                if(attr !=null && attr != ''){
+                    $(this).text(parent.app.getI18nMessage('personal.'+attr));
+                }
+            });
+            $('#add').html(parent.app.getI18nMessage('common.btn.sureBtn'));
         };
         //加载个人信息
         this.loadInfo = function(){
           var deferred = userinfoService.me();
           $.when(deferred).done(function (response) {
-            if (response.code == 200 &&typeof response.result!='undefined') {
-                me.userView.setData(response.result);
+            if (response.state.code == 200000 &&typeof response.result!='undefined') {
+                me.userView.setData(response.result.user);
               util.adjustIframeHeight();
             } else {
               console.log('load userView failed');
@@ -34,16 +50,16 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
         param_obj = mapping.toJSON(param_obj);
         var deferred = userinfoService.modifyMe(param_obj);
         $.when(deferred).done(function (response) {
-          if(response.code==200 && typeof response.result != 'undefined') {
+          if(response.state.code==200000 && typeof response.result != 'undefined') {
 //            parent.amplify.publish('status.alerts','系统信息','更改成功');
             parent.app.refreshHome('account',{username:me.userView.username(),email:me.userView.email()});
             console.log('保存成功');
           }else{
-            parent.amplify.publish('status.alerts','系统信息',response.msg);
+            parent.amplify.publish('status.alerts',sys_info,submit_error);
             console.log(response.msg);
           }
         }).fail(function (error) {
-          parent.amplify.publish('status.alerts','系统信息','系统错误');
+          parent.amplify.publish('status.alerts',sys_info,sys_error);
           console.log(error);
         });
       };
@@ -79,17 +95,18 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
                 me.email(data.email);
               }
             if (typeof data.create_date != 'undefined') {
-              var date_str =  All580.DPGlobal.formatDateTime(data.create_date, 'yyyy-MM-dd');
+              var date_str =  All580.DPGlobal.formatDateTime(data.create_date, 'yyyy-MM-dd HH:mm:ss');
               me.create_date(date_str);
             }
           }
         };
     };
-
+    var check_required = parent.app.getI18nMessage("common.check.must.field");
+    var check_email = parent.app.getI18nMessage("common.check.email");
     //验证用户名称
     $.validator.addMethod("nameCheck",function(value, element) {
             return this.optional(element) || /([a-zA-Z])|(\d)|([_])|([-])+$/.test(value) || /[^\x00-\xff]/.test(value);},
-        "只能包括中文、英文字母、数字、下划线和英文横线");
+        username_tip);
 
     var personalViewModel = new PersonalViewModel();
     personalViewModel.init();
@@ -106,7 +123,11 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
             	  required : true,
             	  email: true
               }
-              },
+          },
+          messages:{
+              username:{required:check_required},
+              email:{required:check_required,email:check_email}
+          },
           showErrors:function(errorMap,errorList) {
               this.defaultShowErrors();
               util.adjustIframeHeight();

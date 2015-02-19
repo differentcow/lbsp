@@ -45,6 +45,7 @@ public class PermissionController extends BaseController{
             res.setCurrentRole(result.getCurrentRole());
             res.setParentRole(result.getParentRole());
 			res.setUser(result.getUser());
+            res.setPageList(result.getPageList());
 			SessionMap.getSessionMapInstance().put(res.getUser().getSecurity_key(), res);
 		} else {
 			throw new UserNameNotExistException("用户名或密码错误");

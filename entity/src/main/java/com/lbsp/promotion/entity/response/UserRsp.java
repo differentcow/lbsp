@@ -22,6 +22,16 @@ public class UserRsp implements Serializable{
 	
     private List<OperateResource> funcsList;
 
+    private List<OperateResource> pageList;
+
+    public List<OperateResource> getPageList() {
+        return pageList;
+    }
+
+    public void setPageList(List<OperateResource> pageList) {
+        this.pageList = pageList;
+    }
+
     public List<String> getPages() {
         return pages;
     }

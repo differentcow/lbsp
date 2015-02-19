@@ -1,7 +1,21 @@
 /**
  * Created by Barry on 6/16/2014.
  */
-requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonUtil','amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers'], function ($, ko, mapping, userinfoService, util) {
+requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonUtil',
+        'amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers'],
+    function ($, ko, mapping, userinfoService, util) {
+    var old_tip = parent.app.getI18nMessage('password.old.not.null');
+    var new_tip = parent.app.getI18nMessage('password.new.not.null');
+    var code_tip = parent.app.getI18nMessage('password.code.not.null');
+    var old_new_not_same = parent.app.getI18nMessage('password.new.old.not.same');
+    var old_label = parent.app.getI18nMessage('password.old.label');
+    var new_label = parent.app.getI18nMessage('password.new.label');
+    var again_tip = parent.app.getI18nMessage('password.again.tip');
+    var sys_info = parent.app.getI18nMessage('common.sys.info');
+    var sys_error = parent.app.getI18nMessage('common.sys.error');
+    var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
+    var code_error = parent.app.getI18nMessage('password.auth.code.error');
+    var correct_label = parent.app.getI18nMessage('common.right.label');
     var PwdViewModel = function () {
         var me = this;
         this.oldpwd = ko.observable('');
@@ -27,26 +41,39 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
 
         this.repeatAuth = function(){
             $.when(userinfoService.repeatAuth()).done(function (response) {
-                if(response.code==200 && typeof response.result != 'undefined') {
+                if(response.state.code==200000 && typeof response.result != 'undefined') {
                     me.step(step==2?1:(step+1));
                     if(step == 2){
                         me.oldpwd('');
                         $('#myModal').modal('toggle');
                     }
-                    console.log(me.msgCobine(step)+ '正确');
+                    console.log(me.msgCobine(step)+ correct_label);
                 }else{
-                    parent.amplify.publish('status.alerts','系统信息',response.msg);
+                    parent.amplify.publish('status.alerts',sys_info,submit_error);
                     console.log(response.msg);
                 }
             }).fail(function (error) {
-                parent.amplify.publish('status.alerts','系统信息','网络异常');
+                parent.amplify.publish('status.alerts',sys_info,sys_error);
                 console.log(error);
             });
         }
+        this.seti18nText = function(){
+            $('title,label,a,span,legend').each(function(){
+                var attr = $(this).attr('i18n');
+                if(attr !=null && attr != ''){
+                    $(this).text(parent.app.getI18nMessage('password.'+attr));
+                }
+            });
+            $('#myModalLabel').text(parent.app.getI18nMessage('password.modify.success'));
+            $('#next').html(parent.app.getI18nMessage('common.btn.nextBtn'));
+            $('#sure').html(parent.app.getI18nMessage('common.btn.sureBtn'));
+            $('button[i18n=nospaceclose]').html(parent.app.getI18nMessage('common.btn.nospace.closeBtn'));
+        };
         //初始化
         this.init = function(){
+            me.seti18nText();
             $.when(userinfoService.isAuthing()).done(function (response) {
-                if(response.code==200 && typeof response.result != 'undefined') {
+                if(response.state.code==200000 && typeof response.result != 'undefined') {
                     if(response.result == 'filter'){
                         me.filterCode(true);
                         me.step(1);
@@ -60,14 +87,14 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
                     }
                     console.log('success');
                 }else{
-                    parent.amplify.publish('status.alerts','系统信息',response.msg);
+                    parent.amplify.publish('status.alerts',sys_info,submit_error);
                     console.log(response.msg);
                 }
             }).fail(function (error) {
-                parent.amplify.publish('status.alerts','系统信息','网络异常');
+                parent.amplify.publish('status.alerts',sys_info,sys_error)
                 console.log(error);
             });
-        }
+        };
 
         //流程事件
         this.nextEvent = function(step){
@@ -91,30 +118,30 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
 
         this.msgCobine = function(step){
             if(step == 1){
-                return '旧密码';
+                return old_label;
             }
             if(step == 2){
-                return '新密码';
+                return new_label;
             }
         }
 
         //事件处理
         this.eventHandler = function(deferred,step){
             $.when(deferred).done(function (response) {
-                if(response.code==200 && typeof response.result != 'undefined') {
+                if(response.state.code==200000 && typeof response.result != 'undefined') {
                     me.step(step==2?1:(step+1));
                     if(step == 2){
                         me.oldpwd('');
                         parent.app.refreshHome('pwd',null);
 //                        $('#myModal').modal('toggle');
                     }
-                    console.log(me.msgCobine(step)+ '正确');
+                    console.log(me.msgCobine(step)+ correct_label);
                 }else{
-                    parent.amplify.publish('status.alerts','系统信息',response.msg);
+                    parent.amplify.publish('status.alerts',sys_info,submit_error);
                     console.log(response.msg);
                 }
             }).fail(function (error) {
-                parent.amplify.publish('status.alerts','系统信息','网络异常');
+                parent.amplify.publish('status.alerts',sys_info,sys_error)
                 console.log(error);
             });
         }
@@ -128,7 +155,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
             }
         }
         return true;
-    },"旧密码不能为空");
+    },old_tip);
 
     $.validator.addMethod("codeChk",function(value,element){
         if(pwdViewModel.step() == 2){
@@ -137,7 +164,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
             }
         }
         return true;
-    },"验证码不能为空");
+    },code_tip);
 
     $.validator.addMethod("newPwd",function(value,element){
         if(pwdViewModel.step() == 2){
@@ -146,7 +173,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
             }
         }
         return true;
-    },"新密码不能为空");
+    },new_tip);
 
     $.validator.addMethod("newPwdSame",function(value,element){
         if(pwdViewModel.step() == 2){
@@ -155,7 +182,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
             }
         }
         return true;
-    },"新密码与再次填写的密码不一致");
+    },old_new_not_same);
 
     $.validator.addMethod("rePwd",function(value,element){
         if(pwdViewModel.step() == 2){
@@ -164,8 +191,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
             }
         }
         return true;
-    },"请再次填写新密码");
-
+    },again_tip);
+    var check_min = parent.app.getI18nMessage("common.check.min",[3]);
     var pwdViewModel = new PwdViewModel();
     pwdViewModel.init();
     ko.applyBindings(pwdViewModel);
@@ -199,7 +226,9 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
                   }
               },
           messages:{
-             code:{remote:'验证码已过期或填写错误.'}
+             code:{remote:code_error},
+             newpwd:{min:check_min},
+             repwd:{min:check_min}
           },
           showErrors:function(errorMap,errorList) {
               this.defaultShowErrors();

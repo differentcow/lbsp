@@ -6,7 +6,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.lbsp.promotion.core.dao.PrivilegeDao">
 
     <select id="findOperateByFilter" resultType="OperateResource">
-        select t.*
+        select distinct t.*
         from privilege p inner join
         <if test="access == 'page'.toString()">
             page_operate t on t.id = p.privilege_access_value

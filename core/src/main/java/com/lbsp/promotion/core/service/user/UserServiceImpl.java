@@ -132,11 +132,24 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
         }
         //查询用户可访问的页面
         List<String> pageStrs = new ArrayList<String>();
+        List<OperateResource> pageOpers = new ArrayList<OperateResource>();
         //如果用户是超级管理员(系统自带生成的唯一的根用户)，允许访问所有页面
         if (GenericConstants.LBSP_ADMINISTRATOR_ID.equals(user.getId())){
-            List<PageOperate> pos = pageOperateService.allPages();
-            for (PageOperate po : pos){
-                pageStrs.add(po.getCode());
+            List<PageOperate> pages = pageOperateService.allPages();
+            for (PageOperate or : pages){
+                pageStrs.add(or.getCode());
+                OperateResource po = new OperateResource();
+                po.setName(or.getName());
+                po.setCode(or.getCode());
+                po.setId(or.getId());
+                po.setParent_code(or.getParent_code());
+                po.setParent_id(or.getParent_id());
+                po.setSort_index(or.getSort_index());
+                po.setCreate_date(or.getCreate_date());
+                po.setCreate_user(or.getCreate_user());
+                po.setLast_update_date(or.getLast_update_date());
+                po.setUpdate_user(or.getUpdate_user());
+                pageOpers.add(po);
             }
         }else{
             //如果非超级管理员，查询其所拥有的可访问的页面
@@ -156,9 +169,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
                 if(StringUtils.isBlank(map.get(or.getId()))){
                     map.put(or.getId(),"Y");
                     pageStrs.add(or.getCode());
+                    pageOpers.add(or);
                 }
             }
         }
+        rsp.setPageList(pageOpers);
         rsp.setPages(pageStrs);
 
         //查询用户所有的功能操作权限
@@ -354,26 +369,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
     public boolean updateUser(User user){
         try{
         	//先判断数据库中是否已有相同账号和名称的人
-        	GenericQueryParam param = new GenericQueryParam();
-            GenericQueryParam param2 = new GenericQueryParam();
-            param.put(new QueryKey("account", QueryKey.Operators.EQ),user.getAccount());
-            param2.put(new QueryKey("username", QueryKey.Operators.EQ),user.getUsername());
-            User u=this.findOne(param);
-            boolean isItself=true;
-            boolean isItself2=true;
-            if(u!=null){
-            	isItself=u.getId().equals(user.getId());
-            }
-            User u2=this.findOne(param2);
-            if(u2!=null){
-            	isItself2=u2.getId().equals(user.getId());
-            }
-            if(isItself&&isItself2){
             user.setLast_update_date(new Date());
             this.update(user);
-            //userDao.updateUserInfo(user);
             return true;
-            }
         }catch (Exception e){
             e.printStackTrace();
         }

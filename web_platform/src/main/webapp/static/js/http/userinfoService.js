@@ -57,7 +57,7 @@ define([ 'jquery' ], function($) {
             });
         },
         modifyMe : function(obj){
-            var url = this.service+'user/me';
+            var url = this.service+'core/userInfo|upt|me';
             return $.ajax({
                 url: url,
                 type: "PUT",

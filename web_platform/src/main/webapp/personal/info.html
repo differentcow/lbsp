@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <title i18n="title">个人档案</title>
+    <link href="../static/shared/adex/css/style.css" rel="stylesheet">
+    <link href="../static/shared/adex/css/style-responsive.css" rel="stylesheet">
+    <link href="../static/css/mid-doc.css" rel="stylesheet">
+    <link href="../static/css/input-select.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../static/shared/adex/js/html5shiv.js"></script>
+    <script src="../static/shared/adex/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="panel">
+    <div class="panel-heading" style="background-color: #65CEA7;color: #ffffff;">
+        <h3 class="panel-title">
+            <i class="fa fa-circle-o"></i>
+            <span i18n="info">个人信息</span>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <legend><span i18n="legend">修改个人资料</span></legend>
+        </section>
+        <form class="form-horizontal" id="sureUpdate" method="post">
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label" i18n="account">用户账号：</label>
+                <div class="col-sm-6 col-sm-8 col-lg-6 form-control-static" data-bind="text:userView.account"> </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="username">用户名称：</span></label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="username" name="username" data-bind="value: userView.username" class="form-control" type="text" maxlength="30" autofocus required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="email">用户邮箱：</span></label>
+                <div class="col-sm-6 col-sm-8 col-lg-6">
+                    <input id="email" name="email" data-bind="value: userView.email" class="form-control" type="text" maxlength="255" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label" i18n="createDate">创建时间：</label>
+                <div class="col-sm-6 col-sm-8 col-lg-6 form-control-static" data-bind="text:userView.create_date"> </div>
+            </div><!--
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label">角色权限：</label>
+                <div class="col-sm-6 col-sm-8 col-lg-6 form-control-static">
+                    <table cellspacing="0" cellpadding="0" style="width: 100%;">
+                        <tbody>
+                        &lt;!&ndash; ko foreach: userView.mapRoleOperName &ndash;&gt;
+                            <tr>
+                               <td><strong><span data-bind="text:$data.name"></span></strong></td>
+                            </tr>
+                            <tr>
+                                <td><span data-bind="text:$data.value"></span></td>
+                            </tr>
+                        &lt;!&ndash; /ko &ndash;&gt;
+                        </tbody>
+                    </table>
+                </div>
+            </div>-->
+            <div clss="form-group">
+                <div class="col-sm-offset-2 col-lg-offset-2 col-md-offset-2">
+                    <button type="submit" class="btn btn-default" id="add">&nbsp;&nbsp;确&nbsp;&nbsp;定&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="../static/shared/js/require.js"></script>
+<script type="text/javascript" src="../static/config.js"></script>
+<script type="application/javascript" src="../static/js/viewmodels/personal/personalViewModel.js"></script>
+</body>
+</html>
