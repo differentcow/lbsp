@@ -22,6 +22,9 @@ public class GenericConstants {
     public static final String TEXT_CODE_UTF_8 = "UTF-8";
     public static final String TEXT_CODE_GBK = "GBK";
 
+    public static final String SOLR_RETURN_TYPE_JSON = "json";
+    public static final String SOLR_RETURN_TYPE_XML = "xml";
+
     public final static String RESOURCES_FIELD_FUNID = "funcId";
     public final static String RESOURCES_FIELD_PARENTID = "parentId";
     public final static String RESOURCES_FIELD_TYPE = "type";

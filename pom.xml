@@ -54,6 +54,7 @@
         <wsdl4j.version>1.6.3</wsdl4j.version>
         <asm.version>3.3.1</asm.version>
         <ehcache.version>2.9.0</ehcache.version>
+        <solrj.version>4.8.1</solrj.version>
     </properties>
 
     <dependencies>
@@ -73,6 +74,11 @@
                 <groupId>com.fasterxml.jackson.jaxrs</groupId>
                 <artifactId>jackson-jaxrs-json-provider</artifactId>
                 <version>${jackson-jaxrs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-solrj</artifactId>
+                <version>${solrj.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
