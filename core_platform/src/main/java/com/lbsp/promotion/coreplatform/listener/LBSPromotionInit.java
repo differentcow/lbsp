@@ -127,8 +127,9 @@ public class LBSPromotionInit implements ServletContextListener {
                 preparedStatement.execute();
 
                 //标记已初始化
-                preparedStatement = conn.prepareStatement("INSERT INTO `parameter` (`id`, `name`, `code`, `type`, `type_meaning`, `status`, `create_user`, `create_date`, `last_update_date`, `update_user`) VALUES " +
-                        "('"+Security.generateUUIDStr()+"', '是否已初始化', 'Y', 'INIT_MARK', '初始化标记类型', NULL, '000000000001',now(), now(),'000000000001')");
+                long times = System.currentTimeMillis();
+                preparedStatement = conn.prepareStatement("INSERT INTO `parameter` (id,`name`, `code`, `type`, `type_meaning`, `status`, `create_user`, `create_time`, `update_time`, `update_user`) VALUES " +
+                        "(1,'是否已初始化', 'Y', 'INIT_MARK', '初始化标记类型', NULL, 1,"+times+", "+times+",1)");
                 preparedStatement.execute();
             }
 
@@ -192,42 +193,37 @@ public class LBSPromotionInit implements ServletContextListener {
                 List<Map<String,String>> maps = (List<Map<String,String>>)result.get("config");
                 if (maps != null && !maps.isEmpty()){
                     passwordEncoder = context.getBean("org.springframework.security.crypto.password.StandardPasswordEncoder",PasswordEncoder.class);
-                    StringBuffer saveSql = new StringBuffer(" INSERT INTO `user` (`id`, `account`, `username`, `email`, `password`, `security_key`, `security_time`, `create_date`, `last_update_date`, `create_user`, `status`, `update_user`, `login_time`, `auth_code`, `auth_time`) VALUES ( ");
-                    StringBuffer delSql = new StringBuffer(" delete from `user` where id in (");
+                    StringBuffer saveSql = new StringBuffer(" INSERT INTO `user` (`id`,`account`, `username`, `email`, `password`, `security_key`, `security_time`, `create_time`, `update_time`, `create_user`, `status`, `update_user`, `login_time`, `auth_code`, `auth_time`) VALUES ( ");
                     int count = 0;
-                    StringBuffer roleS = new StringBuffer("INSERT INTO `user_role` (`user_id`, `role_id`, `create_date`, `operator`) VALUES ");
-                    StringBuffer delRole = new StringBuffer(" delete from `user_role` where user_id in (");
+                    StringBuffer roleS = new StringBuffer("INSERT INTO `user_role` (`user_id`, `role_id`, `create_time`, `create_user`,`update_user`,`update_time`) VALUES ");
+                    long times = System.currentTimeMillis();
                     for (Map<String,String> m : maps){
                         if(count == 0){
                             ++count;
-                            delSql.append(" '10000000000").append(count).append("' ");
-                            delRole.append(" '10000000000").append(count).append("' ");
-                            roleS.append(" ('10000000000").append(count).append("', '000000000001', now(), '000000000001') ");
+                            roleS.append(" (").append(count+1).append(", 1, "+times+", 1,1, "+times+" ) ");
                             String pwd = passwordEncoder.encode(m.get("password"));
-                            saveSql.append(" '10000000000").append(count).append("', '").append(m.get("name")).append("','")
+                            saveSql.append(count+1).append(", '").append(m.get("name")).append("','")
                                     .append(m.get("name")).append("','").append(m.get("email")).append("','").append(pwd)
-                                    .append("',NULL,NULL,now(), now(), '000000000001', 1, '000000000001', NULL, NULL, NULL)");
+                                    .append("',NULL,NULL,"+times+", "+times+",1, 1, 1, NULL, NULL, NULL)");
                         }else{
                             ++count;
-                            delSql.append(", '10000000000").append(count).append("' ");
-                            delRole.append(", '10000000000").append(count).append("' ");
-                            roleS.append(", ('10000000000").append(count).append("', '000000000001', now(), '000000000001') ");
+                            roleS.append(", (").append(count+1).append(", 1, "+times+", 1,1, "+times+" ) ");
                             String pwd = passwordEncoder.encode(m.get("password"));
-                            saveSql.append(",('10000000000").append(count).append("', '").append(m.get("name")).append("','")
+                            saveSql.append(",(").append(count+1).append(", '").append(m.get("name")).append("','")
                                     .append(m.get("name")).append("','").append(m.get("email")).append("','").append(pwd)
-                                    .append("',NULL,NULL,now(), now(), '000000000001', 1, '000000000001', NULL, NULL, NULL)");
+                                    .append("',NULL,NULL,"+times+", "+times+",1, 1, 1, NULL, NULL, NULL)");
                         }
                     }
-                    delSql.append(") ");
-                    delRole.append(") ");
 
-                    preparedStatement = conn.prepareStatement(delSql.toString());
+//                    System.out.println(roleS.toString());
+
+                    preparedStatement = conn.prepareStatement(" delete from `user` where id <> 1 ");
                     preparedStatement.execute();
 
                     preparedStatement = conn.prepareStatement(saveSql.toString());
                     preparedStatement.execute();
 
-                    preparedStatement = conn.prepareStatement(delRole.toString());
+                    preparedStatement = conn.prepareStatement(" delete from `user_role` where user_id <> 1 ");
                     preparedStatement.execute();
 
                     preparedStatement = conn.prepareStatement(roleS.toString());

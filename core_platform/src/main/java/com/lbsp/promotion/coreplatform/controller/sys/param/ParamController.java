@@ -88,7 +88,7 @@ public class ParamController extends BaseController {
         }
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         param.setCreate_user(userId);
         param.setUpdate_user(userId);
         paramService.addParam(param);
@@ -106,11 +106,11 @@ public class ParamController extends BaseController {
     @ResponseBody
     public Object updateParam(
             HttpServletRequest request,
-            @RequestParam(value = "id",required = true)String id,
+            @RequestParam(value = "id",required = true)Integer id,
             @RequestBody Parameter param) {
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         param.setId(id);
         param.setUpdate_user(userId);
         if (paramService.updateParam(param)) {
@@ -152,7 +152,7 @@ public class ParamController extends BaseController {
         PageInfoRsp page = new PageInfoRsp(count);
 
         param.setNeedPaging(true);  //分页
-        param.addSortCond(new SortCond("create_date", SortCond.Order.DESC));    //排序
+        param.addSortCond(new SortCond("update_time", SortCond.Order.DESC));    //排序
         param.setOffset(startRecord);   //起始行
         param.setPageSize(maxRecords);  //相差行数
         List<Parameter> list = paramService.find(param);

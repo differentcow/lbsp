@@ -16,7 +16,7 @@ public interface PrivilegeService<T> extends BaseService<T> {
      * @param masterValues
      * @return
      */
-    List<OperateResource> findEnabledPageByMasterandAccess(String master,List<String> masterValues);
+    List<OperateResource> findEnabledPageByMasterandAccess(String master,List<Integer> masterValues);
 
     /**
      * 根据条件查询所有能访问的功能操作资源
@@ -25,5 +25,5 @@ public interface PrivilegeService<T> extends BaseService<T> {
      * @param masterValues
      * @return
      */
-    List<OperateResource> findEnabledFuncByMasterandAccess(String master,List<String> masterValues);
+    List<OperateResource> findEnabledFuncByMasterandAccess(String master,List<Integer> masterValues);
 }

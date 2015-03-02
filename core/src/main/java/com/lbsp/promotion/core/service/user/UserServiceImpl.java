@@ -74,13 +74,13 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
      * @return
      */
     @Transactional
-    public boolean updateAuthCode(String userId,String authCode){
+    public boolean updateAuthCode(Integer userId,String authCode){
         try{
             User user = new User();
             user.setId(userId);
             user.setAuth_code(authCode);
             Date date = new Date();
-            user.setLast_update_date(date);
+            user.setUpdate_time(System.currentTimeMillis());
             user.setAuth_time(date);
             user.setUpdate_user(userId);
             userDao.updateUserInfo(user);
@@ -124,9 +124,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
         };
 
         //准备过滤条件
-        List<String> userIdParams = new ArrayList<String>();
+        List<Integer> userIdParams = new ArrayList<Integer>();
         userIdParams.add(user.getId());
-        List<String> roleIdParams = new ArrayList<String>();
+        List<Integer> roleIdParams = new ArrayList<Integer>();
         for (Role r : roles){
             roleIdParams.add(r.getId());
         }
@@ -145,10 +145,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
                 po.setParent_code(or.getParent_code());
                 po.setParent_id(or.getParent_id());
                 po.setSort_index(or.getSort_index());
-                po.setCreate_date(or.getCreate_date());
                 po.setCreate_user(or.getCreate_user());
-                po.setLast_update_date(or.getLast_update_date());
                 po.setUpdate_user(or.getUpdate_user());
+                po.setUpdate_time(or.getUpdate_time());
+                po.setCreate_time(or.getCreate_time());
                 pageOpers.add(po);
             }
         }else{
@@ -164,7 +164,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
             if(rolePage != null && !rolePage.isEmpty()){
                 pages.addAll(rolePage);
             }
-            Map<String,String> map = new HashMap<String, String>();
+            Map<Integer,String> map = new HashMap<Integer, String>();
             for (OperateResource or : pages){
                 if(StringUtils.isBlank(map.get(or.getId()))){
                     map.put(or.getId(),"Y");
@@ -190,9 +190,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
                 or.setPath_param(func.getPath_param());
                 or.setBase_url(func.getBase_url());
                 or.setMethod(func.getMethod());
-                or.setCreate_date(func.getCreate_date());
+                or.setCreate_time(func.getCreate_time());
                 or.setCreate_user(func.getCreate_user());
-                or.setLast_update_date(func.getLast_update_date());
+                or.setUpdate_time(func.getUpdate_time());
                 or.setPage_id(func.getPage_id());
                 or.setUpdate_user(func.getUpdate_user());
                 functions.add(or);
@@ -210,7 +210,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
             if(roleFunc != null && !roleFunc.isEmpty()){
                 tmpFunc.addAll(roleFunc);
             }
-            Map<String,String> map = new HashMap<String, String>();
+            Map<Integer,String> map = new HashMap<Integer, String>();
             for (OperateResource or : tmpFunc){
                 if(StringUtils.isBlank(map.get(or.getId()))){
                     map.put(or.getId(),"Y");
@@ -310,13 +310,13 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
         //查找用户使用的角色，修改role记录、删user_role、删user
         for(String id:idArray){
         	id=id.replace("'", "");//去掉'号。
-        	List<Role> roles=roleDao.getRolesByUserId(id);
+        	List<Role> roles=roleDao.getRolesByUserId(Integer.parseInt(id));
         	for(Role r:roles){
         		int uc=r.getUser_count()-1;
         		r.setUser_count(uc);
 //        		roleRightService.update(r);
         	}
-        	roleDao.delUserRole(id);
+        	roleDao.delUserRole(Integer.parseInt(id));
            }
         return this.delete(param) != 0; //批量删除
     }
@@ -330,10 +330,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
     @Transactional
     public boolean addUser(User user){
         //填充新增记录信息
-        user.setId(Security.generateUUIDStr());
-        Date now = new Date();
-        user.setCreate_date(now);
-        user.setLast_update_date(now);
+        long now = System.currentTimeMillis();
+        user.setCreate_time(now);
+        user.setUpdate_time(now);
         
         //先判断数据库中是否已有相同账号和名称的人
         GenericQueryParam param = new GenericQueryParam();
@@ -346,7 +345,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
         if(ulst.size()<=0&&ulst2.size()<=0){
         	
         //添加全体共有角色、修改角色用户数
-        roleDao.addUserRole(user.getId(), "000000000002"/*UserServiceImpl.ELS_WEB_ALL_ACCOUNT_ID*/, now, user.getCreate_user());
+//        roleDao.addUserRole(user.getId(), "000000000002"/*UserServiceImpl.ELS_WEB_ALL_ACCOUNT_ID*/, now, user.getCreate_user());
         Role role=roleService.findOne("000000000002"/*UserServiceImpl.ELS_WEB_ALL_ACCOUNT_ID*/);
         role.setUser_count(role.getUser_count()+1);
         roleService.update(role);
@@ -369,7 +368,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
     public boolean updateUser(User user){
         try{
         	//先判断数据库中是否已有相同账号和名称的人
-            user.setLast_update_date(new Date());
+            user.setUpdate_time(System.currentTimeMillis());
             this.update(user);
             return true;
         }catch (Exception e){

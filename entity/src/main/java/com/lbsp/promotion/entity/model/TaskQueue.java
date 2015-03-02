@@ -14,7 +14,7 @@ public class TaskQueue extends BaseModel{
 
     private String desc;
 
-    private String task_class;
+    private Integer task_class;
 
     public String getTask_status() {
         return task_status;
@@ -24,11 +24,11 @@ public class TaskQueue extends BaseModel{
         this.task_status = task_status;
     }
 
-    public String getTask_class() {
+    public Integer getTask_class() {
         return task_class;
     }
 
-    public void setTask_class(String task_class) {
+    public void setTask_class(Integer task_class) {
         this.task_class = task_class;
     }
 

@@ -83,21 +83,21 @@ public class SchedulerUtil {
      * @throws org.quartz.SchedulerException
      */
     public void add(ScheduleJobTask job) throws SchedulerException{
-        TriggerKey triggerKey = TriggerKey.triggerKey(job.getTaskQueue().getTask_name(), job.getTaskQueue().getTask_class());
+        TriggerKey triggerKey = TriggerKey.triggerKey(job.getTaskQueue().getTask_name(), job.getTaskQueue().getTask_class()+"");
 
         //获取trigger，即在spring配置文件中定义的 bean id="myTrigger"
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
 
         //不存在，创建一个
         if (null == trigger) {
-            JobDetail jobDetail = JobBuilder.newJob(QuartzJobFactory.class).withIdentity(job.getTaskQueue().getTask_name(), job.getTaskQueue().getTask_class()).build();
+            JobDetail jobDetail = JobBuilder.newJob(QuartzJobFactory.class).withIdentity(job.getTaskQueue().getTask_name(), job.getTaskQueue().getTask_class()+"").build();
             jobDetail.getJobDataMap().put("scheduleJobTask", job);
 
             //表达式调度构建器
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getTaskQueue().getCron_expression());
 
             //按新的cronExpression表达式构建一个新的trigger
-            trigger = TriggerBuilder.newTrigger().withIdentity(job.getTaskQueue().getTask_name(), job.getTaskQueue().getTask_class()).withSchedule(scheduleBuilder).build();
+            trigger = TriggerBuilder.newTrigger().withIdentity(job.getTaskQueue().getTask_name(), job.getTaskQueue().getTask_class()+"").withSchedule(scheduleBuilder).build();
 
             scheduler.scheduleJob(jobDetail, trigger);
         } else {
@@ -120,7 +120,7 @@ public class SchedulerUtil {
      * @throws org.quartz.SchedulerException
      */
     public void pause(TaskQueue tq) throws SchedulerException{
-        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class());
+        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class()+"");
         scheduler.pauseJob(jobKey);
     }
 
@@ -131,7 +131,7 @@ public class SchedulerUtil {
      * @throws org.quartz.SchedulerException
      */
     public void restore(TaskQueue tq) throws SchedulerException{
-        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class());
+        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class()+"");
         scheduler.resumeJob(jobKey);
     }
 
@@ -142,7 +142,7 @@ public class SchedulerUtil {
      * @throws org.quartz.SchedulerException
      */
     public void delete(TaskQueue tq) throws SchedulerException{
-        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class());
+        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class()+"");
         scheduler.deleteJob(jobKey);
     }
 
@@ -153,7 +153,7 @@ public class SchedulerUtil {
      * @throws org.quartz.SchedulerException
      */
     public void onlyRunOnce(TaskQueue tq) throws SchedulerException{
-        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class());
+        JobKey jobKey = JobKey.jobKey(tq.getTask_name(), tq.getTask_class()+"");
         scheduler.triggerJob(jobKey);
     }
 
@@ -164,7 +164,7 @@ public class SchedulerUtil {
      * @throws org.quartz.SchedulerException
      */
     public void updateCronExpression(TaskQueue tq) throws SchedulerException{
-        TriggerKey triggerKey = TriggerKey.triggerKey(tq.getTask_name(), tq.getTask_class());
+        TriggerKey triggerKey = TriggerKey.triggerKey(tq.getTask_name(), tq.getTask_class()+"");
         //获取trigger，即在spring配置文件中定义的 bean id="myTrigger"
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         //表达式调度构建器

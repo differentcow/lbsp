@@ -58,10 +58,9 @@ public class ParameterServiceImpl extends BaseServiceImpl<Parameter> implements 
     @Transactional
     public boolean addParam(Parameter param){
         //填充新增记录信息
-        param.setId(Security.generateUUIDStr());
-        Date now = new Date();
-        param.setCreate_date(now);
-        param.setLast_update_date(now);
+        Long times = System.currentTimeMillis();
+        param.setCreate_time(times);
+        param.setUpdate_time(times);
         int result = this.insert(param);
         return result != 1;
     }
@@ -79,12 +78,12 @@ public class ParameterServiceImpl extends BaseServiceImpl<Parameter> implements 
         qry.put(new QueryKey("type",QueryKey.Operators.EQ),param.getType());
         Parameter tmpParam = new Parameter();
         tmpParam.setType_meaning(param.getType_meaning());
-        tmpParam.setLast_update_date(new Date());
+        tmpParam.setUpdate_time(System.currentTimeMillis());
         tmpParam.setUpdate_user(param.getCreate_user());
         this.update(tmpParam,qry);  //两种情况，修改影响行数为0时，说明type是新增动作，修改影响行数不为0时，说明type是修改动作
         //再次修改具体的参数记录
         param.setId(param.getId());
-        param.setLast_update_date(new Date());
+        param.setUpdate_time(System.currentTimeMillis());
         return this.update(param) != 0;
     }
 }

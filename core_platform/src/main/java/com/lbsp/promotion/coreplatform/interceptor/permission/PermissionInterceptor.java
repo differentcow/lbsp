@@ -61,11 +61,11 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 
-        String ip = getRemoteHost(request);
+        /*String ip = getRemoteHost(request);
 
         if (!this.ip.equals(ip)){
             throw new AuthKeyNotExistException("no permission to visit rest");
-        }
+        }*/
 
 		String authKey = request.getParameter(GenericConstants.AUTHKEY);
 		if (authKey ==null&&NONE_PERMISSIONMETHOD.equals(permissionMethod)) {

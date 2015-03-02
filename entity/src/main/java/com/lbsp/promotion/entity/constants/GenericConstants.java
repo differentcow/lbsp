@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class GenericConstants {
 	public static final String AUTHKEY = "authKey";
-    public static final String LBSP_ADMINISTRATOR_ID = "000000000001";
+    public static final Integer LBSP_ADMINISTRATOR_ID = 1;
     public static final String LBSP_PRIVILEGE_ACCESS_TYPE_PAGE = "page";
     public static final String LBSP_PRIVILEGE_OPERATION_ENABLED = "E";
     public static final String LBSP_PRIVILEGE_OPERATION_DISABLED = "D";

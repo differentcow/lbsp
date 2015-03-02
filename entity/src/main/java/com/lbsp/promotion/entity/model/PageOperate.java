@@ -8,19 +8,18 @@ import com.lbsp.promotion.entity.table.annotation.MyTable;
 @MyTable(value = "page_operate")
 public class PageOperate extends BaseModel {
 
-    private String id;
     private String code;
-    private String parent_id;
+    private Integer parent_id;
     private String parent_code;
     private String name;
     private Integer sort_index;
 
-    public String getId() {
-        return id;
+    public Integer getParent_id() {
+        return parent_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setParent_id(Integer parent_id) {
+        this.parent_id = parent_id;
     }
 
     public String getCode() {
@@ -29,14 +28,6 @@ public class PageOperate extends BaseModel {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getParent_id() {
-        return parent_id;
-    }
-
-    public void setParent_id(String parent_id) {
-        this.parent_id = parent_id;
     }
 
     public String getParent_code() {

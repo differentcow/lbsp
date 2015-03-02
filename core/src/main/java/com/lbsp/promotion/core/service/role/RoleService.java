@@ -15,6 +15,6 @@ public interface RoleService<T> extends BaseService<T> {
      * @param userId
      * @return
      */
-    List<Role> getRolesByUserId(@Param("userId") String userId);
+    List<Role> getRolesByUserId(@Param("userId") Integer userId);
 
 }

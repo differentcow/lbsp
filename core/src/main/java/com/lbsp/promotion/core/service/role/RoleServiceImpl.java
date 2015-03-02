@@ -16,7 +16,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements
     private RoleDao roleDao;
 
     @Override
-    public List<Role> getRolesByUserId(@Param("userId") String userId) {
+    public List<Role> getRolesByUserId(@Param("userId") Integer userId) {
         return roleDao.getRolesByUserId(userId);
     }
 }

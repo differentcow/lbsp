@@ -39,7 +39,7 @@ public interface TaskQueueService<T> extends BaseService<T> {
      * @param userId
      * @return
      */
-    boolean updateStatus(String status, String id, String userId);
+    boolean updateStatus(String status, Integer id, Integer userId);
 
 
     /**
@@ -51,7 +51,7 @@ public interface TaskQueueService<T> extends BaseService<T> {
      * @param userId
      * @return
      */
-    boolean updateCornExpression(String expression, String text, String id, String userId);
+    boolean updateCornExpression(String expression, String text, Integer id, Integer userId);
 
 
     /**

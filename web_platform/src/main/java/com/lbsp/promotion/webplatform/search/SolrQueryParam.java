@@ -26,12 +26,15 @@ public class SolrQueryParam {
 
     private Boolean hightLight;
 
+    public static final String SOLR_RETURN_TYPE_JSON = "json";
+    public static final String SOLR_RETURN_TYPE_XML = "xml";
+
     public SolrQueryParam(){
         queryKeys = new ArrayList<SolrQueryKey>();
         resultQueryKeys = new ArrayList<SolrQueryKey>();
         sorts = new ArrayList<SolrQuerySort>();
         hightLight = false;
-        returType = GenericConstants.SOLR_RETURN_TYPE_JSON;
+        returType = SOLR_RETURN_TYPE_JSON;
     }
 
     public List<SolrQueryKey> getQueryKeys() {

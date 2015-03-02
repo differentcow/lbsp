@@ -25,7 +25,7 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<Privilege> implements
      * @param masterValues
      * @return
      */
-    public List<OperateResource> findEnabledPageByMasterandAccess(String master,List<String> masterValues){
+    public List<OperateResource> findEnabledPageByMasterandAccess(String master,List<Integer> masterValues){
         return privilegeDao.findOperateByFilter(GenericConstants.LBSP_PRIVILEGE_ACCESS_TYPE_PAGE,
                                                 GenericConstants.LBSP_PRIVILEGE_OPERATION_ENABLED,
                                                 master,masterValues);
@@ -38,7 +38,7 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<Privilege> implements
      * @param masterValues
      * @return
      */
-    public List<OperateResource> findEnabledFuncByMasterandAccess(String master,List<String> masterValues){
+    public List<OperateResource> findEnabledFuncByMasterandAccess(String master,List<Integer> masterValues){
         return privilegeDao.findOperateByFilter(GenericConstants.LBSP_PRIVILEGE_ACCESS_TYPE_FUNC,
                 GenericConstants.LBSP_PRIVILEGE_OPERATION_ENABLED,
                 master,masterValues);

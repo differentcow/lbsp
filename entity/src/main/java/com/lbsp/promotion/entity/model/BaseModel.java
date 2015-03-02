@@ -3,53 +3,54 @@ package com.lbsp.promotion.entity.model;
 import java.util.Date;
 
 public class BaseModel {
-    protected String id;
+    protected Integer id;
 
-    protected String create_user;
+    protected Long create_time;
 
-    protected Date create_date;
+    protected Long update_time;
 
-    protected String update_user;
+    protected Integer update_user;
 
-    protected Date Last_update_date;
+    protected Integer create_user;
 
-    public Date getLast_update_date() {
-        return Last_update_date;
+    public Long getCreate_time() {
+        return create_time;
     }
 
-    public void setLast_update_date(Date Last_update_date) {
-        this.Last_update_date = Last_update_date;
+    public void setCreate_time(Long create_time) {
+        this.create_time = create_time;
     }
 
-    public String getId() {
+    public Long getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(Long update_time) {
+        this.update_time = update_time;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getCreate_user() {
-        return create_user;
-    }
-
-    public void setCreate_user(String create_user) {
-        this.create_user = create_user;
-    }
-
-    public Date getCreate_date() {
-        return create_date;
-    }
-
-    public void setCreate_date(Date create_date) {
-        this.create_date = create_date;
-    }
-
-    public String getUpdate_user() {
+    public Integer getUpdate_user() {
         return update_user;
     }
 
-    public void setUpdate_user(String update_user) {
+    public void setUpdate_user(Integer update_user) {
         this.update_user = update_user;
     }
+
+    public Integer getCreate_user() {
+        return create_user;
+    }
+
+    public void setCreate_user(Integer create_user) {
+        this.create_user = create_user;
+    }
+
 }

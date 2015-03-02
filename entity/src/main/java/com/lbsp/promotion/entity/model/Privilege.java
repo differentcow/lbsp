@@ -8,18 +8,18 @@ import com.lbsp.promotion.entity.table.annotation.MyTable;
 @MyTable(primaryKey = "privilege_id",value = "privilege")
 public class Privilege extends BaseModel{
 
-    private String privilege_id;
+    private Integer privilege_id;
     private String privilege_access;
-    private String privilege_access_value;
+    private Integer privilege_access_value;
     private String privilege_master;
-    private String privilege_master_value;
+    private Integer privilege_master_value;
     private String privilege_operation;
 
-    public String getPrivilege_id() {
+    public Integer getPrivilege_id() {
         return privilege_id;
     }
 
-    public void setPrivilege_id(String privilege_id) {
+    public void setPrivilege_id(Integer privilege_id) {
         this.privilege_id = privilege_id;
     }
 
@@ -31,11 +31,11 @@ public class Privilege extends BaseModel{
         this.privilege_access = privilege_access;
     }
 
-    public String getPrivilege_access_value() {
+    public Integer getPrivilege_access_value() {
         return privilege_access_value;
     }
 
-    public void setPrivilege_access_value(String privilege_access_value) {
+    public void setPrivilege_access_value(Integer privilege_access_value) {
         this.privilege_access_value = privilege_access_value;
     }
 
@@ -47,11 +47,11 @@ public class Privilege extends BaseModel{
         this.privilege_master = privilege_master;
     }
 
-    public String getPrivilege_master_value() {
+    public Integer getPrivilege_master_value() {
         return privilege_master_value;
     }
 
-    public void setPrivilege_master_value(String privilege_master_value) {
+    public void setPrivilege_master_value(Integer privilege_master_value) {
         this.privilege_master_value = privilege_master_value;
     }
 

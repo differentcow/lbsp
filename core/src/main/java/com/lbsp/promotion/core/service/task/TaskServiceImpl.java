@@ -26,15 +26,14 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements
      */
     @Transactional
     public boolean saveTask(String className,String name){
-        Date date = new Date();
         Task task = new Task();
-        task.setId(Security.generateUUIDStr());
         task.setClass_name(className);
         task.setName(name);
         task.setCreate_user(GenericConstants.LBSP_ADMINISTRATOR_ID);
         task.setUpdate_user(GenericConstants.LBSP_ADMINISTRATOR_ID);
-        task.setCreate_date(date);
-        task.setLast_update_date(date);
+        long times = System.currentTimeMillis();
+        task.setCreate_time(times);
+        task.setUpdate_time(times);
         return this.insert(task) > 0;
     }
 
@@ -49,7 +48,7 @@ public class TaskServiceImpl extends BaseServiceImpl<Task> implements
         if(task == null)
             return false;
         GenericQueryParam param = new GenericQueryParam();
-        if(StringUtils.isNotBlank(task.getId())){
+        if(task.getId() != null){
             param.put(new QueryKey("id", QueryKey.Operators.EQ),task.getId());
         }else{
             if(StringUtils.isNotBlank(task.getName())){

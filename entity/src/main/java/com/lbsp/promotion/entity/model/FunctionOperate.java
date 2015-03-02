@@ -8,7 +8,6 @@ import com.lbsp.promotion.entity.table.annotation.MyTable;
 @MyTable(value = "function_operate")
 public class FunctionOperate extends BaseModel {
 
-    private String id;
     private String code;
     private String url;
     private String page_id;
@@ -56,14 +55,6 @@ public class FunctionOperate extends BaseModel {
 
     public void setPage_id(String page_id) {
         this.page_id = page_id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getCode() {

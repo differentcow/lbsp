@@ -50,10 +50,10 @@ public class TaskQueueServiceImpl extends BaseServiceImpl<TaskQueue> implements
      * @return
      */
     @Transactional
-    public boolean updateStatus(String status,String id,String userId){
+    public boolean updateStatus(String status,Integer id,Integer userId){
         TaskQueue tq = new TaskQueueRsp();
         tq.setId(id);
-        tq.setLast_update_date(new Date());
+        tq.setUpdate_time(System.currentTimeMillis());
         tq.setUpdate_user(userId);
         tq.setTask_status(status);
         List<String> filter = new ArrayList<String>();
@@ -78,10 +78,10 @@ public class TaskQueueServiceImpl extends BaseServiceImpl<TaskQueue> implements
      * @return
      */
     @Transactional
-    public boolean updateCornExpression(String expression,String text,String id,String userId){
+    public boolean updateCornExpression(String expression,String text,Integer id,Integer userId){
         TaskQueue tq = new TaskQueueRsp();
         tq.setId(id);
-        tq.setLast_update_date(new Date());
+        tq.setUpdate_time(System.currentTimeMillis());
         tq.setUpdate_user(userId);
         tq.setCron_expression(expression);
         if(StringUtils.isNotBlank(text)){
@@ -109,10 +109,8 @@ public class TaskQueueServiceImpl extends BaseServiceImpl<TaskQueue> implements
      */
     @Transactional
     public boolean insertTaskQueue(TaskQueue queue){
-        Date date = new Date();
-        queue.setId(Security.generateUUIDStr());
-        queue.setLast_update_date(date);
-        queue.setCreate_date(date);
+        queue.setUpdate_time(System.currentTimeMillis());
+        queue.setCreate_time(System.currentTimeMillis());
         return this.insert(queue) > 0;
     }
 

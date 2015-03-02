@@ -21,7 +21,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <foreach collection="masterValues" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        order by p.last_update_date desc
+        order by p.update_time desc
     </select>
 
 </mapper> 

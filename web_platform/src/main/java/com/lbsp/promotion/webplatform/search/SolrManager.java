@@ -119,6 +119,8 @@ public class SolrManager {
         solrServer.commit();
     }
 
+
+
     /**
      * 查询
      *

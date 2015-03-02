@@ -22,5 +22,5 @@ public interface PrivilegeDao {
     List<OperateResource> findOperateByFilter(@Param("access")String access,
                                               @Param("operate")String operate,
                                               @Param("master")String master,
-                                              @Param("masterValues")List<String> masterValues);
+                                              @Param("masterValues")List<Integer> masterValues);
 }

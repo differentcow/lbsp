@@ -114,7 +114,7 @@ requirejs(['jquery','knockout','paramsService','commonUtil','amplify','DT-bootst
 		{ 	//创建时间
         	'sDefaultContent': '',
         	'fnRender': function (obj) {
-        		return All580.DPGlobal.formatDateTime(obj.aData.create_date, 'yyyy-MM-dd HH:mm:ss');
+        		return All580.DPGlobal.formatDateTime(obj.aData.create_time, 'yyyy-MM-dd HH:mm:ss');
         	}
 		},
 		{ 	//操作

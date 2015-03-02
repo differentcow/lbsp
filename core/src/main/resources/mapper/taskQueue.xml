@@ -16,12 +16,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             and t.name like "%"#{tq.name}"%"
         </if>
         <if test="tq.start_date != null">
-            and q.last_update_date &gt;= #{tq.start_date}
+            and q.update_time &gt;= #{tq.start_date}
         </if>
         <if test="tq.end_date != null">
-            and q.last_update_date &lt;= #{tq.end_date}
+            and q.update_time &lt;= #{tq.end_date}
         </if>
-        order by q.last_update_date desc
+        order by q.update_time desc
         <if test="tq.start != null and tq.size != null">
             limit #{tq.start},#{tq.size}
         </if>
@@ -38,14 +38,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             and t.name like "%"#{tq.name}"%"
         </if>
         <if test="tq.start_date != null">
-            and q.last_update_date &gt;= #{tq.start_date}
+            and q.update_time &gt;= #{tq.start_date}
         </if>
         <if test="tq.end_date != null">
-            and q.last_update_date &lt;= #{tq.end_date}
-        </if>
-        order by q.last_update_date desc
-        <if test="tq.start != null and tq.size != null">
-            limit #{tq.start},#{tq.size}
+            and q.update_time &lt;= #{tq.end_date}
         </if>
     </select>
 

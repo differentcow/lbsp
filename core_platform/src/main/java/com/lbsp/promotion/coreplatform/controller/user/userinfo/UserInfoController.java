@@ -93,7 +93,7 @@ public class UserInfoController extends BaseController {
                               @RequestBody Password pwd) {
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         GenericQueryParam param = new GenericQueryParam();
         param.put(new QueryKey("id", QueryKey.Operators.EQ),userId);
         User user = userService.findOne(param);
@@ -124,7 +124,7 @@ public class UserInfoController extends BaseController {
     public Object reAuth(HttpServletRequest request) {
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         GenericQueryParam param = new GenericQueryParam();
         param.put(new QueryKey("id", QueryKey.Operators.EQ),userId);
         User user = userService.findOne(param);
@@ -154,7 +154,7 @@ public class UserInfoController extends BaseController {
         }
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         GenericQueryParam param = new GenericQueryParam();
         param.put(new QueryKey("id", QueryKey.Operators.EQ),userId);
         User user = userService.findOne(param);
@@ -185,7 +185,7 @@ public class UserInfoController extends BaseController {
         }
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         GenericQueryParam param = new GenericQueryParam();
         param.put(new QueryKey("id", QueryKey.Operators.EQ),userId);
         User user = userService.findOne(param);
@@ -225,7 +225,7 @@ public class UserInfoController extends BaseController {
         }
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         User user = new User();
         user.setId(userId);
         user.setUpdate_user(userId);
@@ -306,7 +306,7 @@ public class UserInfoController extends BaseController {
             @RequestBody User user) {
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         user.setCreate_user(userId);
         user.setUpdate_user(userId);
         String pwd = passwordEncoder.encode(defaultPassword); //加密密码，默认在core.properties设置，后续再完善
@@ -327,11 +327,11 @@ public class UserInfoController extends BaseController {
     @ResponseBody
     public Object updateUser(
             HttpServletRequest request,
-            @RequestParam(value = "id",required = true)String id,
+            @RequestParam(value = "id",required = true)Integer id,
             @RequestBody User user) {
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         user.setId(id);
         user.setUpdate_user(userId);
         if (userService.updateUser(user)) {
@@ -354,7 +354,7 @@ public class UserInfoController extends BaseController {
                            @RequestBody User rsp) {
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         User user = new User();
         user.setId(userId);
         user.setUpdate_user(userId);

@@ -24,7 +24,7 @@ public interface UserService<T> extends BaseService<T> {
      * @param authCode
      * @return
      */
-    boolean updateAuthCode(String userId, String authCode);
+    boolean updateAuthCode(Integer userId, String authCode);
 
 	/**
 	 * 通过验证码获取用户信息

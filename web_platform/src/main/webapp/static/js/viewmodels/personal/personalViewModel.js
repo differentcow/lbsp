@@ -94,8 +94,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'userinfoService', 'commonU
               if (typeof data.email != 'undefined') {
                 me.email(data.email);
               }
-            if (typeof data.create_date != 'undefined') {
-              var date_str =  All580.DPGlobal.formatDateTime(data.create_date, 'yyyy-MM-dd HH:mm:ss');
+            if (typeof data.create_time != 'undefined') {
+              var date_str =  All580.DPGlobal.formatDateTime(data.create_time, 'yyyy-MM-dd HH:mm:ss');
               me.create_date(date_str);
             }
           }

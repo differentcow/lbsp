@@ -125,11 +125,11 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				for (Method method : methods) {
 					if (method.getName().equals("get" + name)) {
 						Object v = method.invoke(obj, new Object[] {});
-						if(fieldName.equals(this.getPrimaryKey())){
+						/*if(fieldName.equals(this.getPrimaryKey())){
 							if(v == null){
 								v = Security.generateUUIDStr();
 							}
-						}
+						}*/
 						if (v != null) {
 							keyBuffer.append(filterKey(fieldName) + ",");
 							if (v instanceof String) {

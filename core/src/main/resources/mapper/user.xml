@@ -37,8 +37,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="user.username != null and user.username != ''">
             , username = #{user.username}
         </if>
-        <if test="user.last_update_date != null">
-            , last_update_date = #{user.last_update_date}
+        <if test="user.update_time != null">
+            , update_time = #{user.update_time}
         </if>
         <if test="user.password != null and user.password != ''">
             , password = #{user.password}

@@ -65,7 +65,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping(value = "/status/run", method = RequestMethod.GET)
     @ResponseBody
-    public Object updateStatus(HttpServletRequest request,@RequestParam(value = "id",required = true)String id) {
+    public Object updateStatus(HttpServletRequest request,@RequestParam(value = "id",required = true)Integer id) {
         if(isRunning(id)){
             return this.createBaseResult(GenericConstants.LBSP_STATUS_SUCCESS,"任务正在运行中", false);
         }
@@ -97,7 +97,7 @@ public class TaskController extends BaseController {
      */
     @RequestMapping(value = "/status/{status}", method = RequestMethod.PUT)
     @ResponseBody
-    public Object updateStatus(HttpServletRequest request,@PathVariable("status") String status,@RequestParam(value = "id",required = true)String id) {
+    public Object updateStatus(HttpServletRequest request,@PathVariable("status") String status,@RequestParam(value = "id",required = true)Integer id) {
         if(isRunning(id)){
             return this.createBaseResult(GenericConstants.HTTP_STATUS_FAILURE,"任务正在运行中", false);
         }
@@ -125,7 +125,7 @@ public class TaskController extends BaseController {
         }
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         boolean flag = taskQueueService.updateStatus(taskStatus,id,userId);
         if(flag){
             return this.createBaseResult("操作成功", true);
@@ -164,7 +164,7 @@ public class TaskController extends BaseController {
     @ResponseBody
     public Object delTask(HttpServletRequest request) {
         String id = request.getParameter("id");
-        if(isRunning(id)){
+        if(isRunning(Integer.parseInt(id))){
             return this.createBaseResult(GenericConstants.HTTP_STATUS_FAILURE,"任务正在运行中", false);
         }
         GenericQueryParam param = new GenericQueryParam();
@@ -197,7 +197,7 @@ public class TaskController extends BaseController {
             HttpServletRequest request,
             @RequestBody TaskQueue tq) {
         //判断参数是否为空
-        if(StringUtils.isBlank(tq.getTask_name()) || StringUtils.isBlank(tq.getCron_expression()) || StringUtils.isBlank(tq.getTask_class())){
+        if(StringUtils.isBlank(tq.getTask_name()) || StringUtils.isBlank(tq.getCron_expression()) || tq.getTask_class() == null){
             return this.createBaseResult(GenericConstants.HTTP_STATUS_SUCCESS,"参数缺失.", false);
         }
         //判断是否已存在同名任务
@@ -209,7 +209,7 @@ public class TaskController extends BaseController {
         }
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
         tq.setCreate_user(userId);
         tq.setUpdate_user(userId);
         tq.setTask_status(TaskQueueService.TASK_STATUS_NORMAL);
@@ -244,7 +244,7 @@ public class TaskController extends BaseController {
     @ResponseBody
     public Object updateCornExpression(
             HttpServletRequest request,
-            @RequestParam(value = "id",required = true)String id,
+            @RequestParam(value = "id",required = true)Integer id,
             @RequestBody TaskQueue rsp) {
 
         if(isRunning(id)){
@@ -257,7 +257,7 @@ public class TaskController extends BaseController {
 
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String userId = session.getUser().getId();
+        Integer userId = session.getUser().getId();
 
         SchedulerUtil util = new SchedulerUtil(schedulerFactoryBean.getScheduler());
         try {
@@ -318,7 +318,7 @@ public class TaskController extends BaseController {
      * @param id
      * @return
      */
-    private boolean isRunning(String id){
+    private boolean isRunning(Integer id){
         GenericQueryParam param = new GenericQueryParam();
         param.put(new QueryKey("id", QueryKey.Operators.EQ),id);
         param.put(new QueryKey("task_status", QueryKey.Operators.EQ),TaskQueueService.TASK_STATUS_RUN);

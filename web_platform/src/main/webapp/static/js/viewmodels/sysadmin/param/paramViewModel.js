@@ -222,8 +222,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
             if (typeof data.type_meaning != 'undefined') {
               me.type_meaning(data.type_meaning);
             }
-            if (typeof data.create_date != 'undefined') {
-              var date_str =  All580.DPGlobal.formatDateTime(data.create_date, 'yyyy-MM-dd HH:mm:ss');
+            if (typeof data.create_time != 'undefined') {
+              var date_str =  All580.DPGlobal.formatDateTime(data.create_time, 'yyyy-MM-dd HH:mm:ss');
               me.create_date(date_str);
             }
             if (typeof data.description != 'undefined') {
