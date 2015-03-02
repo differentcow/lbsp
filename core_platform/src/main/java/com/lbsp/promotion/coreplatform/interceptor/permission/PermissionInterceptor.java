@@ -36,13 +36,37 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
     @Value("${permission.method}")
 	private String permissionMethod;
 
+    @Value("${permission.allow.ip}")
+    private String ip;
+
 	public void setExcludes(List<String> excludes) {
 		this.excludes = excludes;
 	}
 
+    private String getRemoteHost(javax.servlet.http.HttpServletRequest request){
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+            ip = request.getRemoteAddr();
+        }
+        return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip;
+    }
+
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
+
+        String ip = getRemoteHost(request);
+
+        if (!this.ip.equals(ip)){
+            throw new AuthKeyNotExistException("no permission to visit rest");
+        }
+
 		String authKey = request.getParameter(GenericConstants.AUTHKEY);
 		if (authKey ==null&&NONE_PERMISSIONMETHOD.equals(permissionMethod)) {
 			return true;
