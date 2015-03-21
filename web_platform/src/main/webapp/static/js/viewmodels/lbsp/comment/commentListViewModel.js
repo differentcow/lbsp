@@ -5,9 +5,13 @@ requirejs(['jquery','knockout','commentService','commonUtil','amplify','DT-boots
 		function($,ko,commentService,util){
   var sys_info = parent.app.getI18nMessage('common.sys.info');
   var sys_error = parent.app.getI18nMessage('common.sys.error');
+  var yes = parent.app.getI18nMessage('common.sys.label.yes');
+  var no = parent.app.getI18nMessage('common.sys.label.no');
+  var normal = parent.app.getI18nMessage('common.sys.label.normal');
+  var delete_status = parent.app.getI18nMessage('common.sys.label.delStatus');
   var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
-  /*var edit_ok = parent.app.getI18nMessage('common.sys.edit.text');
-  var edit_fail = parent.app.getI18nMessage('common.sys.edit.text');*/
+  var anonymous = parent.app.getI18nMessage('common.select.anonymous');
+  var registCustomer = parent.app.getI18nMessage('common.select.customer');
   var atlease_tip = parent.app.getI18nMessage('common.sys.select.atleast.one');
   var CommentListViewModel = function() {
     var ep = this;
@@ -45,7 +49,7 @@ requirejs(['jquery','knockout','commentService','commonUtil','amplify','DT-boots
       }
     };
       this.seti18nText = function(){
-          $('title,legend,label,span,div,th').each(function(){
+          $('title,label,span,div,th').each(function(){
               var attr = $(this).attr('i18n');
               if(attr !=null && attr != ''){
                   $(this).text(parent.app.getI18nMessage(attr));
@@ -60,7 +64,7 @@ requirejs(['jquery','knockout','commentService','commonUtil','amplify','DT-boots
       };
     this.init = function () {
         ep.sel_text(parent.app.getI18nMessage("common.sys.select.text"));
-//        ep.seti18nText();
+        ep.seti18nText();
         ep.initAuth();
         ep.loadTypeList();
         ep.datePickerInit();
@@ -92,8 +96,8 @@ requirejs(['jquery','knockout','commentService','commonUtil','amplify','DT-boots
         this.val = value;
     };
     this.loadTypeList = function(){
-        ep.typeOptions.push(new SelectModel('注册用户',1));
-        ep.typeOptions.push(new SelectModel('匿名用户',0));
+        ep.typeOptions.push(new SelectModel(registCustomer,1));
+        ep.typeOptions.push(new SelectModel(anonymous,0));
     };
 
     this.datatable = ko.observable();
@@ -123,9 +127,19 @@ requirejs(['jquery','knockout','commentService','commonUtil','amplify','DT-boots
             'sDefaultContent': '',
             'fnRender': function (obj) {
                 if (obj.aData.status == 0 ){
-                    return '<span class="label label-danger">删除</span>';
+                    return '<span class="label label-danger">'+delete_status+'</span>';
                 }else{
-                    return '<span class="label label-success">正常</span>';
+                    return '<span class="label label-success">'+normal+'</span>';
+                }
+            }
+        },
+        { 	//匿名
+            'sDefaultContent': '',
+            'fnRender': function (obj) {
+                if(typeof obj.aData.anonymous_user == 'undefined'){
+                    return '<span class="label label-info">'+no+'</span>';
+                }else{
+                    return '<span class="label label-info">'+yes+'</span>';
                 }
             }
         },

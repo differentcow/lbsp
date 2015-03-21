@@ -70,16 +70,6 @@ public class CommentController extends BaseController {
         if (maxRecords > GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE)
             maxRecords = GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE;
 
-        /*Long fromDate = null;
-        Long toDate = null;
-        try {
-            if (StringUtils.isNotBlank(from))
-                fromDate = new SimpleDateFormat("yyyy-MM-dd 00:00:00").parse(from+" 00:00:00").getTime();
-            if (StringUtils.isNotBlank(to))
-                toDate = new SimpleDateFormat("yyyy-MM-dd 23:59:59").parse(to+" 23:59:59").getTime();
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
         PageResultRsp page = commentService.getPageList(type, name,title,from,to,startRecord,maxRecords);
         return this.createBaseResult("查询成功", page.getResult(),page.getPageInfo());
     }
