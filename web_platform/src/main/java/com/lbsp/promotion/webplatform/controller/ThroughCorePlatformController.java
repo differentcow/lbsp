@@ -14,6 +14,7 @@ import org.apache.commons.httpclient.methods.multipart.ByteArrayPartSource;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -45,6 +46,8 @@ public class ThroughCorePlatformController {
 	private SecurityContextLogoutHandler securityContextLogoutHandler;
     @Autowired
     private SessionLocaleResolver localeResolver;
+    @Value("${web.md5}")
+    private String md5;
 
 	@RequestMapping(value = "/{url}", method = RequestMethod.GET)
 	public @ResponseBody
@@ -52,6 +55,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
+        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -80,6 +84,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
+        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -110,6 +115,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
+        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -139,6 +145,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
+        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -167,6 +174,7 @@ public class ThroughCorePlatformController {
 			HttpServletRequest request) throws IOException {
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
+        param.fill("md5",md5);
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder.getContext().getAuthentication();
 		if (token != null) {
 			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
@@ -195,6 +203,7 @@ public class ThroughCorePlatformController {
                            HttpServletRequest request,HttpServletResponse response) throws IOException {
         GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
+        param.fill("md5",md5);
         UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder.getContext().getAuthentication();
         if (token != null) {
             param.fill(GenericConstants.AUTHKEY, token.getCredentials().toString());
@@ -287,6 +296,7 @@ public class ThroughCorePlatformController {
 			HttpServletRequest request,HttpServletResponse response) throws IOException {
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
+        param.fill("md5",md5);
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		if (token != null) {

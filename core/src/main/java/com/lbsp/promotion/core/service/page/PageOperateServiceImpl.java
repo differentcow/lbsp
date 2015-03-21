@@ -20,7 +20,7 @@ public class PageOperateServiceImpl extends BaseServiceImpl<PageOperate> impleme
      */
     public List<PageOperate> allPages(){
         GenericQueryParam param = new GenericQueryParam();
-        param.addSortCond(new SortCond("last_update_date", SortCond.Order.DESC));
+        param.addSortCond(new SortCond("update_time", SortCond.Order.DESC));
         return this.findAll(param);
     }
 

@@ -1,12 +1,17 @@
 package com.lbsp.promotion.coreplatform.controller.base;
 
+import com.lbsp.promotion.coreplatform.editor.LongDataEditor;
 import com.lbsp.promotion.entity.base.BaseResult;
 import com.lbsp.promotion.entity.base.PageInfoRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
+import com.lbsp.promotion.entity.model.BaseModel;
+import com.lbsp.promotion.entity.response.UserRsp;
 import com.lbsp.promotion.util.validation.Validation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -15,6 +20,28 @@ public abstract class BaseController {
 
     @Autowired
     private MessageSource messageSource;
+
+    protected UserRsp getSessionUser(HttpServletRequest request){
+        UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
+        return session;
+    }
+
+    protected Integer getSessionUserId(HttpServletRequest request){
+        return getSessionUser(request).getUser().getId();
+    }
+
+    protected void setCommonInfo(BaseModel model,HttpServletRequest request){
+        if(model == null)
+            return;
+        Long now = System.currentTimeMillis();
+        Integer userId = getSessionUserId(request);
+        if (model.getId() == null){
+            model.setCreate_user(userId);
+            model.setCreate_time(now);
+        }
+        model.setUpdate_time(now);
+        model.setCreate_user(userId);
+    }
 
     private Locale getLocale(String localStr){
         Locale locale = null;
@@ -75,4 +102,9 @@ public abstract class BaseController {
 		if (maxRecords > GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE)
 			maxRecords = GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE;
 	}
+
+    @InitBinder
+    public void init(WebDataBinder binder){
+        binder.registerCustomEditor(Long.class,new LongDataEditor());
+    }
 }

@@ -20,7 +20,7 @@ public class FunctionOperateServiceImpl extends BaseServiceImpl<FunctionOperate>
      */
     public List<FunctionOperate> allFunctions(){
         GenericQueryParam param = new GenericQueryParam();
-        param.addSortCond(new SortCond("last_update_date", SortCond.Order.DESC));
+        param.addSortCond(new SortCond("update_time", SortCond.Order.DESC));
         return this.findAll(param);
     }
 

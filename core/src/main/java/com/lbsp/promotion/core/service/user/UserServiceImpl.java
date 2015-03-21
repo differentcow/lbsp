@@ -134,7 +134,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
         List<String> pageStrs = new ArrayList<String>();
         List<OperateResource> pageOpers = new ArrayList<OperateResource>();
         //如果用户是超级管理员(系统自带生成的唯一的根用户)，允许访问所有页面
-        if (GenericConstants.LBSP_ADMINISTRATOR_ID.equals(user.getId())){
+        if (GenericConstants.LBSP_ADMINISTRATOR_ID == user.getId()){
             List<PageOperate> pages = pageOperateService.allPages();
             for (PageOperate or : pages){
                 pageStrs.add(or.getCode());
@@ -179,7 +179,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
         //查询用户所有的功能操作权限
         List<OperateResource> functions = new ArrayList<OperateResource>();
         //如果用户是超级管理员(系统自带生成的唯一的根用户)，自动装载所有操作权限
-        if (GenericConstants.LBSP_ADMINISTRATOR_ID.equals(user.getId())){
+        if (GenericConstants.LBSP_ADMINISTRATOR_ID == user.getId()){
             List<FunctionOperate> funcList = functionOperateService.allFunctions();
             for (FunctionOperate func : funcList){
                 OperateResource or = new OperateResource();

@@ -57,7 +57,7 @@ public class TaskQueueServiceImpl extends BaseServiceImpl<TaskQueue> implements
         tq.setUpdate_user(userId);
         tq.setTask_status(status);
         List<String> filter = new ArrayList<String>();
-        filter.add("create_date");
+        filter.add("create_time");
         filter.add("create_user");
         filter.add("task_name");
         filter.add("task_class");
@@ -91,7 +91,7 @@ public class TaskQueueServiceImpl extends BaseServiceImpl<TaskQueue> implements
         if(StringUtils.isBlank(text)){
             filter.add("corn_text");
         }
-        filter.add("create_date");
+        filter.add("create_time");
         filter.add("create_user");
         filter.add("task_name");
         filter.add("status");
