@@ -61,9 +61,9 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getServletPath();
-        if (!this.md5.equals(request.getParameter("md5")) && !"/user/login".equals(uri)){
+        /*if (!"/user/login".equals(uri)){
             throw new AuthKeyNotExistException("no permission to visit rest");
-        }
+        }*/
 
 		String authKey = request.getParameter(GenericConstants.AUTHKEY);
 		if (authKey ==null&&NONE_PERMISSIONMETHOD.equals(permissionMethod)) {

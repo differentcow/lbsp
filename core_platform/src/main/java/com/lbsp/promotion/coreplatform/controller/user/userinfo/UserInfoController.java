@@ -75,7 +75,6 @@ public class UserInfoController extends BaseController {
     public Object me(HttpServletRequest request) {
         //获取user ID
         UserRsp session = (UserRsp)request.getAttribute(GenericConstants.REQUEST_AUTH);
-        String pwd = passwordEncoder.encode("root_0415");
         return this.createBaseResult("查询成功", session);
     }
 

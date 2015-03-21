@@ -45,7 +45,7 @@ public class ThroughCorePlatformController {
 	private SecurityContextLogoutHandler securityContextLogoutHandler;
     @Autowired
     private SessionLocaleResolver localeResolver;
-    @Value("${web.md5}")
+    /*@Value("${web.md5}")
     private String md5;
 
     @PostConstruct
@@ -57,7 +57,7 @@ public class ThroughCorePlatformController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 	@RequestMapping(value = "/{url}", method = RequestMethod.GET)
 	public @ResponseBody
@@ -65,7 +65,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-        param.fill("md5",md5);
+//        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -93,7 +93,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-        param.fill("md5",md5);
+//        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -123,7 +123,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-        param.fill("md5",md5);
+//        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -152,7 +152,7 @@ public class ThroughCorePlatformController {
 		url = url.replace("|", "/");
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-        param.fill("md5",md5);
+//        param.fill("md5",md5);
 		Enumeration queryNames = request.getParameterNames();
 		while (queryNames.hasMoreElements()) {
 			String name = (String) queryNames.nextElement();
@@ -180,7 +180,7 @@ public class ThroughCorePlatformController {
 			HttpServletRequest request) throws IOException {
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-        param.fill("md5",md5);
+//        param.fill("md5",md5);
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder.getContext().getAuthentication();
 		if (token != null) {
 			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
@@ -209,7 +209,7 @@ public class ThroughCorePlatformController {
                            HttpServletRequest request,HttpServletResponse response) throws IOException {
         GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-        param.fill("md5",md5);
+//        param.fill("md5",md5);
         UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder.getContext().getAuthentication();
         if (token != null) {
             param.fill(GenericConstants.AUTHKEY, token.getCredentials().toString());
@@ -302,7 +302,7 @@ public class ThroughCorePlatformController {
 			HttpServletRequest request,HttpServletResponse response) throws IOException {
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-        param.fill("md5",md5);
+//        param.fill("md5",md5);
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		if (token != null) {

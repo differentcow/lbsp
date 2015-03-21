@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"    
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.lbsp.promotion.core.dao.FeedbackDao">
+
+    <select id="getDetailById" resultType="FeedbackRsp">
+        select f.*,c.name as customer
+        from feedback f inner join customer c on c.id = f.customer_id
+        where f.id = #{id}
+    </select>
+
+    <select id="getListCount" resultType="int">
+        select count(1)
+        from feedback f inner join customer c on c.id = f.customer_id
+        where 1=1
+        <if test="title != null and title != ''">
+            and f.title "%"#{title}"%"
+        </if>
+        <if test="name != null and name != '' and type = null">
+            and (c.name like "%"#{name}"%" or f.anonymous like "%"#{name}"%")
+        </if>
+        <if test="name != null and name != '' and type == 0">
+            and f.anonymous like "%"#{name}"%"
+        </if>
+        <if test="name != null and name != '' and type == 1">
+            and c.name like "%"#{name}"%"
+        </if>
+        <if test="type == 0">
+            and f.customer_id is null
+        </if>
+        <if test="type == 1">
+            and f.anonymous is null
+        </if>
+        <if test="from != null">
+            and f.create_time >= #{from}
+        </if>
+        <if test="to != null">
+            and f.create_time &lt;= #{to}
+        </if>
+    </select>
+
+    <select id="getList" resultType="FeedbackRsp">
+      select f.*,c.name as customer
+      from feedback f inner join customer c on c.id = f.customer_id
+      where 1=1
+      <if test="title != null and title != ''">
+          and f.title "%"#{title}"%"
+      </if>
+      <if test="name != null and name != '' and type == null">
+          and (c.name like "%"#{name}"%" or f.anonymous like "%"#{name}"%")
+      </if>
+      <if test="name != null and name != '' and type == 0">
+          and f.anonymous like "%"#{name}"%"
+      </if>
+      <if test="name != null and name != '' and type == 1">
+          and c.name like "%"#{name}"%"
+      </if>
+      <if test="type == 0">
+          and f.customer_id is null
+      </if>
+      <if test="type == 1">
+          and f.anonymous is null
+      </if>
+      <if test="from != null">
+          and f.create_time >= #{from}
+      </if>
+      <if test="to != null">
+          and f.create_time &lt;= #{to}
+      </if>
+      order by f.update_time desc
+      <if test="start != null and size != null">
+          limit #{start},#{size}
+      </if>
+    </select>
+
+    <delete id="batchDelete">
+        delete from feedback
+        where id in
+        <foreach collection="id" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper> 

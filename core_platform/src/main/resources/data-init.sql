@@ -431,7 +431,7 @@ VALUES
 (11,'modifycomment','更改评论状态',12,'/comment/upt',NULL,'PUT',0,3,(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1),
 (12,'delcomment','删除评论',12,'/comment/del',NULL,'DELETE',0,4,(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1),
 (13,'viewfeedback','查看反馈',13,'/feedback/lst',NULL,'GET',0,1,(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1),
-(14,'viewfeedback','查看反馈',13,'/feedback/{id}',NULL,'GET',0,2,(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1),
+(14,'viewfeedback','查看反馈',13,'/feedback/{id}',NULL,'GET',1,2,(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1),
 (15,'delfeedback','删除反馈',13,'/feedback/del',NULL,'DELETE',0,3,(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1);
 
 -- -----------------------------------------关联操作资源----------------------------------
