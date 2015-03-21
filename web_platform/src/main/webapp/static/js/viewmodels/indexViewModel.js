@@ -230,9 +230,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping','moment','userService',
     this.loadUserInfo = function () {
       var deferred = userService.getLoginUserInfo();
       $.when(deferred).done(function (response) {
-
         $.each(response.funcs, function (index, func) {
-
           if (typeof func.type != 'undefined' && func.type == 'menu') {
             self.userMenus.push(new UserFunction(func));
           }

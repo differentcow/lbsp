@@ -23,15 +23,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Barry
@@ -49,6 +48,19 @@ public class ThroughCorePlatformController {
     @Value("${web.md5}")
     private String md5;
 
+    private String md5;
+
+    @PostConstruct
+    public void init(){
+        try {
+            Properties prop = new Properties();
+            prop.load(this.getClass().getClassLoader().getResourceAsStream("web.properties"));
+            md5 = prop.getProperty("web.md5","");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 	@RequestMapping(value = "/{url}", method = RequestMethod.GET)
 	public @ResponseBody
 	Object getFromCore(@PathVariable String url, HttpServletRequest request,HttpServletResponse response) {
@@ -64,8 +76,7 @@ public class ThroughCorePlatformController {
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		if (token != null) {
-			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
-					.toString());
+			param.fill(GenericConstants.AUTHKEY, token.getCredentials().toString());
 		}
 		HttpRequest http = factory.createInstance(param, url);
 
@@ -93,8 +104,7 @@ public class ThroughCorePlatformController {
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		if (token != null) {
-			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
-					.toString());
+			param.fill(GenericConstants.AUTHKEY, token.getCredentials().toString());
 		}
 		HttpRequest http = factory.createInstance(param, url, values);
 		http.setRequestType(GenericHttpRequest.RequestType.PARAM_IN_BODY);
@@ -124,8 +134,7 @@ public class ThroughCorePlatformController {
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		if (token != null) {
-			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
-					.toString());
+			param.fill(GenericConstants.AUTHKEY, token.getCredentials().toString());
 		}
 		HttpRequest http = factory.createInstance(param, url, values);
 		http.setRequestType(GenericHttpRequest.RequestType.PARAM_IN_BODY);
@@ -154,8 +163,7 @@ public class ThroughCorePlatformController {
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		if (token != null) {
-			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
-					.toString());
+			param.fill(GenericConstants.AUTHKEY, token.getCredentials().toString());
 		}
 		HttpRequest http = factory.createInstance(param, url);
 		TypeReference<Map> type = new TypeReference<Map>() {
@@ -300,8 +308,7 @@ public class ThroughCorePlatformController {
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		if (token != null) {
-			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
-					.toString());
+			param.fill(GenericConstants.AUTHKEY, token.getCredentials().toString());
 		}
 		Part[] parts = { new CustomFilePart("uploadFile",
 				new ByteArrayPartSource(file.getOriginalFilename(),

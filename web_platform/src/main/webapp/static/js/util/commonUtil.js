@@ -21,6 +21,9 @@ define(['jquery','knockout','amplify','jquery-i18n'],function($,ko){
 
       }
     };
+    this.random10Num = function(){
+      return parseInt(Math.random()*10+1);
+    };
     this.getQueryString = function(name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
       var r = window.location.search.substr(1).match(reg);
