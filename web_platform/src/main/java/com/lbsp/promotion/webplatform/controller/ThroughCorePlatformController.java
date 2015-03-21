@@ -48,8 +48,6 @@ public class ThroughCorePlatformController {
     @Value("${web.md5}")
     private String md5;
 
-    private String md5;
-
     @PostConstruct
     public void init(){
         try {
