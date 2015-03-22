@@ -1,0 +1,1 @@
+mvn -Pall,no-test install
