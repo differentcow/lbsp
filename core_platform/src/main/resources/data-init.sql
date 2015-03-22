@@ -440,3 +440,15 @@ insert into privilege(privilege_master,privilege_master_value,privilege_access,p
 select 'role',1, 'page',id,'E',(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1 from page_operate;
 insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)
 select 'role',1, 'function',id,'E',(UNIX_TIMESTAMP(now()) * 1000),(UNIX_TIMESTAMP(now()) * 1000),1,1 from function_operate;
+
+-- ------------------2015/03/22 09:49:12 support content------------------
+
+insert into page_operate(code,parent_id,parent_code,`name`,sort_index,create_time,update_time,create_user,update_user) VALUES('collection',11,'lbsp','收藏',2,1427032133107,1427032133107,1,1);
+
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user) VALUES ('viewcollection','查看收藏',14,'/collection/lst',NULL,'GET',0,1,1427032133107,1427032133107,1,1),('viewcollection','查看收藏',14,'/collection/{id}',NULL,'GET',1,2,1427032133107,1427032133107,1,1),('addcollection','添加收藏',14,'/collection/add',NULL,'POST',0,3,1427032133107,1427032133107,1,1),('delcollection','删除收藏',14,'/collection/del',NULL,'DELETE',0,4,1427032133107,1427032133107,1,1),('modifycollection','修改收藏',14,'/collection/upt',NULL,'PUT',0,5,1427032133107,1427032133107,1,1);
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'page',id,'E',1427032133107,1427032133107,1,1 from page_operate where id = 14;
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427032133107,1427032133107,1,1 from function_operate where code in ('viewcollection','delcollection','modifycollection','addcollection');
+
+-- ------------------2015/03/22 09:49:12 support content------------------

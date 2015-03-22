@@ -3,7 +3,6 @@
  */
 package com.lbsp.promotion.core.dao;
 
-import com.lbsp.promotion.entity.model.Comment;
 import com.lbsp.promotion.entity.response.CommentRsp;
 import org.apache.ibatis.annotations.Param;
 
