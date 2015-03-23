@@ -33,7 +33,7 @@ public class ServiceTemplate {
                 sb.append(part.trim().substring(0,1).toUpperCase()).append(part.trim().substring(1));
             }
         }else{
-            sub.append(table.trim().substring(0,1).toUpperCase()).append(table.trim().substring(1));
+            sub.append(table.trim());
             sb.append(table.trim().substring(0,1).toUpperCase()).append(table.trim().substring(1));
         }
         this.className = sb.toString();
@@ -142,6 +142,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("保存信息",true);
         comment.addParam(subClassName);
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\tboolean save").append(className).append("(").append(className).append(" ").append(subClassName).append(" );\n");
         return sb.toString();
     }
@@ -150,6 +151,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("保存信息",true);
         comment.addParam(subClassName);
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\t@Transactional\n");
         sb.append("\tpublic boolean save").append(className).append("(").append(className).append(" ").append(subClassName).append(" ) {\n");
         sb.append("\t\tLong currentTime = System.currentTimeMillis();\n");
@@ -168,6 +170,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("删除信息",true);
         comment.addParam("id");
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\tboolean delete").append(className).append("(Integer id);\n");
         return sb.toString();
     }
@@ -176,6 +179,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("删除信息",true);
         comment.addParam("id");
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\t@Transactional\n");
         sb.append("\tpublic boolean delete").append(className).append("(Integer id) {\n");
         sb.append("\t\tGenericQueryParam param = new GenericQueryParam();\n");
@@ -189,6 +193,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("更新信息",true);
         comment.addParam(subClassName);
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\tboolean update").append(className).append("(").append(className).append(" ").append(subClassName).append(" );\n");
         return sb.toString();
     }
@@ -197,6 +202,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("更新信息",true);
         comment.addParam(subClassName);
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\t@Transactional\n");
         sb.append("\tpublic boolean update").append(className).append("(").append(className).append(" ").append(subClassName).append(" ) {\n");
         sb.append("\t\tLong currentTime = System.currentTimeMillis();\n");
@@ -212,6 +218,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("批量删除信息",true);
         comment.addParam("ids");
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\tboolean batchDelete").append(className).append("(List<Integer> ids);\n");
         return sb.toString();
     }
@@ -220,6 +227,7 @@ public class ServiceTemplate {
         comment = new CommentTemplate("批量删除信息",true);
         comment.addParam("ids");
         StringBuffer sb = new StringBuffer("");
+        sb.append(comment.genComment());
         sb.append("\t@Transactional\n");
         sb.append("\tpublic boolean batchDelete").append(className).append("(List<Integer> ids){\n");
         sb.append("\t\treturn ").append(subClassName).append("Dao.batchDelete(ids) > 0;\n");
