@@ -3,9 +3,10 @@ package com.lbsp.promotion.core.service.collection;
 import com.lbsp.promotion.core.dao.CollectionDao;;
 import com.lbsp.promotion.core.service.BaseServiceImpl;
 import com.lbsp.promotion.entity.base.PageResultRsp;
-import com.lbsp.promotion.entity.model.Collection;
+import com.lbsp.promotion.entity.model.CollectionTable;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.QueryKey;
+import com.lbsp.promotion.entity.response.CollectionRsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +20,11 @@ import java.util.List;
  * @author 简易自动代码创建工具
  */
 @Service
-public class CollectionServiceImpl extends BaseServiceImpl<Collection> implements
-		CollectionService<Collection> {
+public class CollectionServiceImpl extends BaseServiceImpl<CollectionTable> implements
+		CollectionService<CollectionTable> {
 
 	@Autowired
-	private CollectionDao CollectionDao;
+	private CollectionDao collectionDao;
 
 	/**
 	 *
@@ -32,7 +33,7 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection> implement
 	 * @param id
 	 * @return 
 	 */
-	public Collection getDetailById(Integer id){
+	public CollectionTable getDetailById(Integer id){
 		GenericQueryParam param = new GenericQueryParam();
 		param.put(new QueryKey("id", QueryKey.Operators.EQ),id);
 		return this.findOne(param);
@@ -48,23 +49,17 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection> implement
 	 * @param size
 	 * @return 
 	 */
-	public PageResultRsp getPageList(Long from,Long to,Integer start,Integer size){
-		GenericQueryParam param = new GenericQueryParam();
-		param.put(new QueryKey("create_time", QueryKey.Operators.GTE),from);
-		param.put(new QueryKey("create_time", QueryKey.Operators.LTE),to);
-		int count = this.count(param);
-		param.setNeedPaging(true);
-		param.setOffset(start);
-		param.setPageSize(size);
-		List list = this.find(param);
-		PageResultRsp page = new PageResultRsp();
-		page.loadPageInfo(count);
-		page.setResult(list);
+	public PageResultRsp getPageList(String name,String type,Long from,Long to,Integer start,Integer size){
+        int count = collectionDao.getListCount(type, name, from, to);
+        List<CollectionRsp> list = collectionDao.getList(type, name, from, to,start,size);
+        PageResultRsp page = new PageResultRsp();
+        page.loadPageInfo(count);
+        page.setResult(list);
 		return page;
 	}
 
 	@Transactional
-	public boolean saveCollection(Collection Collection ) {
+	public boolean saveCollection(CollectionTable Collection ) {
 		Long currentTime = System.currentTimeMillis();
 		if (Collection.getCreate_time() == null){
 			Collection.setCreate_time(currentTime);
@@ -76,7 +71,7 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection> implement
 	}
 
 	@Transactional
-	public boolean updateCollection(Collection Collection ) {
+	public boolean updateCollection(CollectionTable Collection ) {
 		Long currentTime = System.currentTimeMillis();
 		if (Collection.getUpdate_time() == null){
 			Collection.setUpdate_time(currentTime);
@@ -93,7 +88,7 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection> implement
 
 	@Transactional
 	public boolean batchDeleteCollection(List<Integer> ids){
-		return CollectionDao.batchDelete(ids) > 0;
+		return collectionDao.batchDelete(ids) > 0;
 	}
 
 }

@@ -1,13 +1,16 @@
 package com.lbsp.promotion.entity.model;
 
 
+import com.lbsp.promotion.entity.table.annotation.MyTable;
+
 /**
  *
  * Created on 2015-03-22 09:48:51
  *
  * @author 简易自动代码创建工具
  */
-public class Collection extends BaseModel {
+@MyTable("collection")
+public class CollectionTable extends BaseModel {
 	private String mark;
 	private String type;
 	private Integer page;

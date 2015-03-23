@@ -4,7 +4,7 @@ import com.lbsp.promotion.core.service.collection.CollectionService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
-import com.lbsp.promotion.entity.model.Collection;
+import com.lbsp.promotion.entity.model.CollectionTable;
 import com.lbsp.promotion.util.validation.Validation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class CollectionController extends BaseController {
 
 
 	@Autowired
-	private CollectionService<Collection> service;
+	private CollectionService<CollectionTable> service;
 
 
 	/**
@@ -40,7 +40,7 @@ public class CollectionController extends BaseController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object detail(@PathVariable(value = "id") Integer id) {
-		Collection rsp = service.getDetailById(id);
+		CollectionTable rsp = service.getDetailById(id);
 		return this.createBaseResult("query success", rsp);
 	}
 
@@ -58,7 +58,9 @@ public class CollectionController extends BaseController {
 	@ResponseBody
 	public Object list(@RequestParam(value = "iDisplayStart", required=false,defaultValue=DEFAULT_LIST_PAGE_INDEX) Integer startRecord,
 						@RequestParam(value = "iDisplayLength", required=false,defaultValue=DEFAULT_LIST_PAGE_SIZE) Integer maxRecords,
-						@RequestParam(value = "from", required=false) Long from,
+                        @RequestParam(value = "name", required=false) String name,
+                        @RequestParam(value = "type", required=false) String type,
+                        @RequestParam(value = "from", required=false) Long from,
 						@RequestParam(value = "to", required=false) Long to) {
 
 		if (Validation.isEmpty(startRecord) || startRecord < GenericConstants.DEFAULT_LIST_PAGE_INDEX)
@@ -68,7 +70,7 @@ public class CollectionController extends BaseController {
 		if (maxRecords > GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE)
 			maxRecords = GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE;
 
-		PageResultRsp page = service.getPageList(from,to,startRecord,maxRecords);
+		PageResultRsp page = service.getPageList(name,type,from,to,startRecord,maxRecords);
 		return this.createBaseResult("query success", page.getResult(),page.getPageInfo());
 	}
 
@@ -82,7 +84,7 @@ public class CollectionController extends BaseController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Object save(HttpServletRequest request, @RequestBody Collection obj) {
+	public Object save(HttpServletRequest request, @RequestBody CollectionTable obj) {
 		setCommonInfo(obj,request);
 		if(service.saveCollection(obj)){
 			return this.createBaseResult("add success", true);
@@ -101,7 +103,7 @@ public class CollectionController extends BaseController {
 	 */
 	@RequestMapping(value = "/upt", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object update(HttpServletRequest request, @RequestBody Collection obj) {
+	public Object update(HttpServletRequest request, @RequestBody CollectionTable obj) {
 		setCommonInfo(obj,request);
 		if(service.updateCollection(obj)){
 			return this.createBaseResult("update success", true);

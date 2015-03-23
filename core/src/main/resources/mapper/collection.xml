@@ -10,4 +10,48 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</foreach>
 	</delete>
 
+    <select id="getListCount" resultType="int">
+        select count(1) from collection c
+        inner join customer t on c.customer_id = t.id
+        left join shop s on s.id = c.mark
+        left join preferential p on p.id = c.mark
+        where 1=1
+        <if test="type != null and type != ''">
+            and c.type = #{type}
+        </if>
+        <if test="name != null and name != ''">
+            and t.name like "%"#{name}"%"
+        </if>
+        <if test="from != null">
+            and c.create_time >= #{from}
+        </if>
+        <if test="to != null">
+            and c.create_time &lt;= #{to}
+        </if>
+    </select>
+
+    <select id="getList" resultType="CollectionRsp">
+    select c.*,t.name as customerName,s.shop_name as shopName,p.title as title from collection c
+    inner join customer t on c.customer_id = t.id
+    left join shop s on s.id = c.mark
+    left join preferential p on p.id = c.mark
+    where 1=1
+    <if test="type != null and type != ''">
+      and c.type = #{type}
+    </if>
+    <if test="name != null and name != ''">
+      and t.name like "%"#{name}"%"
+    </if>
+    <if test="from != null">
+        and c.create_time >= #{from}
+    </if>
+    <if test="to != null">
+        and c.create_time &lt;= #{to}
+    </if>
+    order by c.update_time desc
+    <if test="start != null and size != null">
+        limit #{start},#{size}
+    </if>
+    </select>
+
 </mapper>

@@ -9,6 +9,7 @@
     <menu funcId="lbsp" icon="fa fa-dot-circle-o" parentId="root" index="2" name="LBSP" target="adviceFrame" type="menu" url=""></menu>
     <menu funcId="comment" parentId="lbsp" index="1" name="评论管理" type="menu" url="/lbsp/comment/list.html" oper="viewcomment"></menu>
     <menu funcId="feedback" parentId="lbsp" index="2" name="意见反馈" type="menu" url="/lbsp/feedback/list.html" oper="viewfeedback"></menu>
+    <menu funcId="collection" parentId="lbsp" index="3" name="收藏" type="menu" url="/lbsp/collection/list.html" oper="viewcollection"></menu>
 
     <menu funcId="interadmin" icon="fa fa-building-o" parentId="root" index="3" name="接口管理" target="interFrame" type="menu" url=""></menu>
     <menu funcId="interreg" parentId="interadmin" index="1" name="接口信息" type="menu" url="/interface/regist/list.html" oper="viewinter"></menu>

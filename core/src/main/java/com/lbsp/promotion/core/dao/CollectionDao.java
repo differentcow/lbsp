@@ -1,5 +1,6 @@
 package com.lbsp.promotion.core.dao;
 
+import com.lbsp.promotion.entity.response.CollectionRsp;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 /**
@@ -18,5 +19,38 @@ public interface CollectionDao {
 	 * @return 
 	 */
 	int batchDelete(@Param("ids")List<Integer> ids);
+
+
+    /**
+     * 分页获取信息
+     *
+     * @param name
+     * @param type
+     * @param from
+     * @param to
+     * @param start
+     * @param size
+     * @return
+     */
+    List<CollectionRsp> getList(@Param("name")String name,
+                                @Param("type")String type,
+                                @Param("from")Long from,
+                                @Param("to")Long to,
+                                @Param("start")Integer start,
+                                @Param("size")Integer size);
+
+    /**
+     * 获取信息总记录数
+     *
+     * @param name
+     * @param type
+     * @param from
+     * @param to
+     * @return
+     */
+    int getListCount(@Param("name")String name,
+                     @Param("type")String type,
+                     @Param("from")Long from,
+                     @Param("to")Long to);
 
 }

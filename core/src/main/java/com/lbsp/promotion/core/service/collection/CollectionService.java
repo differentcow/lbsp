@@ -2,7 +2,7 @@ package com.lbsp.promotion.core.service.collection;
 
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
-import com.lbsp.promotion.entity.model.Collection;
+import com.lbsp.promotion.entity.model.CollectionTable;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public interface CollectionService<T> extends BaseService<T> {
 	 * @param id
 	 * @return 
 	 */
-	Collection getDetailById(Integer id);
+	CollectionTable getDetailById(Integer id);
 
 	/**
 	 *
@@ -34,11 +34,11 @@ public interface CollectionService<T> extends BaseService<T> {
 	 * @param size
 	 * @return 
 	 */
-	PageResultRsp getPageList(Long from,Long to,Integer start,Integer size);
+	PageResultRsp getPageList(String name,String type,Long from,Long to,Integer start,Integer size);
 
-	boolean saveCollection(Collection Collection );
+	boolean saveCollection(CollectionTable Collection );
 
-	boolean updateCollection(Collection Collection );
+	boolean updateCollection(CollectionTable Collection );
 
 	boolean deleteCollection(Integer id);
 

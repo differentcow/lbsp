@@ -77,6 +77,7 @@ requirejs.config({
     'fileUploadService':'js/http/fileUploadService',
     'commentService':'js/http/commentService',
     'feedbackService':'js/http/feedbackService',
+    'collectionService':'js/http/collectionService',
     //validate Msg
     'validateMsg': 'js/util/message_cn',//jquery validator 中文message
     //配置Util
