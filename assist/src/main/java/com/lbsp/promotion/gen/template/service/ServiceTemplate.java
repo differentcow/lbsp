@@ -257,8 +257,10 @@ public class ServiceTemplate {
         sb.append(comment.genComment());
         sb.append("\tpublic PageResultRsp getPageList(Long from,Long to,Integer start,Integer size){\n");
         sb.append("\t\tGenericQueryParam param = new GenericQueryParam();\n");
-        sb.append("\t\tparam.put(new QueryKey(\"create_time\", QueryKey.Operators.GTE),from);\n");
-        sb.append("\t\tparam.put(new QueryKey(\"create_time\", QueryKey.Operators.LTE),to);\n");
+        sb.append("\t\tif(from != null)\n");
+        sb.append("\t\t\tparam.put(new QueryKey(\"create_time\", QueryKey.Operators.GTE),from);\n");
+        sb.append("\t\tif(to != null)\n");
+        sb.append("\t\t\tparam.put(new QueryKey(\"create_time\", QueryKey.Operators.LTE),to);\n");
         sb.append("\t\tint count = this.count(param);\n");
         sb.append("\t\tparam.setNeedPaging(true);\n");
         sb.append("\t\tparam.setOffset(start);\n");
