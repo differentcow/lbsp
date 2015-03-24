@@ -452,3 +452,15 @@ insert into privilege(privilege_master,privilege_master_value,privilege_access,p
 insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427032133107,1427032133107,1,1 from function_operate where code in ('viewcollection','delcollection','modifycollection','addcollection');
 
 -- ------------------2015/03/22 09:49:12 support content------------------
+
+-- ------------------2015/03/24 12:01:27 support content------------------
+
+insert into page_operate(code,parent_id,parent_code,`name`,sort_index,create_time,update_time,create_user,update_user) VALUES('customer',11,'lbsp','注册用户',2,1427126487098,1427126487098,1,1);
+
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user) VALUES ('viewcustomer','查看注册用户',15,'/customer/lst',NULL,'GET',0,1,1427126487098,1427126487098,1,1),('viewcustomer','查看注册用户',15,'/customer/{id}',NULL,'GET',1,2,1427126487098,1427126487098,1,1),('addcustomer','添加注册用户',15,'/customer/add',NULL,'POST',0,3,1427126487098,1427126487098,1,1),('delcustomer','删除注册用户',15,'/customer/del',NULL,'DELETE',0,4,1427126487098,1427126487098,1,1),('modifycustomer','修改注册用户',15,'/customer/upt',NULL,'PUT',0,5,1427126487098,1427126487098,1,1);
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'page',id,'E',1427126487098,1427126487098,1,1 from page_operate where id = 15;
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427126487098,1427126487098,1,1 from function_operate where code in ('viewcustomer','delcustomer','modifycustomer','addcustomer');
+
+-- ------------------2015/03/24 12:01:27 support content------------------
