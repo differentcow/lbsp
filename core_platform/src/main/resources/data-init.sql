@@ -224,6 +224,7 @@ CREATE TABLE IF NOT EXISTS `shop` (
 	`longitude` DOUBLE NULL DEFAULT NULL COMMENT '经度',
 	`area_code` VARCHAR(50) NULL DEFAULT NULL COMMENT '区域编码' COLLATE 'utf8_unicode_ci',
 	`sell_no` VARCHAR(255) NOT NULL COMMENT '营业号' COLLATE 'utf8_unicode_ci',
+	`address` VARCHAR(255) NOT NULL COMMENT '地址' COLLATE 'utf8_unicode_ci',
 	`customer_id` INT(11) NULL DEFAULT NULL COMMENT '注册用户ID',
 	`create_user` INT(11) NULL DEFAULT NULL COMMENT '创建人ID',
 	`create_time` BIGINT(20) NOT NULL COMMENT '创建时间',

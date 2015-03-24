@@ -78,6 +78,7 @@ requirejs.config({
     'commentService':'js/http/commentService',
     'feedbackService':'js/http/feedbackService',
     'collectionService':'js/http/collectionService',
+    'customerService':'js/http/customerService',
     //validate Msg
     'validateMsg': 'js/util/message_cn',//jquery validator 中文message
     //配置Util
