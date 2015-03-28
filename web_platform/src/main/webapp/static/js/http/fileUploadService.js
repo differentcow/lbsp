@@ -4,9 +4,12 @@
 define(['jquery','ajaxfileupload'],function($){
   return {
     service:All580.serverName+'/service/',
-    upload : function(id,type,filename, code,img, successMethod,failedMethod){
+    upload : function(id,forward,data,successMethod,failedMethod){
       var me = this;
-      this.url=this.service+'core/uploadPic?type='+type+'&filename='+filename+'&code='+code+'&id='+img
+      this.url=this.service+'core/upload?forward='+forward;
+      for(var k in data){
+          this.url += '&'+k+'='+data[k];
+      }
       $.ajaxFileUpload({
           url: me.url,
           secureuri:false,
@@ -19,8 +22,6 @@ define(['jquery','ajaxfileupload'],function($){
             failedMethod(data, status, e)
           }
       });
-
   }
-
-  };
+};
 });

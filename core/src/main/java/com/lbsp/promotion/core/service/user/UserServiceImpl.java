@@ -181,6 +181,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
         //如果用户是超级管理员(系统自带生成的唯一的根用户)，自动装载所有操作权限
         if (GenericConstants.LBSP_ADMINISTRATOR_ID == user.getId()){
             List<FunctionOperate> funcList = functionOperateService.allFunctions();
+            List<String> list = new ArrayList<String>();
             for (FunctionOperate func : funcList){
                 OperateResource or = new OperateResource();
                 or.setId(func.getId());
@@ -196,8 +197,20 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
                 or.setPage_id(func.getPage_id());
                 or.setUpdate_user(func.getUpdate_user());
                 functions.add(or);
+                if(func.getUrl().indexOf("{") == -1 && func.getUrl().indexOf("}") == -1){
+                    list.add(func.getUrl());
+                }
             }
+            rsp.setNoParamUrl(list);
         }else {
+            List<FunctionOperate> funcList = functionOperateService.allFunctions();
+            List<String> list = new ArrayList<String>();
+            for (FunctionOperate func : funcList){
+                if(func.getUrl().indexOf("{") == -1 && func.getUrl().indexOf("}") == -1){
+                    list.add(func.getUrl());
+                }
+            }
+            rsp.setNoParamUrl(list);
             //如果非超级管理员，查询其所拥有的功能操作权限
             List<OperateResource> tmpFunc = new ArrayList<OperateResource>();
             List<OperateResource> userFunc = privilegeService.findEnabledFuncByMasterandAccess(

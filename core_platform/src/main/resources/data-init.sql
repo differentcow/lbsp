@@ -274,6 +274,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 	`email` VARCHAR(255) NULL DEFAULT NULL COMMENT '电子邮箱' COLLATE 'utf8_unicode_ci',
 	`key` VARCHAR(255) NULL DEFAULT NULL COMMENT '用户唯一信息（相关手机）' COLLATE 'utf8_unicode_ci',
 	`gender` TINYINT(4) NULL DEFAULT NULL COMMENT '男:1女:0',
+  `path` VARCHAR(255) NULL DEFAULT NULL COMMENT '图像路径' COLLATE 'utf8_unicode_ci',
 	`create_user` INT(11) NULL DEFAULT NULL COMMENT '创建人ID',
 	`create_time` BIGINT(20) NOT NULL COMMENT '创建时间',
 	`update_user` INT(11) NULL DEFAULT NULL COMMENT '更新者',

@@ -177,26 +177,52 @@ public class ThroughCorePlatformController {
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public @ResponseBody
 	Object postToCore(@RequestParam("uploadFile") MultipartFile file,
-			HttpServletRequest request) throws IOException {
+             		  HttpServletRequest request,HttpServletResponse response) throws IOException {
 		GenericHttpParam param = new GenericHttpParam();
         param.fill("locale",localeResolver.resolveLocale(request).toString());
-//        param.fill("md5",md5);
 		UsernamePasswordSecurityKeyToken token = (UsernamePasswordSecurityKeyToken) SecurityContextHolder.getContext().getAuthentication();
 		if (token != null) {
 			param.fill(GenericConstants.AUTHKEY, token.getCredentials()
 					.toString());
 		}
 
+        Enumeration queryNames = request.getParameterNames();
+        while (queryNames.hasMoreElements()) {
+            String name = (String) queryNames.nextElement();
+            param.fill(name, request.getParameter(name));
+        }
+
+        /**
+         * 组装URL参数
+         */
+        /*int index = url.indexOf("param?");
+        if (index != -1){
+            String urlParamString = url.substring(index + 1);
+            String[] urlParams = urlParamString.split("&");
+            for (String urlParam : urlParams){
+                String[] keyVal = urlParam.split("=");
+                if(keyVal.length == 2 && StringUtils.isNotBlank(keyVal[1])){
+                    param.fill(keyVal[0],keyVal[1]);
+                }
+            }
+        }*/
+
         /**
          * 处理上传的图片
          */
-
+        String forward = request.getParameter("forward");
 		Part[] parts = { new CustomFilePart(file.getName(),
 				new ByteArrayPartSource(file.getOriginalFilename(),
 						file.getBytes()), null, "UTF-8") };
 		GenericHttpRequest http = (GenericHttpRequest) factory.createInstance(
-				param, "file/add");
-		return http.postMutilPart(parts);
+				param, forward);
+        TypeReference<Map> objType = new TypeReference<Map>() {
+        };
+        Map<String,Map> result = JsonMapper.getJsonMapperInstance().readValue(http.postMutilPart(parts),objType);
+        if((Integer)result.get("state").get("code") == ExceptionCode.AuthKeyNotExistException){
+            securityContextLogoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        }
+		return result;
 	}
 
     @RequestMapping(value = "/uploadPic", method = RequestMethod.POST)

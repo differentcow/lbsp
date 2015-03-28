@@ -40,7 +40,7 @@ public abstract class BaseController {
             model.setCreate_time(now);
         }
         model.setUpdate_time(now);
-        model.setCreate_user(userId);
+        model.setUpdate_user(userId);
     }
 
     private Locale getLocale(String localStr){

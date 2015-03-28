@@ -7,6 +7,20 @@ define(['jquery','knockout','amplify','jquery-i18n'],function($,ko){
     this.trim = function(str){
         return str.replace(/(^\s*)|(\s*$)/g, "");
     };
+      this.adjustIframeParentHeight = function () {
+          if (parent.parent != null && typeof parent.parent != 'undefined') {
+              //console.log(parent.$('div.active iframe').height());
+              //console.log($(document).height());
+              var _h = 632;
+              if($('body').height()<_h){
+                  var height = parent.parent.window.innerHeight-166<_h?_h:parent.parent.window.innerHeight-166;
+                  parent.parent.$('div.active iframe').height(height);
+              }else{
+                  parent.parent.$('div.active iframe').height($('body').height());
+              }
+
+          }
+      };
     this.adjustIframeHeight = function (h) {
       if (parent != null && typeof parent != 'undefined') {
         //console.log(parent.$('div.active iframe').height());

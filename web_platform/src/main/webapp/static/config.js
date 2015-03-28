@@ -4,6 +4,7 @@
 
 var All580 = {
 	resBaseUrl : 'http://127.0.0.1:8086',
+    imgBaseUrl : 'http://127.0.0.1:8085/static',
 	serverName : '',
     webPath : window.location.protocol+window.location.host,
     contextPath :function() {

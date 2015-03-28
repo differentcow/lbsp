@@ -24,6 +24,16 @@ public class UserRsp implements Serializable{
 
     private List<OperateResource> pageList;
 
+    private List<String> noParamUrl;
+
+    public List<String> getNoParamUrl() {
+        return noParamUrl;
+    }
+
+    public void setNoParamUrl(List<String> noParamUrl) {
+        this.noParamUrl = noParamUrl;
+    }
+
     public List<OperateResource> getPageList() {
         return pageList;
     }
