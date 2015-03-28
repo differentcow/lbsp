@@ -106,6 +106,7 @@ public class ServiceTemplate {
         sb.append("import com.lbsp.promotion.entity.model.").append(className).append(";\n");
         sb.append("import com.lbsp.promotion.entity.query.GenericQueryParam;\n");
         sb.append("import com.lbsp.promotion.entity.query.QueryKey;\n");
+        sb.append("import com.lbsp.promotion.entity.query.SortCond;\n");
         sb.append("import org.springframework.beans.factory.annotation.Autowired;\n");
         sb.append("import org.springframework.stereotype.Service;\n");
         sb.append("import org.springframework.transaction.annotation.Transactional;\n");
@@ -261,6 +262,7 @@ public class ServiceTemplate {
         sb.append("\t\t\tparam.put(new QueryKey(\"create_time\", QueryKey.Operators.GTE),from);\n");
         sb.append("\t\tif(to != null)\n");
         sb.append("\t\t\tparam.put(new QueryKey(\"create_time\", QueryKey.Operators.LTE),to);\n");
+        sb.append("		param.addSortCond(new SortCond(\"update_time\", SortCond.Order.DESC));\n");
         sb.append("\t\tint count = this.count(param);\n");
         sb.append("\t\tparam.setNeedPaging(true);\n");
         sb.append("\t\tparam.setOffset(start);\n");
