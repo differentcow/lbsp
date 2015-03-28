@@ -268,7 +268,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 	`type` CHAR(2) NOT NULL DEFAULT 'N' COMMENT '类别(N-注册用户,B-商户)' COLLATE 'utf8_unicode_ci',
 	`account` VARCHAR(20) NOT NULL COMMENT '账号' COLLATE 'utf8_unicode_ci',
 	`name` VARCHAR(20) NOT NULL COMMENT '名称(默认为account)' COLLATE 'utf8_unicode_ci',
-	`password` VARCHAR(50) NOT NULL COMMENT '密码' COLLATE 'utf8_unicode_ci',
+	`password` VARCHAR(255) NOT NULL COMMENT '密码' COLLATE 'utf8_unicode_ci',
 	`status` INT(2) NULL DEFAULT NULL COMMENT '状态(0-禁用,1-启用)',
 	`mobile` VARCHAR(50) NULL DEFAULT NULL COMMENT '手机号码' COLLATE 'utf8_unicode_ci',
 	`email` VARCHAR(255) NULL DEFAULT NULL COMMENT '电子邮箱' COLLATE 'utf8_unicode_ci',
