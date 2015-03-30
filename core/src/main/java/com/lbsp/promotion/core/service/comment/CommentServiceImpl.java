@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,6 +48,38 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements
     public PageResultRsp getPageList(Integer type,String name,String title,Long from,Long to,Integer start,Integer size){
         int count = commentDao.getListCount(type, name, title, from, to);
         List<CommentRsp> list = commentDao.getList(type, name, title, from, to,start,size);
+        PageResultRsp page = new PageResultRsp();
+        page.loadPageInfo(count);
+        page.setResult(list);
+        return page;
+    }
+
+    /**
+     * 获取信集合(公共分页)
+     *
+     * @param call
+     * @param callId
+     * @param type
+     * @param param
+     * @param from
+     * @param to
+     * @param start
+     * @param size
+     * @return
+     */
+    public PageResultRsp getPageList(String call,Integer callId,Integer type,String param,Long from,Long to,Integer start,Integer size){
+        int count = 0;
+        if ("c".equals(call)){
+            count = commentDao.getCommonListCount(call, callId, type, null, param, from, to);
+        }else{
+            count = commentDao.getCommonListCount(call, callId, type, param, null, from, to);
+        }
+        List<CommentRsp> list = new ArrayList<CommentRsp>();
+        if ("c".equals(call)){
+            list = commentDao.getCommonList(call, callId, type, null, param, from, to,start,size);
+        }else{
+            list = commentDao.getCommonList(call, callId, type, param, null, from, to,start,size);
+        }
         PageResultRsp page = new PageResultRsp();
         page.loadPageInfo(count);
         page.setResult(list);

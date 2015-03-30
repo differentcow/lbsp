@@ -49,9 +49,9 @@ public class CollectionServiceImpl extends BaseServiceImpl<CollectionTable> impl
 	 * @param size
 	 * @return 
 	 */
-	public PageResultRsp getPageList(String name,String type,Long from,Long to,Integer start,Integer size){
-        int count = collectionDao.getListCount(type, name, from, to);
-        List<CollectionRsp> list = collectionDao.getList(type, name, from, to,start,size);
+	public PageResultRsp getPageList(Integer customerId,String name,String type,Long from,Long to,Integer start,Integer size){
+        int count = collectionDao.getListCount(customerId,type, name, from, to);
+        List<CollectionRsp> list = collectionDao.getList(customerId,type, name, from, to,start,size);
         PageResultRsp page = new PageResultRsp();
         page.loadPageInfo(count);
         page.setResult(list);

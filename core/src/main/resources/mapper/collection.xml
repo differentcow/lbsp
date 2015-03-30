@@ -19,6 +19,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="type != null and type != ''">
             and c.type = #{type}
         </if>
+        <if test="customerId != null">
+            and c.customer_id = #{customerId}
+        </if>
         <if test="name != null and name != ''">
             and t.name like "%"#{name}"%"
         </if>
@@ -38,6 +41,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     where 1=1
     <if test="type != null and type != ''">
       and c.type = #{type}
+    </if>
+    <if test="customerId != null">
+      and c.customer_id = #{customerId}
     </if>
     <if test="name != null and name != ''">
       and t.name like "%"#{name}"%"

@@ -52,6 +52,49 @@ public interface CommentDao {
                              @Param("size")Integer size);
 
     /**
+     * 获取所有信息总记录数（公共）
+     *
+     * @param call
+     * @param callId
+     * @param type
+     * @param name
+     * @param title
+     * @param from
+     * @param to
+     * @return
+     */
+    int getCommonListCount(@Param("call")String call,
+                           @Param("callId")Integer callId,
+                           @Param("type")Integer type,
+                           @Param("name")String name,
+                           @Param("title")String title,
+                           @Param("from")Long from,
+                           @Param("to")Long to);
+
+    /**
+     * 获取信息集合(分页)（公共）
+     *
+     * @param call
+     * @param callId
+     * @param type
+     * @param name
+     * @param title
+     * @param from
+     * @param to
+     * @param start
+     * @param size
+     * @return
+     */
+    List<CommentRsp> getCommonList(@Param("call")String call,
+                                   @Param("callId")Integer callId,
+                                   @Param("type")Integer type,
+                                   @Param("name")String name,
+                                   @Param("title")String title,
+                                   @Param("from")Long from,
+                                   @Param("to")Long to,
+                                   @Param("start")Integer start,
+                                   @Param("size")Integer size);
+    /**
      * 通过ID获取信息
      *
      * @param id

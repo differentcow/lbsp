@@ -34,7 +34,7 @@ public interface CollectionService<T> extends BaseService<T> {
 	 * @param size
 	 * @return 
 	 */
-	PageResultRsp getPageList(String name,String type,Long from,Long to,Integer start,Integer size);
+	PageResultRsp getPageList(Integer customerId,String name,String type,Long from,Long to,Integer start,Integer size);
 
 	boolean saveCollection(CollectionTable Collection );
 

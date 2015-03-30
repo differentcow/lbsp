@@ -103,8 +103,8 @@ requirejs(['jquery','knockout','customerService','commonUtil','amplify','DT-boot
         '</tr>'+ '<tr>'+'<td colspan="4">&nbsp;</td>'+
         '</tr>'+'<tr>'+'<td colspan="4" align="right" style="padding-right: 30px;">';
         if(flag){
-            html += '<a href="javascript:void(0);" align="right">'+comment_tip+'</a>&nbsp;&nbsp;'+
-                '<a href="javascript:void(0);" align="right">'+collection_tip+'</a>&nbsp;&nbsp;'+
+            html += '<a href="javascript:void(0);" align="right" onclick="viewComment(\''+id+'\');">'+comment_tip+'</a>&nbsp;&nbsp;'+
+                '<a href="javascript:void(0);" align="right" onclick="viewCollection(\''+id+'\')">'+collection_tip+'</a>&nbsp;&nbsp;'+
                 '<a href="javascript:void(0);" align="right" onclick="editDetail(3,\''+id+'\')" >'+pwd_tip+'</a>&nbsp;&nbsp;'+
                 '<a href="javascript:void(0);" id="'+id+'_edit" onclick="editDetail(1,\''+id+'\')" >'+edit_tip+'</a>'+ '</td>'+'</tr>'+'</table>';
         }else{
@@ -483,4 +483,13 @@ function uploadPic(id){
     $('#upload_iframe').prop('src',iframe_src);
     $('#uploadModal').modal('toggle');
 }
-
+function viewComment(id){
+    var iframe_src = '../../common/commonComment.html?type=c&id=' + id;
+    $('#comment_iframe').prop('src',iframe_src);
+    $('#commentModal').modal('toggle');
+}
+function viewCollection(id){
+    var iframe_src = '../../common/commonCollection.html?id=' + id;
+    $('#collection_iframe').prop('src',iframe_src);
+    $('#collectionModal').modal('toggle');
+}

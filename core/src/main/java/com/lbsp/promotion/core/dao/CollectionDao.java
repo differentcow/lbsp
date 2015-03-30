@@ -32,7 +32,8 @@ public interface CollectionDao {
      * @param size
      * @return
      */
-    List<CollectionRsp> getList(@Param("name")String name,
+    List<CollectionRsp> getList(@Param("customerId")Integer customerId,
+                                @Param("name")String name,
                                 @Param("type")String type,
                                 @Param("from")Long from,
                                 @Param("to")Long to,
@@ -48,7 +49,8 @@ public interface CollectionDao {
      * @param to
      * @return
      */
-    int getListCount(@Param("name")String name,
+    int getListCount(@Param("customerId")Integer customerId,
+                     @Param("name")String name,
                      @Param("type")String type,
                      @Param("from")Long from,
                      @Param("to")Long to);

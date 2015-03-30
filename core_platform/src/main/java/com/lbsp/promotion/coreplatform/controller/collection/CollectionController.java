@@ -59,6 +59,7 @@ public class CollectionController extends BaseController {
 	public Object list(@RequestParam(value = "iDisplayStart", required=false,defaultValue=DEFAULT_LIST_PAGE_INDEX) Integer startRecord,
 						@RequestParam(value = "iDisplayLength", required=false,defaultValue=DEFAULT_LIST_PAGE_SIZE) Integer maxRecords,
                         @RequestParam(value = "name", required=false) String name,
+                        @RequestParam(value = "customerId", required=false) Integer customerId,
                         @RequestParam(value = "type", required=false) String type,
                         @RequestParam(value = "from", required=false) Long from,
 						@RequestParam(value = "to", required=false) Long to) {
@@ -70,7 +71,7 @@ public class CollectionController extends BaseController {
 		if (maxRecords > GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE)
 			maxRecords = GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE;
 
-		PageResultRsp page = service.getPageList(name,type,from,to,startRecord,maxRecords);
+		PageResultRsp page = service.getPageList(customerId,name,type,from,to,startRecord,maxRecords);
 		return this.createBaseResult("query success", page.getResult(),page.getPageInfo());
 	}
 

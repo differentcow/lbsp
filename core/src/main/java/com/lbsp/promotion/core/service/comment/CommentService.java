@@ -32,6 +32,20 @@ public interface CommentService<T> extends BaseService<T> {
      */
     PageResultRsp getPageList(Integer type,String name,String title,Long from,Long to,Integer start,Integer size);
 
+    /**
+     * 获取信集合(公共分页)
+     *
+     * @param call
+     * @param callId
+     * @param type
+     * @param param
+     * @param from
+     * @param to
+     * @param start
+     * @param size
+     * @return
+     */
+    PageResultRsp getPageList(String call,Integer callId,Integer type,String param,Long from,Long to,Integer start,Integer size);
 
     /**
      * 保存信息

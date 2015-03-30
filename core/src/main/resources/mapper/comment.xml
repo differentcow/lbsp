@@ -5,6 +5,85 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.lbsp.promotion.core.dao.CommentDao">
 
+    <select id="getCommonListCount" resultType="int">
+        select count(1)
+        from comment c inner join customer s on c.customer_id = s.id
+        inner join preferential p on c.preferential_id = p.id
+        where 1=1
+        <if test="call == 'c'.toString()">
+            and s.id = #{callId}
+        </if>
+        <if test="call == 'p'.toString()">
+            and p.id = #{callId}
+        </if>
+        <if test="name != null and name != '' and type == 0">
+            and c.anonymous_user like "%"#{name}"%"
+        </if>
+        <if test="name != null and name != '' and type == 1">
+            and s.name like "%"#{name}"%"
+        </if>
+        <if test="name != null and name != '' and type == null">
+            and (s.name like "%"#{name}"%" or c.anonymous_user like "%"#{name}"%")
+        </if>
+        <if test="from != null">
+            and c.create_time >= #{from}
+        </if>
+        <if test="to != null">
+            and c.create_time &lt;= #{to}
+        </if>
+        <if test="type == 1">
+            and (c.anonymous_user is null or c.anonymous_user = '')
+        </if>
+        <if test="type == 0">
+            and c.customer_id is null
+        </if>
+        <if test="title != null and title != ''">
+            and p.title like "%"#{title}"%"
+        </if>
+    </select>
+
+    <select id="getCommonList" resultType="CommentRsp">
+        select c.status,c.content,c.anonymous_user,s.name as commentor,p.title as preferentialTitle,
+        c.create_time,c.create_user,c.update_time,c.update_user,c.id
+        from comment c inner join customer s on c.customer_id = s.id
+        inner join preferential p on c.preferential_id = p.id
+        where 1=1
+        <if test="call == 'c'.toString()">
+            and s.id = #{callId}
+        </if>
+        <if test="call == 'p'.toString()">
+            and p.id = #{callId}
+        </if>
+        <if test="name != null and name != '' and type == 0">
+            and c.anonymous_user like "%"#{name}"%"
+        </if>
+        <if test="name != null and name != '' and type == 1">
+            and s.name like "%"#{name}"%"
+        </if>
+        <if test="name != null and name != '' and type == null">
+            and (s.name like "%"#{name}"%" or c.anonymous_user like "%"#{name}"%")
+        </if>
+        <if test="from != null">
+            and c.create_time >= #{from}
+        </if>
+        <if test="to != null">
+            and c.create_time &lt;= #{to}
+        </if>
+        <if test="type == 1">
+            and (c.anonymous_user is null or c.anonymous_user = '')
+        </if>
+        <if test="type == 0">
+            and c.customer_id is null
+        </if>
+        <if test="title != null and title != ''">
+            and p.title like "%"#{title}"%"
+        </if>
+        order by c.update_time desc
+        <if test="start != null and size != null">
+            limit #{start},#{size}
+        </if>
+    </select>
+
     <select id="getListCount" resultType="int">
         select count(1)
         from comment c inner join customer s on c.customer_id = s.id

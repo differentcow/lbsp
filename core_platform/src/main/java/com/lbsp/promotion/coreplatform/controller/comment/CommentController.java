@@ -74,6 +74,41 @@ public class CommentController extends BaseController {
     }
 
     /**
+     * 获取信息集合(公共分页)
+     *
+     * @param startRecord
+     * @param maxRecords
+     * @param param
+     * @param call
+     * @param callId
+     * @param type
+     * @param from
+     * @param to
+     * @return
+     */
+    @RequestMapping(value = "/common", method = RequestMethod.GET)
+    @ResponseBody
+    public Object commonList(@RequestParam(value = "iDisplayStart", required=false,defaultValue=DEFAULT_LIST_PAGE_INDEX) Integer startRecord,
+                       @RequestParam(value = "iDisplayLength", required=false,defaultValue=DEFAULT_LIST_PAGE_SIZE) Integer maxRecords,
+                       @RequestParam(value = "param", required=false) String param,
+                       @RequestParam(value = "call", required=false) String call,
+                       @RequestParam(value = "callId", required=false) Integer callId,
+                       @RequestParam(value = "type", required=false) Integer type,
+                       @RequestParam(value = "from", required=false) Long from,
+                       @RequestParam(value = "to", required=false) Long to) {
+
+        if (Validation.isEmpty(startRecord) || startRecord < GenericConstants.DEFAULT_LIST_PAGE_INDEX)
+            startRecord = GenericConstants.DEFAULT_LIST_PAGE_INDEX;
+        if (Validation.isEmpty(maxRecords) || maxRecords < 1)
+            maxRecords = GenericConstants.DEFAULT_LIST_PAGE_SIZE;
+        if (maxRecords > GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE)
+            maxRecords = GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE;
+
+        PageResultRsp page = commentService.getPageList(call, callId, type, param, from,to,startRecord,maxRecords);
+        return this.createBaseResult("查询成功", page.getResult(),page.getPageInfo());
+    }
+
+    /**
      * 删除信息
      *
      * @param ids
