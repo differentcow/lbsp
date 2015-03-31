@@ -466,3 +466,61 @@ insert into privilege(privilege_master,privilege_master_value,privilege_access,p
 insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427126487098,1427126487098,1,1 from function_operate where code in ('viewcustomer','delcustomer','modifycustomer','addcustomer');
 
 -- ------------------2015/03/24 12:01:27 support content------------------
+
+-- ----------------------add----------------------
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user)
+VALUES ('viewcollection','查看评论',12,'/comment/common',NULL,'GET',0,6,1427032133107,1427032133107,1,1),
+('modifycustomer','编辑用户注册',15,'/customer/upload',NULL,'POST',0,6,1427032133107,1427032133107,1,1);
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)
+select 'role',1, 'function',id,'E',1427126487098,1427126487098,1,1 from function_operate where url in ('/customer/upload','/comment/common');
+
+-- ------------------2015/03/31 09:41:11 support content------------------
+
+insert into page_operate(code,parent_id,parent_code,`name`,sort_index,create_time,update_time,create_user,update_user) VALUES('preferential',11,'lbsp','优惠',2,1427809271771,1427809271771,1,1);
+
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user) VALUES ('viewpreferential','查看优惠',16,'/preferential/lst',NULL,'GET',0,1,1427809271771,1427809271771,1,1),('viewpreferential','查看优惠',16,'/preferential/{id}',NULL,'GET',1,2,1427809271771,1427809271771,1,1),('addpreferential','添加优惠',16,'/preferential/add',NULL,'POST',0,3,1427809271771,1427809271771,1,1),('delpreferential','删除优惠',16,'/preferential/del',NULL,'DELETE',0,4,1427809271771,1427809271771,1,1),('modifypreferential','修改优惠',16,'/preferential/upt',NULL,'PUT',0,5,1427809271771,1427809271771,1,1);
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'page',id,'E',1427809271771,1427809271771,1,1 from page_operate where id = 16;
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427809271771,1427809271771,1,1 from function_operate where code in ('viewpreferential','delpreferential','modifypreferential','addpreferential');
+
+-- ------------------2015/03/31 09:41:11 support content------------------
+
+
+-- ------------------2015/04/01 06:51:35 support content------------------
+
+insert into page_operate(code,parent_id,parent_code,`name`,sort_index,create_time,update_time,create_user,update_user) VALUES('shop',11,'lbsp','商铺',2,1427842295293,1427842295293,1,1);
+
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user) VALUES ('viewshop','查看商铺',17,'/shop/lst',NULL,'GET',0,1,1427842295293,1427842295293,1,1),('viewshop','查看商铺',17,'/shop/{id}',NULL,'GET',1,2,1427842295293,1427842295293,1,1),('addshop','添加商铺',17,'/shop/add',NULL,'POST',0,3,1427842295293,1427842295293,1,1),('delshop','删除商铺',17,'/shop/del',NULL,'DELETE',0,4,1427842295293,1427842295293,1,1),('modifyshop','修改商铺',17,'/shop/upt',NULL,'PUT',0,5,1427842295293,1427842295293,1,1);
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'page',id,'E',1427842295293,1427842295293,1,1 from page_operate where id = 17;
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427842295293,1427842295293,1,1 from function_operate where code in ('viewshop','delshop','modifyshop','addshop');
+
+-- ------------------2015/04/01 06:51:35 support content------------------
+
+
+-- ------------------2015/04/01 06:53:52 support content------------------
+
+insert into page_operate(code,parent_id,parent_code,`name`,sort_index,create_time,update_time,create_user,update_user) VALUES('category',11,'lbsp','分类',2,1427842432291,1427842432291,1,1);
+
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user) VALUES ('viewcategory','查看分类',18,'/category/lst',NULL,'GET',0,1,1427842432291,1427842432291,1,1),('viewcategory','查看分类',18,'/category/{id}',NULL,'GET',1,2,1427842432291,1427842432291,1,1),('addcategory','添加分类',18,'/category/add',NULL,'POST',0,3,1427842432291,1427842432291,1,1),('delcategory','删除分类',18,'/category/del',NULL,'DELETE',0,4,1427842432291,1427842432291,1,1),('modifycategory','修改分类',18,'/category/upt',NULL,'PUT',0,5,1427842432291,1427842432291,1,1);
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'page',id,'E',1427842432291,1427842432291,1,1 from page_operate where id = 18;
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427842432291,1427842432291,1,1 from function_operate where code in ('viewcategory','delcategory','modifycategory','addcategory');
+
+-- ------------------2015/04/01 06:53:52 support content------------------
+
+
+-- ------------------2015/04/01 06:55:02 support content------------------
+
+insert into page_operate(code,parent_id,parent_code,`name`,sort_index,create_time,update_time,create_user,update_user) VALUES('advert',11,'lbsp','广告',2,1427842502215,1427842502215,1,1);
+
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user) VALUES ('viewadvert','查看广告',19,'/advert/lst',NULL,'GET',0,1,1427842502215,1427842502215,1,1),('viewadvert','查看广告',19,'/advert/{id}',NULL,'GET',1,2,1427842502215,1427842502215,1,1),('addadvert','添加广告',19,'/advert/add',NULL,'POST',0,3,1427842502215,1427842502215,1,1),('deladvert','删除广告',19,'/advert/del',NULL,'DELETE',0,4,1427842502215,1427842502215,1,1),('modifyadvert','修改广告',19,'/advert/upt',NULL,'PUT',0,5,1427842502215,1427842502215,1,1);
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'page',id,'E',1427842502215,1427842502215,1,1 from page_operate where id = 19;
+
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)  select 'role',1, 'function',id,'E',1427842502215,1427842502215,1,1 from function_operate where code in ('viewadvert','deladvert','modifyadvert','addadvert');
+
+-- ------------------2015/04/01 06:55:02 support content------------------

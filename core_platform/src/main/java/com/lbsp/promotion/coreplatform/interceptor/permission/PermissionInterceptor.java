@@ -106,16 +106,19 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
 	private boolean isExistPermission(UserRsp  userRsp, String path, String method) {
         boolean flag = false;
+        List<String> urlParam = userRsp.getNoParamUrl();
         label: for (OperateResource or : userRsp.getFuncsList()){
             if (or.getUrl().equals(path) && or.getMethod().equalsIgnoreCase(method)){
                 flag = true;
                 break label;
-            }else if(or.getUrl().indexOf("{") != -1 && or.getUrl().indexOf("}") != -1
-                    && or.getPath_param() != null && or.getPath_param() > 0){
-                String url = or.getUrl().substring(0,or.getUrl().indexOf("{"));
-                if(path.replace(url,"").split("/").length == or.getPath_param()){
-                    flag = true;
-                    break label;
+            }else if(or.getMethod().equalsIgnoreCase(method) && !urlParam.contains(path)){
+                if(or.getUrl().indexOf("{") != -1 && or.getUrl().indexOf("}") != -1
+                    && or.getPath_param() != null && or.getPath_param() > 0) {
+                    String url = or.getUrl().substring(0, or.getUrl().indexOf("{"));
+                    if (path.replace(url, "").split("/").length == or.getPath_param()) {
+                        flag = true;
+                        break label;
+                    }
                 }
             }
         }

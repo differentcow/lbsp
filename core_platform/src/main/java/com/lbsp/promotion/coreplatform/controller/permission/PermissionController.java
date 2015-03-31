@@ -45,6 +45,7 @@ public class PermissionController extends BaseController{
             res.setCurrentRole(result.getCurrentRole());
             res.setParentRole(result.getParentRole());
 			res.setUser(result.getUser());
+            res.setNoParamUrl(result.getNoParamUrl());
             res.setPageList(result.getPageList());
 			SessionMap.getSessionMapInstance().put(res.getUser().getSecurity_key(), res);
 		} else {
