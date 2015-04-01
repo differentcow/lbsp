@@ -9,15 +9,18 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
     var add_text = parent.app.getI18nMessage("common.sys.add.text");
     var upt_text = parent.app.getI18nMessage("common.sys.upt.text");
     var ok_text = parent.app.getI18nMessage("common.sys.success.text");
+    var deny = parent.app.getI18nMessage('shop.select.status.deny');
+    var open = parent.app.getI18nMessage('shop.select.status.open');
+    var wait = parent.app.getI18nMessage('shop.select.status.wait');
     var ShopViewModel = function () {
         var me = this;
         this.isEdit = ko.observable();
-        this.paramView = new ParamView();
+        this.showView = new ParamView();
         this.viewEdit = ko.observable(false);
         this.viewSelect = ko.observable(true);
         this.viewTextEdit = ko.observable(false);
         this.editParamId = ko.observable();
-        this.typeOptions = ko.observableArray([]);
+        this.statusOptions = ko.observableArray([]);
         this.wayOptions = ko.observableArray([]);
         this.addAuth = 'addparam';
         this.editAuth = 'modifyparam';
@@ -38,50 +41,28 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
                     $(this).text(parent.app.getI18nMessage('param.'+attr));
                 }
             });
-            $('#add').html(parent.app.getI18nMessage('common.btn.addBtn'));
-            $('#edit').html(parent.app.getI18nMessage('common.btn.editBtn'));
-            $('#goback').html(parent.app.getI18nMessage('common.btn.returnBtn'));
-        };
-        this.loadTypeList = function(){
-            var deferred = paramsService.getParams(null);
-            $.when(deferred).done(function (response) {
-                if(typeof response =="string") {
-                    eval('var result =' + response);
-                }else{
-                    var result = response;
+            $('h4,button').each(function(){
+                var attr = $(this).attr('i18n');
+                if(attr !=null && attr != ''){
+                    $(this).html(parent.app.getI18nMessage(attr));
                 }
-                if (result.state.code == 200000 && result.result.length > 0) {
-                    me.typeOptions([]);
-                    $.each(result.result, function (index,status) {
-                        me.typeOptions.push(new SelectModel(status.type_meaning,status.type));
-                    });
-                } else {
-                    console.log('load types failed');
-                }
-            }).fail(function (error) {
-                console.log(error);
             });
         };
-
-        this.initTypeWay = function(){
-            var et = parent.app.getI18nMessage("param.type.had");
-            var ct = parent.app.getI18nMessage("param.type.customer");
-            me.wayOptions([]);
-            me.wayOptions.push(new SelectModel(et,'had'));
-            me.wayOptions.push(new SelectModel(ct,'customer'));
-            me.paramView.way('had');
+        this.loadStatusList = function(){
+            me.statusOptions.push(new SelectModel(deny,0));
+            me.statusOptions.push(new SelectModel(open,1));
+            me.statusOptions.push(new SelectModel(wait,2));
         };
 
         this.init = function () {
-          me.initTypeWay();
           me.initAuth();
-          me.loadTypeList();
+          me.loadStatusList();
           me.getIDFromUrl();
           if(typeof me.editParamId() != 'undefined'&& me.editParamId() != ''){
             me.isEdit(true);
             me.loadParam(me.editParamId());
           }else{
-            me.paramView.setEmpty();
+            me.showView.setEmpty();
             me.isEdit(false);
           }
         };
@@ -94,13 +75,13 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
         };
 
         this.loadParam = function(id){
-          var deferred = paramsService.getParamById(id);
+          var deferred = shopService.getDetailById(id);
           $.when(deferred).done(function (response) {
             if (response.state.code == 200000 &&typeof response.result!='undefined') {
-                me.paramView.setData(response.result);
+                me.showView.setData(response.result);
               util.adjustIframeHeight();
             } else {
-              console.log('load paramView failed');
+              console.log('load showView failed');
               util.adjustIframeHeight();
             }
           }).fail(function (error) {
@@ -126,7 +107,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
         };
 
         this.autoCompleteCodeText = function(){
-            var code = me.paramView.type_code();
+            var code = me.showView.type_code();
             var ary = me.typeOptions();
             var flag = false;
             var tmpVar = '';;
@@ -138,9 +119,9 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
                 }
             }
             if(flag){
-                me.paramView.type_meaning(tmpVar);
+                me.showView.type_meaning(tmpVar);
             }else{
-                me.paramView.type_meaning('');
+                me.showView.type_meaning('');
             }
         };
 
