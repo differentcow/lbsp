@@ -6,7 +6,7 @@ import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Shop;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.QueryKey;
-import com.lbsp.promotion.entity.query.SortCond;
+import com.lbsp.promotion.entity.response.ShopRsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +33,8 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements
 	 * @param id
 	 * @return 
 	 */
-	public Shop getDetailById(Integer id){
-		GenericQueryParam param = new GenericQueryParam();
-		param.put(new QueryKey("id", QueryKey.Operators.EQ),id);
-		return this.findOne(param);
+	public ShopRsp getDetailById(Integer id){
+        return shopDao.getDetailById(id);
 	}
 
 	/**
@@ -49,22 +47,13 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements
 	 * @param size
 	 * @return 
 	 */
-	public PageResultRsp getPageList(Long from,Long to,Integer start,Integer size){
-		GenericQueryParam param = new GenericQueryParam();
-		if(from != null)
-			param.put(new QueryKey("create_time", QueryKey.Operators.GTE),from);
-		if(to != null)
-			param.put(new QueryKey("create_time", QueryKey.Operators.LTE),to);
-		param.addSortCond(new SortCond("update_time", SortCond.Order.DESC));
-		int count = this.count(param);
-		param.setNeedPaging(true);
-		param.setOffset(start);
-		param.setPageSize(size);
-		List list = this.find(param);
-		PageResultRsp page = new PageResultRsp();
-		page.loadPageInfo(count);
-		page.setResult(list);
-		return page;
+	public PageResultRsp getPageList(String user,String sell,String name,String address,Integer status,Long from,Long to,Integer start,Integer size){
+        int count = shopDao.getListCount(user, sell, name, address, status, from, to);
+        List<ShopRsp> list = shopDao.getList(user, sell, name, address, status, from, to,start,size);
+        PageResultRsp page = new PageResultRsp();
+        page.loadPageInfo(count);
+        page.setResult(list);
+        return page;
 	}
 
 	/**

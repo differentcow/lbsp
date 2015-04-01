@@ -3,6 +3,7 @@ package com.lbsp.promotion.core.service.shop;
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Shop;
+import com.lbsp.promotion.entity.response.ShopRsp;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface ShopService<T> extends BaseService<T> {
 	 * @param id
 	 * @return 
 	 */
-	Shop getDetailById(Integer id);
+    ShopRsp getDetailById(Integer id);
 
 	/**
 	 *
@@ -34,7 +35,7 @@ public interface ShopService<T> extends BaseService<T> {
 	 * @param size
 	 * @return 
 	 */
-	PageResultRsp getPageList(Long from,Long to,Integer start,Integer size);
+	PageResultRsp getPageList(String user,String sell,String name,String address,Integer status,Long from,Long to,Integer start,Integer size);
 
 	/**
 	 *

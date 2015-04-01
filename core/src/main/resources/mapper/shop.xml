@@ -10,4 +10,68 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</foreach>
 	</delete>
 
+    <select id="getDetailById" resultType="ShopRsp">
+        select s.*,c.name as customerName
+        from shop s inner join customer c on c.id = s.customer_id
+        where 1=1 and s.id = #{id}
+    </select>
+
+    <select id="getListCount" resultType="int">
+        select count(1)
+        from shop s inner join customer c on c.id = s.customer_id
+        where 1=1
+        <if test="name != null and name != ''">
+            and s.shop_name like "%"#{name}"%"
+        </if>
+        <if test="user != null and user != ''">
+            and s.contact_user like "%"#{user}"%"
+        </if>
+        <if test="status != null">
+            and s.status = #{status}
+        </if>
+        <if test="sell != null and sell != ''">
+            and s.sell_no like "%"#{sell}"%"
+        </if>
+        <if test="address != null and address != ''">
+            and s.address like "%"#{address}"%"
+        </if>
+        <if test="from != null">
+            and s.create_time >= #{from}
+        </if>
+        <if test="to != null">
+            and s.create_time &lt;= #{to}
+        </if>
+    </select>
+
+    <select id="getList" resultType="ShopRsp">
+        select s.*,c.name as customerName
+        from shop s inner join customer c on c.id = s.customer_id
+        where 1=1
+        <if test="name != null and name != ''">
+            and s.shop_name like "%"#{name}"%"
+        </if>
+        <if test="user != null and user != ''">
+            and s.contact_user like "%"#{user}"%"
+        </if>
+        <if test="status != null">
+            and s.status = #{status}
+        </if>
+        <if test="sell != null and sell != ''">
+            and s.sell_no like "%"#{sell}"%"
+        </if>
+        <if test="address != null and address != ''">
+            and s.address like "%"#{address}"%"
+        </if>
+        <if test="from != null">
+            and s.create_time >= #{from}
+        </if>
+        <if test="to != null">
+            and s.create_time &lt;= #{to}
+        </if>
+        order by s.update_time desc
+        <if test="start != null and size != null">
+            limit #{start},#{size}
+        </if>
+    </select>
+
 </mapper>

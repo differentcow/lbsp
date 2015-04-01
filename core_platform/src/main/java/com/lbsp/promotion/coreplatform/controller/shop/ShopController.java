@@ -58,7 +58,12 @@ public class ShopController extends BaseController {
 	@ResponseBody
 	public Object list(@RequestParam(value = "iDisplayStart", required=false,defaultValue=DEFAULT_LIST_PAGE_INDEX) Integer startRecord,
 						@RequestParam(value = "iDisplayLength", required=false,defaultValue=DEFAULT_LIST_PAGE_SIZE) Integer maxRecords,
-						@RequestParam(value = "from", required=false) Long from,
+                        @RequestParam(value = "sell", required=false) String sell,
+                        @RequestParam(value = "name", required=false) String name,
+                        @RequestParam(value = "address", required=false) String address,
+                        @RequestParam(value = "status", required=false) Integer status,
+                        @RequestParam(value = "user", required=false) String user,
+                        @RequestParam(value = "from", required=false) Long from,
 						@RequestParam(value = "to", required=false) Long to) {
 
 		if (Validation.isEmpty(startRecord) || startRecord < GenericConstants.DEFAULT_LIST_PAGE_INDEX)
@@ -68,7 +73,7 @@ public class ShopController extends BaseController {
 		if (maxRecords > GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE)
 			maxRecords = GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE;
 
-		PageResultRsp page = service.getPageList(from,to,startRecord,maxRecords);
+		PageResultRsp page = service.getPageList(user,sell,name,address,status,from,to,startRecord,maxRecords);
 		return this.createBaseResult("query success", page.getResult(),page.getPageInfo());
 	}
 
