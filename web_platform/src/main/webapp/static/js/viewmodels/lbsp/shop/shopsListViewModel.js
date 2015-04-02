@@ -102,13 +102,14 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
             checkout.hide();
         }).data('datepicker');
     };
+
       this.buildHtml = function(data){
         var html =  '<table>' +
-                     '<tr><td><img src="'+data.pic_path+'"></td></tr>' +
+                     '<tr><td><img src="'+All580.imgBaseUrl+data.pic_path+'"></td></tr>' +
                      '<tr><td>'+longitude+data.longitude+'&nbsp;&nbsp;'+latitude+data.latitude+'</td></tr>' +
                      '<tr><td>'+customerName+data.customerName+'&nbsp;&nbsp;'+areaCode+data.area_code+'</td></tr>' +
-                     '<tr><td>'+desc+data.description+'</td></tr>' +
-                     '<tr><td><a href="javascript:void(0)">'+sellPic+'</a></td></tr></table>';
+                     '<tr><td>'+desc+(typeof data.description == 'undefined'?'':data.description)+'</td></tr>' +
+                     '<tr><td><a href="javascript:void(0)" onclick="showSellImg(\''+data.verify_pic_path+'\')">'+sellPic+'</a></td></tr></table>';
           return html;
       };
       this.loadRef = function(self,id){
@@ -297,4 +298,9 @@ function eachCheckBox(_self){
 
 function eventHandle(id,self){
     window.operateEvent(id,self);
+}
+
+function showSellImg(path){
+    $('#img_sell').attr('src',All580.imgBaseUrl + path);
+    $('#sellModal').modal('toggle');
 }

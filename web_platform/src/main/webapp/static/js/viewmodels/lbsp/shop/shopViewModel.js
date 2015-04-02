@@ -87,14 +87,22 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
             console.log(error);
           });
         };
-        this.store_upload = {logo:'Y',sell:'Y'};
-        this.uploadFile = function(id){
+        this.changePath = function(type){
+            if(type == 1){
+                me.shopView.pic_path('');
+                me.fileArray.push('logo');
+            }else{
+                me.shopView.verify_pic_path('');
+                me.fileArray.push('sell');
+            }
+        };
+//        this.store_upload = {logo:'Y',sell:'Y'};
+        this.uploadFile = function(){
+            var id = me.fileArray[me.fileIndex];
             if($('#'+id).val()!='') {
-                if(me.store_upload[id] == 'Y'){
-                    me.store_upload[id] = 'N';
-                }
-//                $("#edit").attr("disabled","disabled");
-//                $("#add").attr("disabled","disabled");
+                me.fileIndex++;
+                $("#edit").attr("disabled","disabled");
+                $("#add").attr("disabled","disabled");
                 $('#'+id).attr('name','uploadFile');
                 fileUploadService.upload(id,'shop/upload',{type:id},me.uploadSuccess, me.uploadFailed);
             }else{
@@ -109,27 +117,24 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
         };
         this.logo_path = '';
         this.sell_path = '';
+        this.fileArray = [];
+        this.fileIndex = 0;
         this.uploadSuccess = function(data,satus){
             if(data.state.code==200000) {
-                /*var flag = false;var id = '';
-                for(var k in me.store_upload()){
-                    if(me.store_upload[k] == 'Y'){
-                        flag = true;id = k;
-                        me.store_upload[k] = 'N';
-                        return;
-                    }
-                }
-                me[data.key] = data.val;
-                if(data.key == 'logo_path'){
+//                me[data.result.key] = data.result.val;
+                if(data.result.key == 'logo_path'){
                     $('#logo').attr('name','logo');
-                }else{
+                    me.logo_path =  data.result.val;
+                }else if(data.result.key == 'sell_path'){
                     $('#sell').attr('name','sell');
+                    me.sell_path =  data.result.val;
                 }
-                if(flag){
-                    me.uploadFile((id));
-                    return;
+                if(me.fileArray.length >= me.fileIndex){
+                    me.submitParam();
+                }else{
+                    me.uploadFile();
                 }
-                me.submitParam();*/
+
             }else{
                 parent.amplify.publish('status.alerts','上传图片失败',data.msg);
                 console.log('upload failed code '+data.code);
@@ -143,13 +148,23 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
             $("#add").removeAttr("disabled","disabled");
         };
         this.backToList = function(){
-            parent.amplify.publish('page.redirect','sysFrame',All580.serverName+'/lbsp/show/list.html');
-        }
+            self.location = 'list.html';
+//            parent.amplify.publish('page.redirect','sysFrame',All580.serverName+'/lbsp/show/list.html');
+        };
       this.submitParam = function () {
         var param_obj = {};
-        $('input[tag=data],select[tag=data]').each(function(){
+        $('input[tag=data],select[tag=data],textarea[tag=data]').each(function(){
             param_obj[$(this).attr('name')] = $(this).val();
         });
+          for(var i = 0; i < me.fileArray.length;i++){
+              if(me.fileArray[i] == 'logo'){
+                  param_obj.pic_path = me.logo_path;
+              }
+              if(me.fileArray[i] == 'sell'){
+                  param_obj.verify_pic_path = me.sell_path;
+              }
+          }
+        param_obj.id  = me.editParamId();
         var msg = add_text;
         param_obj = mapping.toJSON(param_obj);
         var deferred = null;
@@ -234,6 +249,9 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
             }
             if (typeof data.verify_pic_path != 'undefined') {
               me.verify_pic_path(All580.imgBaseUrl+data.verify_pic_path);
+                me.sell_path = data.verify_pic_path;
+            }else{
+                me.sell_path = '';
             }
             if (typeof data.description != 'undefined') {
 //              var date_str =  All580.DPGlobal.formatDateTime(data.create_time, 'yyyy-MM-dd HH:mm:ss');
@@ -244,6 +262,9 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
             }
               if (typeof data.pic_path != 'undefined') {
                   me.pic_path(All580.imgBaseUrl+data.pic_path);
+                  me.logo_path = data.pic_path;
+              }else{
+                  me.logo_path = '';
               }
               if (typeof data.latitude != 'undefined') {
                   me.latitude(data.latitude);
@@ -282,7 +303,6 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
               contact_user: {required:true},
               contact_phone: {required:true},
               status:{required:true},
-              customer_id:{required:true},
               latitude:{required:true},
               longitude:{required:true},
               sell_no:{required:true},
@@ -304,17 +324,24 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
                   $('label[for=customer_text]').css('display','inline-block');
                   return;
               }
-              if(!($('#logo').val() != '')){
+              var verify = model.shopView.verify_pic_path();
+              var pic = model.shopView.pic_path();
+              if(verify != null && pic != null && verify != '' && pic != ''){
+
+                  model.submitParam();
+                  return;
+              }
+              if(!($('#logo').val() != '') && (pic == null || pic == '')){
                   $('#logo_error').show();
                   return;
               }
               $('#logo_error').hide();
-              if(!($('#sell').val() != '')){
+              if(!($('#sell').val() != '') && (verify == null || verify == '')){
                   $('#sell_error').show();
                   return;
               }
               $('#sell_error').hide();
-              model.uploadFile('logo');
+              model.uploadFile();
           }
         }
       );
@@ -327,6 +354,12 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
           model.shopView.customer_id(_return.id);
           model.shopView.customerName(_return.name);
           $('#myModal').modal('toggle');
+      });
+      $('#logo').change(function(){
+          model.changePath(1);
+      });
+      $('#sell').change(function(){
+          model.changePath(2);
       });
       $('#goback').click(function () {
     	  self.location = 'list.html';
