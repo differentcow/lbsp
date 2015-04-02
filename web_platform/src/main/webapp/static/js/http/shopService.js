@@ -16,6 +16,24 @@ define(['jquery'],function($){
       getDetailById : function(id){
           var url = this.service + 'core/shop|'+id;
           return $.getJSON(url);
+      },
+      modifyShop : function(obj,id){
+          var url = this.service+'core/shop|upt';
+          return $.ajax({
+              url: url,
+              type: "PUT",
+              data: obj,
+              contentType : 'application/json'
+          });
+      },
+      addShop : function(obj){
+          var url = this.service+'core/shop|add';
+          return $.ajax({
+              url: url,
+              type: "POST",
+              data: obj,
+              contentType : 'application/json'
+          });
       }
   };
 });

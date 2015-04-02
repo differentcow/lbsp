@@ -48,7 +48,7 @@ requirejs([
             };
 
             this.uploadFile = function(){
-              if($('#uploadFile').val()!='') {
+              if($('#wxpic').val()!='') {
             	$("#sure_btn").attr("disabled","disabled");
                 fileUploadService.upload('wxpic',me.forward(),me.dataObject(),me.uploadSuccess, me.uploadFailed);
               }else{
@@ -102,9 +102,6 @@ requirejs([
 
             $("#theForm").validate({
                 rules: {
-                    name: {
-                    required: true
-                  },
                   uploadFile : {
                       extension: function(){return model.ext();}
                   }

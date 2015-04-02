@@ -1,19 +1,24 @@
 package com.lbsp.promotion.coreplatform.controller.shop;
 
 import com.lbsp.promotion.core.service.shop.ShopService;
-import com.lbsp.promotion.coreplatform.controller.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.base.BaseUploadController;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.Shop;
+import com.lbsp.promotion.entity.response.ShopRsp;
 import com.lbsp.promotion.util.validation.Validation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -23,12 +28,22 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/shop")
-public class ShopController extends BaseController {
+public class ShopController extends BaseUploadController {
 
 
 	@Autowired
 	private ShopService<Shop> service;
 
+    @Value("${fileupload.path}")
+    private String resourceRootPath;
+    @Value("${fileupload.src.path}")
+    private String resourceSrcPath;
+    @Value("${fileupload.shop.pic.dir}")
+    private String logoDirPath;
+    @Value("${fileupload.shop.sell.dir}")
+    private String sellDirPath;
+
+    private Map map = new HashMap();
 
 	/**
 	 *
@@ -40,9 +55,39 @@ public class ShopController extends BaseController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object detail(@PathVariable(value = "id") Integer id) {
-		Shop rsp = service.getDetailById(id);
+		ShopRsp rsp = service.getDetailById(id);
 		return this.createBaseResult("query success", rsp);
 	}
+
+    /**
+     * 上传用户图像
+     *
+     * @return
+     */
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public Object uploadFile(HttpServletRequest request,
+                             @RequestParam(value = "uploadFile",required = false) MultipartFile file,
+                             @RequestParam(value = "type",required = false) String type){
+        String filename = "";
+        String resourceRootDir = null;
+        if ("logo".equals(type)){
+            map.put("key","logo_path");
+            resourceRootDir=logoDirPath;
+        }else{
+            map.put("key","sell_path");
+            resourceRootDir=sellDirPath;
+        }
+
+        try {
+            filename = upload(file,resourceRootPath,resourceRootDir,resourceSrcPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        map.put("val",filename);
+        return this.createBaseResult("query success", map);
+    }
 
 	/**
 	 *

@@ -95,6 +95,8 @@ requirejs(['jquery','knockout','commentService','commonUtil','amplify','DT-boots
     this.setUpTable = function () {
       var settings = All580.dataTable;
       settings['sAjaxSource'] = All580.serverName + '/service/core/comment|common';
+      settings['iListLength'] = 3;
+      settings['iDisplayLength'] = 10;
       settings['fnServerParams'] = function (aoData) {
         aoData.push({ "name": "param", "value": ep.viewTitle()?ep.params['title']:ep.params['name']});
         aoData.push({ "name": "call", "value": ep.viewTitle()?'c':'p'});

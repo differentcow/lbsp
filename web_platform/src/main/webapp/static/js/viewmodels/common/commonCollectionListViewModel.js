@@ -101,6 +101,8 @@ requirejs(['jquery','knockout','collectionService','commonUtil','amplify','DT-bo
         aoData.push({ "name": "from", "value": ep.params['from']});
         aoData.push({ "name": "to", "value": ep.params['to']});
       };
+      settings['iListLength'] = 3;
+      settings['iDisplayLength'] = 10;
       settings['fnDrawCallback'] = function(){
     	  util.adjustIframeHeight();
       };

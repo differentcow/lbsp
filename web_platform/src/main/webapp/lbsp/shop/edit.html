@@ -34,72 +34,80 @@
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.name">商铺名称：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input id="name" name="name" data-bind="value: shopView.shop_name" class="form-control" type="text" maxlength="30" autofocus required>
+                    <input tag="data" id="shop_name" name="shop_name" data-bind="value: shopView.shop_name" class="form-control" type="text" maxlength="30" autofocus required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.user">联系人：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input id="contact_user" name="contact_user" data-bind="value: shopView.contact_user" class="form-control" type="text" maxlength="20" required>
+                    <input tag="data" id="contact_user" name="contact_user" data-bind="value: shopView.contact_user" class="form-control" type="text" maxlength="20" required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.phone">联系电话：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input id="contact_phone" name="contact_phone" data-bind="value: shopView.contact_phone" class="form-control" type="text" maxlength="20" required>
+                    <input tag="data" id="contact_phone" name="contact_phone" data-bind="value: shopView.contact_phone" class="form-control" type="text" maxlength="20" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.customerName">注册用户：</span></label>
+                <div class="col-sm-6 col-sm-8 col-lg-6" style="padding-top: 8px;">
+                    <a href="#" data-bind="text:shopView.customerName,click:showCustomer" id="customer_text" name="customer_text"></a>
+                    <input tag="data" id="customer_id" name="customer_id" data-bind="value: shopView.customer_id" type="hidden"/>
+                    <label for="customer_text" class="error" style="display: none;">请选择用户</label>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.status">状态</span></label>
                 <div class="col-sm-4 col-sm-6 col-lg-4">
-                    <select class="form-control" name="type" style="cursor: pointer;"
-                            data-bind="options:statusOptions,optionsText:'text',optionsValue:'val',value: paramView.status"></select>
+                    <select tag="data" class="form-control" name="type" style="cursor: pointer;"
+                            data-bind="options:statusOptions,optionsText:'text',optionsValue:'val',value: shopView.status"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.latitude">经度：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input id="latitude" name="latitude" data-bind="value: shopView.latitude" class="form-control" type="text" maxlength="20" required>
+                    <input tag="data" id="latitude" name="latitude" data-bind="value: shopView.latitude" class="form-control" type="text" maxlength="20" required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.longitude">纬度：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input id="longitude" name="longitude" data-bind="value: shopView.longitude" class="form-control" type="text" maxlength="20" required>
+                    <input tag="data" id="longitude" name="longitude" data-bind="value: shopView.longitude" class="form-control" type="text" maxlength="20" required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.address">地址：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input id="address" name="address" data-bind="value: shopView.address" class="form-control" type="text" maxlength="20" required>
+                    <input tag="data" id="address" name="address" data-bind="value: shopView.address" class="form-control" type="text" maxlength="20" required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.icon">商铺Logo：</span></label>
                 <div class="col-sm-6 col-md-5 col-lg-4">
                     <div class="fileupload fileupload-new" data-provides="fileupload">
-                        <div class="fileupload-new thumbnail" style="width: 240px; height: 240px;">
-                            <img data-bind="attr:{src:showView.pic_path}" alt="" />
+                        <div class="fileupload-new thumbnail" style="width: 72px; height: 72px;">
+                            <img data-bind="attr:{src:shopView.pic_path}" alt="" />
                         </div>
                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 330px; max-height: 200px; line-height: 20px;"></div>
                         <div>
                                     <span class="btn btn-default btn-file">
                                         <span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择</span>
                                         <span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
-                                        <input type="file" class="default" id="logo" name="uploadFile" />
+                                        <input type="file" class="default" id="logo" name="logo" />
                                     </span>
                             <a id="dismiss" href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 移除</a>
                         </div>
                     </div>
                     <br/>
                     <span class="label label-danger ">注意</span>
-                    <span>仅支持png,jpg图片格式</span>
+                    <span>仅支持png,jpg图片格式</span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="logo_error" style="display: none;">请选择logo</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.label.sell.no">营业号：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input id="sell_no" name="sell_no" data-bind="value: shopView.sell_no" class="form-control" type="text" maxlength="20" required>
+                    <input tag="data" id="sell_no" name="sell_no" data-bind="value: shopView.sell_no" class="form-control" type="text" maxlength="20" required>
                 </div>
             </div>
             <div class="form-group">
@@ -107,37 +115,55 @@
                 <div class="col-sm-6 col-md-5 col-lg-4">
                     <div class="fileupload fileupload-new" data-provides="fileupload">
                         <div class="fileupload-new thumbnail" style="width: 240px; height: 240px;">
-                            <img data-bind="attr:{src:showView.verify_pic_path}" alt="" />
+                            <img data-bind="attr:{src:shopView.verify_pic_path}" alt="" />
                         </div>
                         <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 330px; max-height: 200px; line-height: 20px;"></div>
                         <div>
                                     <span class="btn btn-default btn-file">
                                         <span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择</span>
                                         <span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
-                                        <input type="file" class="default" id="sell" name="uploadFile" />
+                                        <input type="file" class="default" id="sell" name="sell" />
                                     </span>
                             <a id="sell_dismiss" href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 移除</a>
                         </div>
                     </div>
                     <br/>
                     <span class="label label-danger ">注意</span>
-                    <span>仅支持png,jpg图片格式</span>
+                    <span>仅支持png,jpg图片格式</span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="sell_error" style="display: none;">请选择营业执照</span>
                 </div>
             </div>
             <div class="form-group" data-bind="visible:viewEdit()">
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="shop.label.area.code">区域编码：</span></label>
                 <div class="col-sm-6 col-sm-8 col-lg-6">
-                    <input name="area_code" id="area_code" data-bind="value: paramView.area_code" class="form-control" type="text" maxlength="30">
+                    <input tag="data" name="area_code" id="area_code" data-bind="value: shopView.area_code" class="form-control" type="text" maxlength="30">
                 </div>
             </div>
             <div clss="form-group">
                 <div class="col-sm-offset-2 col-lg-offset-2 col-md-offset-2">
-                    <button type="submit" data-bind="visible:!isEdit() && canAdd()" class="btn btn-default" id="add" i18n="common.btn.addBtn">&nbsp;&nbsp;新&nbsp;&nbsp;增&nbsp;&nbsp;</button>
-                    <button type="submit" data-bind="visible:isEdit() && canEdit()" class="btn btn-default" id="edit" i18n="common.btn.editBtn">&nbsp;&nbsp;编&nbsp;&nbsp;辑&nbsp;&nbsp;</button>
+                    <button type="submit" data-bind="visible:!isEdit() && canAdd()" class="btn btn-default" id="add" i18n="common.btn.addBtn">&nbsp;</button>
+                    <button type="submit" data-bind="visible:isEdit() && canEdit()" class="btn btn-default" id="edit" i18n="common.btn.editBtn">&nbsp;</button>
                     <button type="button" class="btn btn-default" id="goback" i18n="common.btn.returnBtn">返回列表</button>
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-iframe">
+        <div class="modal-content">
+            <div class="modal-header"  style="background-color: #424F63;color: #ffffff">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" i18n="customer.label">文件上传</h4>
+            </div>
+            <div class="modal-body">
+                <iframe id="customer_iframe" name="customer_iframe" frameborder="0" style="overflow: hidden;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="sure_btn" i18n="common.btn.nospace.sureBtn">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" i18n="common.btn.nospace.closeBtn">关闭</button>
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="../../static/shared/js/require.js"></script>

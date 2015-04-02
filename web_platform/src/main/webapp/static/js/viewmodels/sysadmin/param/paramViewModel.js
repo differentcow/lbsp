@@ -186,7 +186,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
         this.way = ko.observable('had');
         this.opText = ko.observable();
         this.opType = ko.observable();
-        this.id = ko.observable('');
+        this.id = ko.observable();
         this.code = ko.observable('');
         this.name = ko.observable('');
         this.type = ko.observable('');
@@ -195,14 +195,14 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'paramsService', 'commonUti
         this.create_date = ko.observable('');
         this.description = ko.observable('');
         this.setEmpty = function(){
-            me.opText = ko.observable();
-            me.opType = ko.observable();
-            me.id = ko.observable('');
-            me.code = ko.observable('');
-            me.name = ko.observable('');
-            me.type = ko.observable('');
-            me.type_code = ko.observable('');
-            me.type_meaning = ko.observable('');
+            me.opText();
+            me.opType();
+            me.id();
+            me.code('');
+            me.name('');
+            me.type('');
+            me.type_code('');
+            me.type_meaning('');
         };
         this.setData = function(data) {
           if (typeof data != 'undefined') {

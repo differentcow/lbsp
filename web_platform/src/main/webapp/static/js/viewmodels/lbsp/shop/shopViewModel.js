@@ -1,9 +1,9 @@
 /**
  * Created by Barry on 6/16/2014.
  */
-requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil',
-    'amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers'],
-    function ($, ko, mapping, shopService, util) {
+requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadService', 'commonUtil',
+    'amplify', 'jquery-validate','bootstrap', 'validateMsg','knockout-amd-helpers','additional-methods','bootstrap-fileupload'],
+    function ($, ko, mapping, shopService, fileUploadService, util) {
     var sys_info = parent.app.getI18nMessage('common.sys.info');
     var sys_error = parent.app.getI18nMessage('common.sys.submit.fail');
     var add_text = parent.app.getI18nMessage("common.sys.add.text");
@@ -15,15 +15,15 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
     var ShopViewModel = function () {
         var me = this;
         this.isEdit = ko.observable();
-        this.showView = new ParamView();
+        this.shopView = new ShopView();
         this.viewEdit = ko.observable(false);
         this.viewSelect = ko.observable(true);
         this.viewTextEdit = ko.observable(false);
         this.editParamId = ko.observable();
         this.statusOptions = ko.observableArray([]);
         this.wayOptions = ko.observableArray([]);
-        this.addAuth = 'addparam';
-        this.editAuth = 'modifyparam';
+        this.addAuth = 'addshop';
+        this.editAuth = 'modifyshop';
         this.canAdd = ko.observable(false);
         this.canEdit = ko.observable(false);
         this.initAuth = function () {
@@ -38,7 +38,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
             $('title,legend,label,span').each(function(){
                 var attr = $(this).attr('i18n');
                 if(attr !=null && attr != ''){
-                    $(this).text(parent.app.getI18nMessage('param.'+attr));
+                    $(this).text(parent.app.getI18nMessage(attr));
                 }
             });
             $('h4,button').each(function(){
@@ -55,6 +55,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
         };
 
         this.init = function () {
+          me.seti18nText();
           me.initAuth();
           me.loadStatusList();
           me.getIDFromUrl();
@@ -62,84 +63,102 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
             me.isEdit(true);
             me.loadParam(me.editParamId());
           }else{
-            me.showView.setEmpty();
+            me.shopView.setEmpty();
             me.isEdit(false);
           }
         };
-
         this.getIDFromUrl = function(){
           var id = util.getQueryString('id');
           if(id != null){
             me.editParamId(id);
           }
         };
-
         this.loadParam = function(id){
           var deferred = shopService.getDetailById(id);
           $.when(deferred).done(function (response) {
             if (response.state.code == 200000 &&typeof response.result!='undefined') {
-                me.showView.setData(response.result);
+                me.shopView.setData(response.result);
               util.adjustIframeHeight();
             } else {
-              console.log('load showView failed');
+              console.log('load shopView failed');
               util.adjustIframeHeight();
             }
           }).fail(function (error) {
             console.log(error);
           });
         };
-
-        this.backToList = function(){
-            parent.amplify.publish('page.redirect','sysFrame',All580.serverName+'/sysadmin/param/list.html');
-        }
-
-        this.typeWay = function(way){
-            if(way == 'had'){
-                me.viewSelect(true);
-                me.viewEdit(false);
-                me.viewTextEdit(false);
-            }
-            if(way == 'customer'){
-                me.viewSelect(false);
-                me.viewEdit(true);
-                me.viewTextEdit(true);
-            }
-        };
-
-        this.autoCompleteCodeText = function(){
-            var code = me.showView.type_code();
-            var ary = me.typeOptions();
-            var flag = false;
-            var tmpVar = '';;
-            for(var i = 0;i < ary.length;i++){
-                if(ary[i].val == code){
-                    flag = true;
-                    tmpVar = ary[i].text;
-                    break;
+        this.store_upload = {logo:'Y',sell:'Y'};
+        this.uploadFile = function(id){
+            if($('#'+id).val()!='') {
+                if(me.store_upload[id] == 'Y'){
+                    me.store_upload[id] = 'N';
                 }
-            }
-            if(flag){
-                me.showView.type_meaning(tmpVar);
+//                $("#edit").attr("disabled","disabled");
+//                $("#add").attr("disabled","disabled");
+                $('#'+id).attr('name','uploadFile');
+                fileUploadService.upload(id,'shop/upload',{type:id},me.uploadSuccess, me.uploadFailed);
             }else{
-                me.showView.type_meaning('');
+                parent.amplify.publish('status.alerts','请选择要上传的图片','系统信息');
             }
         };
-
-      this.submitParam = function () {
-        var param_obj = {
-          name:me.paramView.name(),
-          code:me.paramView.code(),
-          type:me.paramView.opType(),
-          type_meaning:me.paramView.opText()
+        this.showCustomer = function(){
+            var iframe_src = '../../common/commonCustomer.html';
+            $('#customer_iframe').prop('src',iframe_src);
+            $('#myModal').modal('toggle');
+//            $(window.frames['customer_iframe'].document)
         };
+        this.logo_path = '';
+        this.sell_path = '';
+        this.uploadSuccess = function(data,satus){
+            if(data.state.code==200000) {
+                /*var flag = false;var id = '';
+                for(var k in me.store_upload()){
+                    if(me.store_upload[k] == 'Y'){
+                        flag = true;id = k;
+                        me.store_upload[k] = 'N';
+                        return;
+                    }
+                }
+                me[data.key] = data.val;
+                if(data.key == 'logo_path'){
+                    $('#logo').attr('name','logo');
+                }else{
+                    $('#sell').attr('name','sell');
+                }
+                if(flag){
+                    me.uploadFile((id));
+                    return;
+                }
+                me.submitParam();*/
+            }else{
+                parent.amplify.publish('status.alerts','上传图片失败',data.msg);
+                console.log('upload failed code '+data.code);
+                $("#edit").removeAttr("disabled","disabled");
+                $("#add").removeAttr("disabled","disabled");
+            }
+        };
+        this.uploadFailed = function(data,status, e){
+            parent.amplify.publish('status.alerts','上传图片失败','系统错误');
+            $("#edit").removeAttr("disabled","disabled");
+            $("#add").removeAttr("disabled","disabled");
+        };
+        this.backToList = function(){
+            parent.amplify.publish('page.redirect','sysFrame',All580.serverName+'/lbsp/show/list.html');
+        }
+      this.submitParam = function () {
+        var param_obj = {};
+        $('input[tag=data],select[tag=data]').each(function(){
+            param_obj[$(this).attr('name')] = $(this).val();
+        });
         var msg = add_text;
         param_obj = mapping.toJSON(param_obj);
         var deferred = null;
-        if(me.isEdit()){console.log(me.editParamId()+":id");
+        if(me.isEdit()){
+            console.log(me.editParamId()+":id");
             msg = upt_text;
-            deferred = paramsService.modifyParam(param_obj, me.editParamId());
+            deferred = shopService.modifyShop(param_obj);
         }else{
-            deferred = paramsService.addParam(param_obj);
+            deferred = shopService.addShop(param_obj);
         }
         $.when(deferred).done(function (response) {
           if(response.state.code==200000) {
@@ -149,12 +168,15 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
             parent.amplify.publish('status.alerts',sys_info,sys_error);
             console.log(response.msg);
           }
+            $("#edit").removeAttr("disabled","disabled");
+            $("#add").removeAttr("disabled","disabled");
         }).fail(function (error) {
           parent.amplify.publish('status.alerts',sys_info,msg + sys_error);
           console.log(error);
+            $("#edit").removeAttr("disabled","disabled");
+            $("#add").removeAttr("disabled","disabled");
         });
       };
-
     };
 
     var SelectModel = function (text, value) {
@@ -162,86 +184,93 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
         this.val = value;
     };
 
-    var ParamView = function () {
+    var ShopView = function () {
         var me = this;
-        this.way = ko.observable('had');
-        this.opText = ko.observable();
-        this.opType = ko.observable();
-        this.id = ko.observable('');
-        this.code = ko.observable('');
-        this.name = ko.observable('');
-        this.type = ko.observable('');
-        this.type_code = ko.observable('');
-        this.type_meaning = ko.observable('');
-        this.create_date = ko.observable('');
+        this.shop_name = ko.observable('');
+        this.contact_user = ko.observable('');
+        this.contact_phone = ko.observable('');
+        this.id = ko.observable();
+        this.verify_pic_path = ko.observable('');
         this.description = ko.observable('');
+        this.status = ko.observable();
+        this.pic_path = ko.observable('');
+        this.latitude = ko.observable();
+        this.longitude = ko.observable();
+        this.area_code = ko.observable('');
+        this.sell_no = ko.observable('');
+        this.address = ko.observable('');
+        this.customerName = ko.observable('');
+        this.customer_id = ko.observable('');
         this.setEmpty = function(){
-            me.opText = ko.observable();
-            me.opType = ko.observable();
-            me.id = ko.observable('');
-            me.code = ko.observable('');
-            me.name = ko.observable('');
-            me.type = ko.observable('');
-            me.type_code = ko.observable('');
-            me.type_meaning = ko.observable('');
+            me.shop_name('');
+            me.contact_user('');
+            me.contact_phone('');
+            me.id();
+            me.verify_pic_path('');
+            me.description('');
+            me.status();
+            me.pic_path('');
+            me.latitude();
+            me.longitude();
+            me.area_code('');
+            me.sell_no('');
+            me.address('');
+            me.customerName(parent.app.getI18nMessage("common.sys.select.text"));
+            me.customer_id();
         };
         this.setData = function(data) {
           if (typeof data != 'undefined') {
             if (typeof data.id != 'undefined') {
               me.id(data.id);
             }
-            if (typeof data.type != 'undefined') {
-              me.type(data.type);
-              me.type_code(data.type);
+            if (typeof data.shop_name != 'undefined') {
+              me.shop_name(data.shop_name);
             }
-            if (typeof data.name != 'undefined') {
-              me.name(data.name);
+            if (typeof data.contact_user != 'undefined') {
+              me.contact_user(data.contact_user);
             }
-            if (typeof data.code != 'undefined') {
-              me.code(data.code);
+            if (typeof data.contact_phone != 'undefined') {
+              me.contact_phone(data.contact_phone);
             }
-            if (typeof data.type_meaning != 'undefined') {
-              me.type_meaning(data.type_meaning);
-            }
-            if (typeof data.create_time != 'undefined') {
-              var date_str =  All580.DPGlobal.formatDateTime(data.create_time, 'yyyy-MM-dd HH:mm:ss');
-              me.create_date(date_str);
+            if (typeof data.verify_pic_path != 'undefined') {
+              me.verify_pic_path(All580.imgBaseUrl+data.verify_pic_path);
             }
             if (typeof data.description != 'undefined') {
+//              var date_str =  All580.DPGlobal.formatDateTime(data.create_time, 'yyyy-MM-dd HH:mm:ss');
               me.description(data.description);
             }
-
+            if (typeof data.status != 'undefined') {
+              me.status(data.status);
+            }
+              if (typeof data.pic_path != 'undefined') {
+                  me.pic_path(All580.imgBaseUrl+data.pic_path);
+              }
+              if (typeof data.latitude != 'undefined') {
+                  me.latitude(data.latitude);
+              }
+              if (typeof data.longitude != 'undefined') {
+                  me.longitude(data.longitude);
+              }
+              if (typeof data.area_code != 'undefined') {
+                  me.area_code(data.area_code);
+              }
+              if (typeof data.sell_no != 'undefined') {
+                  me.sell_no(data.sell_no);
+              }
+              if (typeof data.address != 'undefined') {
+                  me.address(data.address);
+              }
+              if (typeof data.customerName != 'undefined') {
+                  me.customerName(data.customerName);
+              }else{
+                 me.customerName(parent.app.getI18nMessage("common.sys.select.text"));
+              }
+              if (typeof data.customer_id != 'undefined') {
+                  me.customer_id(data.customer_id);
+              }
           }
         }
     };
-    var check_type_name = parent.app.getI18nMessage("param.type.name.not.null");
-    var check_type_code = parent.app.getI18nMessage("param.type.code.not.null");
-    $.validator.addMethod("typeMeaning",function(value,element){
-        if(model.paramView.way() == 'customer'){
-            if(value == null || value == ''){
-                return false;
-            }
-        }
-        return true;
-    },check_type_name);
-
-    $.validator.addMethod("typeSelect",function(value,element){
-        if(model.paramView.way() == 'had'){
-            model.paramView.opText($(element).find("option:selected").text());
-            model.paramView.opType(value);
-        }
-        return true;
-    },"");
-
-    $.validator.addMethod("typeCode",function(value,element){
-        if(model.paramView.way() == 'customer'){
-            if(value == null || value == ''){
-                return false;
-            }
-        }
-        return true;
-    },check_type_code);
-    var check_required = parent.app.getI18nMessage("common.check.must.field");
     var model = new ShopViewModel();
     model.init();
     ko.applyBindings(model);
@@ -249,39 +278,56 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService', 'commonUtil'
       $().ready(function () {
         $("#editParam").validate({
           rules: {
-                  name: {
-                      required:true
-                  },
-                  code: {
-                      required:true
-                  },
-                  type :{
-                    typeSelect : true
-                  },
-                  type_code:{
-                      typeCode:true
-                  },
-                  type_meaning:{
-                      typeMeaning:true
-                  }
-          },
-          messages:{
-            name:{required:check_required},
-            code:{required:check_required}
+              shop_name: {required:true},
+              contact_user: {required:true},
+              contact_phone: {required:true},
+              status:{required:true},
+              customer_id:{required:true},
+              latitude:{required:true},
+              longitude:{required:true},
+              sell_no:{required:true},
+              address:{required:true},
+              logo : {
+                  extension: function(){return 'png|jpg';}
+              },
+              sell : {
+                  extension: function(){return 'png|jpg';}
+              }
           },
           showErrors:function(errorMap,errorList) {
               this.defaultShowErrors();
               util.adjustIframeHeight();
       	  },
           submitHandler: function (form) {
-              if(model.paramView.way() == 'customer'){
-                  model.paramView.opText(model.paramView.type_meaning());
-                  model.paramView.opType(model.paramView.type_code());
+              var tmp = model.shopView.customer_id();
+              if(tmp == null || tmp == ''){
+                  $('label[for=customer_text]').css('display','inline-block');
+                  return;
               }
-              model.submitParam();
+              if(!($('#logo').val() != '')){
+                  $('#logo_error').show();
+                  return;
+              }
+              $('#logo_error').hide();
+              if(!($('#sell').val() != '')){
+                  $('#sell_error').show();
+                  return;
+              }
+              $('#sell_error').hide();
+              model.uploadFile('logo');
           }
         }
       );
+      $('#sure_btn').click(function(){
+          var _return = window.frames['customer_iframe'].returnVal;
+          if(typeof _return == 'undefined'){
+              parent.amplify.publish('status.alerts',sys_info,parent.app.getI18nMessage('common.sys.select.atleast.one'));
+              return ;
+          }
+          model.shopView.customer_id(_return.id);
+          model.shopView.customerName(_return.name);
+          $('#myModal').modal('toggle');
+      });
       $('#goback').click(function () {
     	  self.location = 'list.html';
       });

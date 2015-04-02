@@ -207,7 +207,7 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
             'sDefaultContent': '',
             'fnRender': function (obj) {
                 if(ep.canModify)
-                    return '<a href="javascript:void(0)">编辑</a>';
+                    return '<a href="edit.html?id='+obj.aData.id+'">编辑</a>';
                 else
                     return '不可编辑';
             }
@@ -264,6 +264,10 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
       $('#sure_btn').click(function(){
           $('#myModal').modal('toggle');
           epList.delParam(epList.delIds());
+      });
+
+      $('#add').click(function(){
+          window.location.href='edit.html';
       });
 
       //删除事件
