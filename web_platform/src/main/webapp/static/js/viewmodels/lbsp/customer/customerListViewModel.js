@@ -32,6 +32,7 @@ requirejs(['jquery','knockout','customerService','commonUtil','amplify','DT-boot
   var reset_tip = parent.app.getI18nMessage('customer.reset.pwd.success');
   var pic_tip = parent.app.getI18nMessage('common.sys.user.pic');
   var require_tip = parent.app.getI18nMessage('common.sys.user.require');
+  var cancel_a_href = parent.app.getI18nMessage('common.sys.cancel.label');
   var CustomerListViewModel = function() {
     var ep = this;
     this.sel_text = ko.observable('-Select-');
@@ -108,7 +109,8 @@ requirejs(['jquery','knockout','customerService','commonUtil','amplify','DT-boot
                 '<a href="javascript:void(0);" align="right" onclick="editDetail(3,\''+id+'\')" >'+pwd_tip+'</a>&nbsp;&nbsp;'+
                 '<a href="javascript:void(0);" id="'+id+'_edit" onclick="editDetail(1,\''+id+'\')" >'+edit_tip+'</a>'+ '</td>'+'</tr>'+'</table>';
         }else{
-            html += '<a href="javascript:void(0);" onclick="addDetail(2,\'new\')" >'+add_tip+'</a>'+ '</td>'+'</tr>'+'</table>';
+            html += '<a href="javascript:void(0);" onclick="addDetail(2,\'new\')" >'+add_tip+'</a>&nbsp;&nbsp;';
+            html += '<a href="javascript:void(0);" onclick="removeAdd()" >'+cancel_a_href+'</a>'+ '</td>'+'</tr>'+'</table>';
         }
         return html;
     };
@@ -471,6 +473,9 @@ function addDetail(type,id){
 }
 function expand(self,id){
     window.operateEvent(self,id);
+}
+function removeAdd(){
+    $('#expand_new').remove();
 }
 function uploadPic(id){
     var orgId = id;
