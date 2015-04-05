@@ -17,11 +17,19 @@ public class Preferential extends BaseModel {
 	private Integer status;
 	private Integer shop_id;
 	private String pic_path;
+    private String mark;
 	private Long start_time;
 	private Long end_time;
 
+    public String getMark() {
+        return mark;
+    }
 
-	public void setTitle(String title) {
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public void setTitle(String title) {
 		this.title = title;
 	}
 

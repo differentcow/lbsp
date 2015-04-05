@@ -15,6 +15,24 @@ define(['jquery'],function($){
     getDetailById : function(id){
         var url = this.service + 'core/preferential|'+id;
         return $.getJSON(url);
-    }
+    },
+      modifyPreferential : function(obj){
+          var url = this.service+'core/preferential|upt';
+          return $.ajax({
+              url: url,
+              type: "PUT",
+              data: obj,
+              contentType : 'application/json'
+          });
+      },
+      addPreferential : function(obj){
+          var url = this.service+'core/preferential|add';
+          return $.ajax({
+              url: url,
+              type: "POST",
+              data: obj,
+              contentType : 'application/json'
+          });
+      }
   };
 });

@@ -60,4 +60,12 @@ public interface PreferentialDao {
                                   @Param("start")Integer start,
                                   @Param("size")Integer size);
 
+    /**
+     * 通过ID获取信息
+     *
+     * @param id
+     * @return
+     */
+    PreferentialRsp getDetailById(@Param("id")Integer id);
+
 }

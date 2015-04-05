@@ -7,6 +7,7 @@ import com.lbsp.promotion.entity.model.Preferential;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.QueryKey;
 import com.lbsp.promotion.entity.query.SortCond;
+import com.lbsp.promotion.entity.response.PreferentialRsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +34,8 @@ public class PreferentialServiceImpl extends BaseServiceImpl<Preferential> imple
 	 * @param id
 	 * @return 
 	 */
-	public Preferential getDetailById(Integer id){
-		GenericQueryParam param = new GenericQueryParam();
-		param.put(new QueryKey("id", QueryKey.Operators.EQ),id);
-		return this.findOne(param);
+	public PreferentialRsp getDetailById(Integer id){
+		return preferentialDao.getDetailById(id);
 	}
 
 	/**

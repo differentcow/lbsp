@@ -18,6 +18,8 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
   var now_price_label = parent.app.getI18nMessage('preferential.label.now.price');
   var desc_label = parent.app.getI18nMessage('preferential.label.desc');
   var comment_tip = parent.app.getI18nMessage('customer.view.comment');
+  var mark_tip = parent.app.getI18nMessage('common.sys.label.mark');
+  var off_tip = parent.app.getI18nMessage('preferential.label.off');
   var PreferentialListViewModel = function() {
     var ep = this;
     this.sel_text = ko.observable('-Select-');
@@ -122,6 +124,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
             if(typeof  tmp != 'undefined' && tmp != null){
                 $('#expand_'+id).show();
                 $(self).prop('tag','-');
+                util.adjustIframeHeight();
                 return;
             }
             $.when(preferentialService.getDetailById(id)).done(function (response) {
@@ -129,14 +132,18 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
                     console.log('操作成功');
                     $(self).prop('tag','-');
                     var _type = $(self).attr('type');
-                    var html = title_label + ":"+ response.result.title + '<br>';
+                    var html = '<table style="margin-left: 10px;"><tr><td><img src="'+All580.imgBaseUrl+response.result.pic_path+'"/></td></tr>';
+                    html += '<tr><td>'+title_label + response.result.title + '</td></tr>';
                     if(_type == 'O'){
-                        html = was_price_label + response.result.was_price + '<br>' + now_price_label + response.result.now_price;
+                        html += '<tr><td>' + was_price_label + response.result.was_price + '</td></tr>';
+                        html += '<tr><td>' + now_price_label + response.result.now_price + '</td></tr>';
+                        html += '<tr><td>' + off_tip+response.result.off + '</td></tr>'
                     }else if(_type == 'A'){
-                        html = desc_label + response.result.description;
+                        html += '<tr><td>' + desc_label + response.result.description + '</td></tr>';
                     }
-                    html += '<br><a href="javascript:void(0)" >'+comment_tip+'</a>'
-                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="5"><p>'+html+'</p></td></tr>');
+                    html += '<tr><td>' + mark_tip+response.result.mark + '</td></tr>'
+                    html += '<tr><td><a href="javascript:void(0)" onclick="viewComment(\''+response.result.id+'\')" >'+comment_tip + '</a></td></tr></table>';
+                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="8">'+html+'</td></tr>');
                     $('#expand_'+id).slideToggle('slow');
                     util.adjustIframeHeight();
                 }else{
@@ -194,7 +201,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
         { 	//状态
             'sDefaultContent': '',
             'fnRender': function (obj) {
-                if(typeof obj.aData.status == 1){
+                if(obj.aData.end_time > new Date().getTime()){
                     return '<span class="label label-success">'+active_tip+'</span>';
                 }else{
                     return '<span class="label label-danger">'+over_tip+'</span>';
@@ -212,17 +219,26 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
         	'fnRender': function (obj) {
         		return All580.DPGlobal.formatDateTime(obj.aData.end_time, 'yyyy-MM-dd HH:mm:ss');
         	}
-		}
+		},
+        { 	//操作
+            'sDefaultContent': '',
+            'fnRender': function (obj) {
+                if(ep.canModify)
+                    return "<a href='edit.html?id="+obj.aData.id+"'>编辑</a>";
+                else
+                    return "不可编辑";
+            }
+        }
       ];
       var dataTable = $('#dynamic-table').dataTable(settings);
-        ep.datatable(dataTable);
+      ep.datatable(dataTable);
       $('#search').click(function() {
-          ep.params['status']=ep.status();
-          ep.params['title']=ep.title();
           ep.params['shop']=ep.shop();
+          ep.params['title']=ep.title();
           ep.params['type']=ep.type();
-          ep.params['from']=ep.start_dateStr();
-          ep.params['to']=ep.end_dateStr();
+          ep.params['status']=ep.status();
+          ep.params['start']=ep.start_dateStr();
+          ep.params['end']=ep.end_dateStr();
           dataTable.fnDraw();
       });
 
@@ -232,11 +248,12 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
         $.when(deferred).done(function (response) {
             if(response.state.code==200000) {
                 console.log('删除成功');
-                ep.params['name']=ep.name();
+                ep.params['shop']=ep.shop();
                 ep.params['title']=ep.title();
                 ep.params['type']=ep.type();
-                ep.params['from']=ep.start_dateStr();
-                ep.params['to']=ep.end_dateStr();
+                ep.params['status']=ep.status();
+                ep.params['start']=ep.start_dateStr();
+                ep.params['end']=ep.end_dateStr();
                 ep.datatable().fnDraw();
             }else{
                 parent.amplify.publish('status.alerts',sys_info,submit_error);
@@ -258,6 +275,11 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
 
   $(document).ready(function(){
 	  epList.setUpTable();
+
+      $('#add').click(function(){
+          window.location.href = 'edit.html';
+      });
+
       $('#sure_btn').click(function(){
           $('#myModal').modal('toggle');
           epList.delParam(epList.delIds());
@@ -287,7 +309,11 @@ function eachCheckBox(_self){
         $(this).prop('checked',_chk);
     });
 }
-
+function viewComment(id){
+    var iframe_src = '../../common/commonComment.html?type=p&id=' + id;
+    $('#comment_iframe').prop('src',iframe_src);
+    $('#commentModal').modal('toggle');
+}
 function eventHandle(id,self){
     window.operateEvent(id,self);
 }

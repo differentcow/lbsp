@@ -2,14 +2,19 @@ package com.lbsp.promotion.coreplatform.controller.preferential;
 
 import com.lbsp.promotion.core.service.preferential.PreferentialService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.base.BaseUploadController;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
+import com.lbsp.promotion.entity.model.Customer;
 import com.lbsp.promotion.entity.model.Preferential;
+import com.lbsp.promotion.entity.response.PreferentialRsp;
 import com.lbsp.promotion.util.validation.Validation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -23,12 +28,36 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/preferential")
-public class PreferentialController extends BaseController {
+public class PreferentialController extends BaseUploadController {
 
 
 	@Autowired
 	private PreferentialService<Preferential> service;
 
+    @Value("${fileupload.path}")
+    private String resourceRootPath;
+    @Value("${fileupload.preferential.dir}")
+    private String resourceRootDir;
+    @Value("${fileupload.src.path}")
+    private String resourceSrcPath;
+
+    /**
+     * 上传用户图像
+     *
+     * @return
+     */
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public Object uploadPreferentialPic(HttpServletRequest request,
+                                    @RequestParam(value = "uploadFile",required = false) MultipartFile file){
+        String filename = "";
+        try {
+            filename = upload(file,resourceRootPath,resourceRootDir,resourceSrcPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this.createBaseResult("query success", filename);
+    }
 
 	/**
 	 *
@@ -86,7 +115,7 @@ public class PreferentialController extends BaseController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Object save(HttpServletRequest request, @RequestBody Preferential obj) {
+	public Object save(HttpServletRequest request, @RequestBody PreferentialRsp obj) {
 		setCommonInfo(obj,request);
 		if(service.savePreferential(obj)){
 			return this.createBaseResult("add success", true);
@@ -105,7 +134,7 @@ public class PreferentialController extends BaseController {
 	 */
 	@RequestMapping(value = "/upt", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object update(HttpServletRequest request, @RequestBody Preferential obj) {
+	public Object update(HttpServletRequest request, @RequestBody PreferentialRsp obj) {
 		setCommonInfo(obj,request);
 		if(service.updatePreferential(obj)){
 			return this.createBaseResult("update success", true);

@@ -17,7 +17,7 @@ define(['jquery'],function($){
           var url = this.service + 'core/shop|'+id;
           return $.getJSON(url);
       },
-      modifyShop : function(obj,id){
+      modifyShop : function(obj){
           var url = this.service+'core/shop|upt';
           return $.ajax({
               url: url,

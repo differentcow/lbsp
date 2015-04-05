@@ -78,6 +78,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
           $.when(deferred).done(function (response) {
             if (response.state.code == 200000 &&typeof response.result!='undefined') {
                 me.shopView.setData(response.result);
+                me.sell_path = response.result.verify_pic_path;
+                me.logo_path = response.result.pic_path;
               util.adjustIframeHeight();
             } else {
               console.log('load shopView failed');
@@ -137,7 +139,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
 
             }else{
                 parent.amplify.publish('status.alerts','上传图片失败',data.msg);
-                console.log('upload failed code '+data.code);
+                console.log('upload failed code '+data.state.code);
                 $("#edit").removeAttr("disabled","disabled");
                 $("#add").removeAttr("disabled","disabled");
             }
@@ -249,9 +251,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
             }
             if (typeof data.verify_pic_path != 'undefined') {
               me.verify_pic_path(All580.imgBaseUrl+data.verify_pic_path);
-                me.sell_path = data.verify_pic_path;
-            }else{
-                me.sell_path = '';
+
             }
             if (typeof data.description != 'undefined') {
 //              var date_str =  All580.DPGlobal.formatDateTime(data.create_time, 'yyyy-MM-dd HH:mm:ss');
@@ -263,8 +263,6 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
               if (typeof data.pic_path != 'undefined') {
                   me.pic_path(All580.imgBaseUrl+data.pic_path);
                   me.logo_path = data.pic_path;
-              }else{
-                  me.logo_path = '';
               }
               if (typeof data.latitude != 'undefined') {
                   me.latitude(data.latitude);

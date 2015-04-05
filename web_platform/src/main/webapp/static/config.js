@@ -44,6 +44,7 @@ requirejs.config({
     'bootstrap': 'shared/js/bootstrap.min',
     'bootstrap-fileupload':'shared/js/bootstrap-fileupload.min',//文件上传组件
     'bootstrap-datepicker':'shared/js/bootstrap-datepicker/js/bootstrap-datepicker',
+    'bootstrap-datetimepicker':'shared/adex/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker',
     'daterangepicker':'shared/js/bootstrap-daterangepicker/daterangepicker',
     'moment.min':'shared/js/bootstrap-daterangepicker/moment.min',
     'bootstrap-wysihtml5':'shared/js/bootstrap-wysihtml5/bootstrap-wysihtml5', //editor

@@ -23,7 +23,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             and p.status = #{status}
         </if>
         <if test="title != null and title != ''">
-            and p.title = #{title}
+            and p.title like "%"#{title}"%"
         </if>
         <if test="startTime != null">
             and  #{startTime} &lt;= p.end_time
@@ -46,7 +46,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
             and p.status = #{status}
         </if>
         <if test="title != null and title != ''">
-            and p.title = #{title}
+            and p.title like "%"#{title}"%"
         </if>
         <if test="startTime != null">
             and  #{startTime} &lt;= p.end_time
@@ -58,6 +58,11 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         <if test="start != null and size != null">
             limit #{start},#{size}
         </if>
+    </select>
+
+    <select id="getDetailById" resultType="PreferentialRsp">
+        select p.*,s.shop_name as shopName  from preferential p inner  join shop s on p.shop_id = s.id
+        where p.id = #{id}
     </select>
 
 </mapper>

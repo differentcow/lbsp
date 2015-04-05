@@ -249,6 +249,7 @@ CREATE TABLE IF NOT EXISTS `preferential` (
 	`status` INT(2) NULL COMMENT '状态(0-禁用,1-启用)',
 	`shop_id` INT(11) NOT NULL COMMENT '商铺ID',
 	`pic_path` VARCHAR(255) NOT NULL COMMENT '图片路径' COLLATE 'utf8_unicode_ci',
+	`mark` VARCHAR(255) NULL DEFAULT NULL COMMENT '标签' COLLATE 'utf8_unicode_ci',
 	`start_time` BIGINT(20) NOT NULL COMMENT '起始时间',
 	`end_time` BIGINT(20) NOT NULL COMMENT '结束时间',
 	`create_user` INT(11) NULL COMMENT '创建人ID',
@@ -530,3 +531,9 @@ insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,
 VALUES ('modifyshop','编辑商铺',17,'/shop/upload',NULL,'POST',0,6,1427032133107,1427032133107,1,1);
 insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)
 select 'role',1, 'function',id,'E',1427126487098,1427126487098,1,1 from function_operate where url in ('/shop/upload');
+
+-- ----------------------add----------------------
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user)
+VALUES ('modifypreferential','编辑优惠',16,'/preferential/upload',NULL,'POST',0,6,1427032133107,1427032133107,1,1);
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)
+select 'role',1, 'function',id,'E',1427126487098,1427126487098,1,1 from function_operate where url in ('/preferential/upload');
