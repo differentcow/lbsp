@@ -1,13 +1,13 @@
-package com.lbsp.promotion.coreplatform.controller.base;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
+package com.lbsp.promotion.coreplatform.controller.mng.base;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 public class BaseUploadController extends BaseController {
 

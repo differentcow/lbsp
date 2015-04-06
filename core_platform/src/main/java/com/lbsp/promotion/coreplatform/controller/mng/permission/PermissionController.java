@@ -1,12 +1,7 @@
-package com.lbsp.promotion.coreplatform.controller.permission;
+package com.lbsp.promotion.coreplatform.controller.mng.permission;
 
-import com.lbsp.promotion.core.service.user.UserService;
-import com.lbsp.promotion.coreplatform.controller.base.BaseController;
-import com.lbsp.promotion.entity.exception.ServiceIsNullException;
-import com.lbsp.promotion.entity.exception.security.UserNameNotExistException;
-import com.lbsp.promotion.entity.model.User;
-import com.lbsp.promotion.entity.response.UserRsp;
-import com.lbsp.promotion.util.session.SessionMap;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +9,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
+import com.lbsp.promotion.core.service.user.UserService;
+import com.lbsp.promotion.coreplatform.controller.mng.base.BaseController;
+import com.lbsp.promotion.entity.exception.ServiceIsNullException;
+import com.lbsp.promotion.entity.exception.security.UserNameNotExistException;
+import com.lbsp.promotion.entity.model.User;
+import com.lbsp.promotion.entity.response.UserRsp;
+import com.lbsp.promotion.util.session.SessionMap;
 
 @Controller
 @RequestMapping("/user")

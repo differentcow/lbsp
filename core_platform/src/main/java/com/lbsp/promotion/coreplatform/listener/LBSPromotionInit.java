@@ -1,31 +1,33 @@
 package com.lbsp.promotion.coreplatform.listener;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import org.quartz.Scheduler;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.lbsp.promotion.core.service.task.TaskQueueService;
 import com.lbsp.promotion.core.service.task.TaskService;
 import com.lbsp.promotion.coreplatform.job.LoadTask;
 import com.lbsp.promotion.entity.model.Task;
 import com.lbsp.promotion.entity.model.TaskQueue;
-import com.lbsp.promotion.util.Security;
 import com.lbsp.promotion.util.json.JsonMapper;
-import org.quartz.Scheduler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import scala.util.parsing.combinator.testing.Str;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * Created by Barry on 2014/11/21.
@@ -40,7 +42,6 @@ public class LBSPromotionInit implements ServletContextListener {
 
     private PasswordEncoder passwordEncoder;
 
-    @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
         /**
@@ -277,7 +278,6 @@ public class LBSPromotionInit implements ServletContextListener {
         }
     }
 
-    @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
     }

@@ -1,7 +1,24 @@
-package com.lbsp.promotion.coreplatform.controller.user.userinfo;
+package com.lbsp.promotion.coreplatform.controller.mng.user.userinfo;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lbsp.promotion.core.service.user.UserService;
-import com.lbsp.promotion.coreplatform.controller.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.mng.base.BaseController;
 import com.lbsp.promotion.entity.base.PageInfoRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.User;
@@ -16,16 +33,6 @@ import com.lbsp.promotion.util.Security;
 import com.lbsp.promotion.util.SendMail;
 import com.lbsp.promotion.util.session.SessionMap;
 import com.lbsp.promotion.util.validation.Validation;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author Summer

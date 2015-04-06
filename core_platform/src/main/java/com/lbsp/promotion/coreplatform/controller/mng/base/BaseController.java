@@ -1,4 +1,14 @@
-package com.lbsp.promotion.coreplatform.controller.base;
+package com.lbsp.promotion.coreplatform.controller.mng.base;
+
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
 import com.lbsp.promotion.coreplatform.editor.LongDataEditor;
 import com.lbsp.promotion.entity.base.BaseResult;
@@ -7,14 +17,6 @@ import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.BaseModel;
 import com.lbsp.promotion.entity.response.UserRsp;
 import com.lbsp.promotion.util.validation.Validation;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Locale;
 
 public abstract class BaseController {
 

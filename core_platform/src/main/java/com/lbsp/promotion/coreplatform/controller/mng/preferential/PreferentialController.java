@@ -1,24 +1,29 @@
-package com.lbsp.promotion.coreplatform.controller.preferential;
+package com.lbsp.promotion.coreplatform.controller.mng.preferential;
 
-import com.lbsp.promotion.core.service.preferential.PreferentialService;
-import com.lbsp.promotion.coreplatform.controller.base.BaseController;
-import com.lbsp.promotion.coreplatform.controller.base.BaseUploadController;
-import com.lbsp.promotion.entity.base.PageResultRsp;
-import com.lbsp.promotion.entity.constants.GenericConstants;
-import com.lbsp.promotion.entity.model.Customer;
-import com.lbsp.promotion.entity.model.Preferential;
-import com.lbsp.promotion.entity.response.PreferentialRsp;
-import com.lbsp.promotion.util.validation.Validation;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import com.lbsp.promotion.core.service.preferential.PreferentialService;
+import com.lbsp.promotion.coreplatform.controller.mng.base.BaseUploadController;
+import com.lbsp.promotion.entity.base.PageResultRsp;
+import com.lbsp.promotion.entity.constants.GenericConstants;
+import com.lbsp.promotion.entity.model.Preferential;
+import com.lbsp.promotion.entity.response.PreferentialRsp;
+import com.lbsp.promotion.util.validation.Validation;
 
 /**
  *

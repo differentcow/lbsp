@@ -1,21 +1,21 @@
 package com.lbsp.promotion.coreplatform.job.factory;
 
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.context.ApplicationContext;
+
 import com.lbsp.promotion.core.service.task.TaskQueueService;
 import com.lbsp.promotion.coreplatform.job.ScheduleJobTask;
 import com.lbsp.promotion.coreplatform.listener.LBSPromotionInit;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.TaskQueue;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.springframework.context.ApplicationContext;
 
 /**
  * Created by Barry on 2014/12/6.
  */
 public class QuartzJobFactory implements Job {
 
-    @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         ApplicationContext ctx = LBSPromotionInit.getApplicationContext();
         TaskQueueService<TaskQueue> taskQueueService = (TaskQueueService<TaskQueue>)ctx.getBean("taskQueueServiceImpl");

@@ -1,8 +1,24 @@
-package com.lbsp.promotion.coreplatform.controller.sys.task;
+package com.lbsp.promotion.coreplatform.controller.mng.sys.task;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.quartz.SchedulerException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lbsp.promotion.core.service.task.TaskQueueService;
 import com.lbsp.promotion.core.service.task.TaskService;
-import com.lbsp.promotion.coreplatform.controller.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.mng.base.BaseController;
 import com.lbsp.promotion.coreplatform.job.ScheduleJobTask;
 import com.lbsp.promotion.coreplatform.job.SchedulerUtil;
 import com.lbsp.promotion.entity.base.PageInfoRsp;
@@ -15,15 +31,6 @@ import com.lbsp.promotion.entity.query.SortCond;
 import com.lbsp.promotion.entity.response.TaskQueueRsp;
 import com.lbsp.promotion.entity.response.UserRsp;
 import com.lbsp.promotion.util.validation.Validation;
-import org.apache.commons.lang.StringUtils;
-import org.quartz.SchedulerException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author Barry
