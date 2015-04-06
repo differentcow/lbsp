@@ -1,9 +1,9 @@
 package com.lbsp.promotion.core.service.function;
 
+import java.util.List;
+
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.model.FunctionOperate;
-
-import java.util.List;
 
 public interface FunctionOperateService<T> extends BaseService<T> {
 

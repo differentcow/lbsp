@@ -1,8 +1,8 @@
 package com.lbsp.promotion.core.service;
 
-import com.lbsp.promotion.entity.query.GenericQueryParam;
-
 import java.util.List;
+
+import com.lbsp.promotion.entity.query.GenericQueryParam;
 
 public interface BaseService<T> {
 	public int insert(T obj);

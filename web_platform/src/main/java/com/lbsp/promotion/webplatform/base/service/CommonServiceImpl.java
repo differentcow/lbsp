@@ -8,7 +8,6 @@ import com.lbsp.promotion.entity.exception.security.UserNameOrPwdNotExistExcepti
 
 public abstract class CommonServiceImpl implements CommonService {
 
-	@Override
 	public void baseCheck(BaseResult result) {
 		if (result == null) {
 			throw new HttpClientException("请求出错");

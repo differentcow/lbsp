@@ -254,7 +254,6 @@ public final class GenericHttpRequest extends AbstractGenericHttpRequest {
 		return this.http(post);
 	}
 
-	@Override
 	public String put() {
 		PutMethod put = new PutMethod(this.getUri());
 		if (this.getRequestType() == RequestType.PARAM_IN_BODY) {
@@ -271,14 +270,12 @@ public final class GenericHttpRequest extends AbstractGenericHttpRequest {
 		return this.http(put);
 	}
 
-	@Override
 	public String delete() {
 		DeleteMethod delete = new DeleteMethod(this.getUri());
 		delete.setQueryString(this.getQueryPair());
 		return this.http(delete);
 	}
 
-	@Override
 	public <T> BaseResult<T> get(TypeReference<BaseResult<T>> type) {
 		if (type == null) {
 			throw new RuntimeException("type is null");
@@ -286,7 +283,6 @@ public final class GenericHttpRequest extends AbstractGenericHttpRequest {
 		return JsonMapper.getJsonMapperInstance().readValue(this.get(), type);
 	}
 
-	@Override
 	public <T> BaseResult<T> post(TypeReference<BaseResult<T>> type) {
 		if (type == null) {
 			throw new RuntimeException("type is null");
@@ -294,7 +290,6 @@ public final class GenericHttpRequest extends AbstractGenericHttpRequest {
 		return JsonMapper.getJsonMapperInstance().readValue(this.post(), type);
 	}
 
-	@Override
 	public <T> BaseResult<T> put(TypeReference<BaseResult<T>> type) {
 		if (type == null) {
 			throw new RuntimeException("type is null");
@@ -302,7 +297,6 @@ public final class GenericHttpRequest extends AbstractGenericHttpRequest {
 		return JsonMapper.getJsonMapperInstance().readValue(this.put(), type);
 	}
 
-	@Override
 	public <T> BaseResult<T> delete(TypeReference<BaseResult<T>> type) {
 		if (type == null) {
 			throw new RuntimeException("type is null");
@@ -311,7 +305,6 @@ public final class GenericHttpRequest extends AbstractGenericHttpRequest {
 				.readValue(this.delete(), type);
 	}
 
-	@Override
 	public <T> T post(Class<T> cls, ResponseType type) {
 		if (type == ResponseType.urlParam) {
 			return this.post(cls);
@@ -328,7 +321,6 @@ public final class GenericHttpRequest extends AbstractGenericHttpRequest {
 	 * com.hentre.all580.util.http.request.HttpRequest#postMutilPart(org.apache
 	 * .commons.httpclient.methods.multipart.Part[])
 	 */
-	@Override
 	public String postMutilPart(Part[] parts) {
 		PostMethod post = new PostMethod(this.getUri());
 		setContentType("");

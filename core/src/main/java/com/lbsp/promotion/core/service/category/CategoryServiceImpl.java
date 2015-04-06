@@ -1,17 +1,18 @@
 package com.lbsp.promotion.core.service.category;
 
-import com.lbsp.promotion.core.dao.CategoryDao;;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lbsp.promotion.core.dao.CategoryDao;
 import com.lbsp.promotion.core.service.BaseServiceImpl;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Category;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.QueryKey;
 import com.lbsp.promotion.entity.query.SortCond;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  *
