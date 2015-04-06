@@ -136,7 +136,6 @@ public class UserContorller {
      */
 	private void sortList(List<UserFunctionDTO> dtos){
 		Collections.sort(dtos, new Comparator<UserFunctionDTO>() {
-					@Override
 					public int compare(UserFunctionDTO o1, UserFunctionDTO o2) {
 						if(o1.getIndex()==null&&o2.getIndex()==null){return 0;}
 						if(o1.getIndex()==null&&o2.getIndex()!=null){	return -1;}

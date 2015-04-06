@@ -34,7 +34,6 @@ public abstract class AbstractGenericHttpRequest implements HttpRequest {
 		return client;
 	}
 
-	@Override
 	public <T> T post(Class<T> cls) {
 		String queryString = this.post();
 		String[] pairs = queryString.split("&");

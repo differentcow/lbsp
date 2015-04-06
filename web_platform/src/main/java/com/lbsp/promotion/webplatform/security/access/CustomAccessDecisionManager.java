@@ -12,7 +12,6 @@ import java.util.Iterator;
 
 public class CustomAccessDecisionManager implements AccessDecisionManager {
 
-	@Override
 	public void decide(Authentication authentication, Object object,
 			Collection<ConfigAttribute> configAttributes)
 			throws AccessDeniedException {
@@ -34,12 +33,10 @@ public class CustomAccessDecisionManager implements AccessDecisionManager {
 		}
 	}
 
-	@Override
 	public boolean supports(ConfigAttribute paramConfigAttribute) {
 		return true;
 	}
 
-	@Override
 	public boolean supports(Class<?> paramClass) {
 		return true;
 	}

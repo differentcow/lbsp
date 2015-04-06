@@ -36,7 +36,6 @@ public class CustomMetadataSource implements
 		this.pathForAllRoles = pathForAllRoles;
 	}
 
-	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object)
 			throws IllegalArgumentException {
 		HttpServletRequest request = ((FilterInvocation) object).getRequest();
@@ -73,7 +72,6 @@ public class CustomMetadataSource implements
 		collections.add(new ConfigAttribute() {
 			private static final long serialVersionUID = 1989113482648580593L;
 
-			@Override
 			public String getAttribute() {
 				return String.valueOf(funcId);
 			}
@@ -81,7 +79,6 @@ public class CustomMetadataSource implements
 		return collections;
 	}
 
-	@Override
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
 		if (resources == null) {
 			throw new RuntimeException("resources properties is null");
@@ -91,7 +88,6 @@ public class CustomMetadataSource implements
 			collections.add(new ConfigAttribute() {
 				private static final long serialVersionUID = -2248931371325415550L;
 
-				@Override
 				public String getAttribute() {
 					// key代表功能ID
 					return map.get("funcId");
@@ -101,7 +97,6 @@ public class CustomMetadataSource implements
 		return collections;
 	}
 
-	@Override
 	public boolean supports(Class<?> paramClass) {
 		return FilterInvocation.class.isAssignableFrom(paramClass);
 	}
@@ -154,7 +149,6 @@ public class CustomMetadataSource implements
         CacheMapping.put(RESOURCE_QNAME+localeFix,resources);
     }
 
-	@Override
 	public void afterPropertiesSet() throws Exception {
         if (resources == null) {
             if (StringUtils.isBlank(resourcePath)){

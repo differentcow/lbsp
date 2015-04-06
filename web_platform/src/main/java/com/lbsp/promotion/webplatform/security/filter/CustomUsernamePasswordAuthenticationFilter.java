@@ -1,10 +1,9 @@
 package com.lbsp.promotion.webplatform.security.filter;
 
-import com.lbsp.promotion.entity.base.BaseResult;
-import com.lbsp.promotion.entity.exception.security.*;
-import com.lbsp.promotion.entity.response.UserRsp;
-import com.lbsp.promotion.webplatform.security.token.UsernamePasswordSecurityKeyToken;
-import com.lbsp.promotion.webplatform.service.PermissionService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -12,9 +11,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import com.lbsp.promotion.entity.base.BaseResult;
+import com.lbsp.promotion.entity.exception.security.PasswordIsEmptyException;
+import com.lbsp.promotion.entity.exception.security.RequestMustPostException;
+import com.lbsp.promotion.entity.exception.security.UserNameIsEmptyException;
+import com.lbsp.promotion.entity.exception.security.UserNameOrPwdNotExistException;
+import com.lbsp.promotion.entity.exception.security.ValidateCodeErrorException;
+import com.lbsp.promotion.entity.response.UserRsp;
+import com.lbsp.promotion.webplatform.security.token.UsernamePasswordSecurityKeyToken;
+import com.lbsp.promotion.webplatform.service.PermissionService;
 
 public class CustomUsernamePasswordAuthenticationFilter extends
 		UsernamePasswordAuthenticationFilter {
