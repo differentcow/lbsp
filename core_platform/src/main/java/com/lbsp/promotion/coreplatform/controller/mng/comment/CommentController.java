@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lbsp.promotion.core.service.comment.CommentService;
-import com.lbsp.promotion.coreplatform.controller.mng.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.base.BaseController;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.request.CommentReq;

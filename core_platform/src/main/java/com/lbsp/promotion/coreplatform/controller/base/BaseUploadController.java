@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.mng.base;
+package com.lbsp.promotion.coreplatform.controller.base;
 
 import java.io.File;
 import java.io.FileOutputStream;

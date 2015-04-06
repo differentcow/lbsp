@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lbsp.promotion.core.service.task.TaskQueueService;
 import com.lbsp.promotion.core.service.task.TaskService;
-import com.lbsp.promotion.coreplatform.controller.mng.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.base.BaseController;
 import com.lbsp.promotion.coreplatform.job.ScheduleJobTask;
 import com.lbsp.promotion.coreplatform.job.SchedulerUtil;
 import com.lbsp.promotion.entity.base.PageInfoRsp;

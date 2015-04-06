@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lbsp.promotion.core.service.preferential.PreferentialService;
-import com.lbsp.promotion.coreplatform.controller.mng.base.BaseUploadController;
+import com.lbsp.promotion.coreplatform.controller.base.BaseUploadController;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.Preferential;

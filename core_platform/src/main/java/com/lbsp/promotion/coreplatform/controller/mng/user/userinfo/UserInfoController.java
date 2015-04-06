@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lbsp.promotion.core.service.user.UserService;
-import com.lbsp.promotion.coreplatform.controller.mng.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.base.BaseController;
 import com.lbsp.promotion.entity.base.PageInfoRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.User;
