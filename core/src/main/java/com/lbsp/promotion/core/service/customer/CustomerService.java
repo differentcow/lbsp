@@ -1,10 +1,10 @@
 package com.lbsp.promotion.core.service.customer;
 
+import java.util.List;
+
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Customer;
-
-import java.util.List;
 
 /**
  *

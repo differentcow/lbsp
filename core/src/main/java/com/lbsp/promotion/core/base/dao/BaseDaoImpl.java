@@ -1,7 +1,28 @@
 package com.lbsp.promotion.core.base.dao;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.util.StringUtils;
+
 import com.lbsp.promotion.core.dao.GenericDao;
-import com.lbsp.promotion.entity.base.*;
+import com.lbsp.promotion.entity.base.BaseComplexEntity;
+import com.lbsp.promotion.entity.base.BaseComplexFieldsEntity;
+import com.lbsp.promotion.entity.base.BaseDeleteEntity;
+import com.lbsp.promotion.entity.base.BaseFindFieldsEntity;
+import com.lbsp.promotion.entity.base.BaseInsertAllEntity;
+import com.lbsp.promotion.entity.base.BaseInsertEntity;
+import com.lbsp.promotion.entity.base.BaseUpdateEntity;
 import com.lbsp.promotion.entity.exception.CommonRunException;
 import com.lbsp.promotion.entity.exception.MethodReflectException;
 import com.lbsp.promotion.entity.exception.SqlStatementException;
@@ -12,15 +33,6 @@ import com.lbsp.promotion.entity.table.annotation.MyTable;
 import com.lbsp.promotion.entity.table.annotation.Transient;
 import com.lbsp.promotion.entity.table.annotation.util.MySqlFilterKeyUtils;
 import com.lbsp.promotion.util.Security;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.util.StringUtils;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Map.Entry;
 
 public class BaseDaoImpl<T> implements BaseDao<T> {
 	private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(
@@ -58,7 +70,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		params.setPageSize(pageSize);
 	}
 
-	@Override
 	public String getTableName() {
 		MyTable myTable = this.cls.getAnnotation(MyTable.class);
 		if (myTable == null || myTable.value() == null
@@ -69,36 +80,35 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 	}
 
-    private void setFilterField(List<String> filters){
-        this.filter = filters;
-    }
+	private void setFilterField(List<String> filters) {
+		this.filter = filters;
+	}
 
-    private List<String> getFilterField(){
-        return this.filter;
-    }
+	private List<String> getFilterField() {
+		return this.filter;
+	}
 
-    public List<String> getNotUpdateField() {
-        List<String> list = getFilterField();
-        if (list == null){
-            list = new ArrayList<String>();
-        }else if(!list.isEmpty()) {
-            return list;
-        }
-        MyTable myTable = this.cls.getAnnotation(MyTable.class);
-        if (myTable != null) {
-            String fields = myTable.notUpdateField();
-            String[] filters = fields.split(",");
-            for (String f : filters){
-                list.add(f);
-            }
-        } else {
-            list.add("create_date");
-            list.add("create_user");
-        }
-        return list;
-    }
+	public List<String> getNotUpdateField() {
+		List<String> list = getFilterField();
+		if (list == null) {
+			list = new ArrayList<String>();
+		} else if (!list.isEmpty()) {
+			return list;
+		}
+		MyTable myTable = this.cls.getAnnotation(MyTable.class);
+		if (myTable != null) {
+			String fields = myTable.notUpdateField();
+			String[] filters = fields.split(",");
+			for (String f : filters) {
+				list.add(f);
+			}
+		} else {
+			list.add("create_date");
+			list.add("create_user");
+		}
+		return list;
+	}
 
-	@Override
 	public String getPrimaryKey() {
 		MyTable myTable = this.cls.getAnnotation(MyTable.class);
 		if (myTable != null) {
@@ -125,17 +135,19 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				for (Method method : methods) {
 					if (method.getName().equals("get" + name)) {
 						Object v = method.invoke(obj, new Object[] {});
-						/*if(fieldName.equals(this.getPrimaryKey())){
-							if(v == null){
-								v = Security.generateUUIDStr();
-							}
-						}*/
+						/*
+						 * if(fieldName.equals(this.getPrimaryKey())){ if(v ==
+						 * null){ v = Security.generateUUIDStr(); } }
+						 */
 						if (v != null) {
 							keyBuffer.append(filterKey(fieldName) + ",");
 							if (v instanceof String) {
-								valueBuffer.append("'" + Security.encodeSQLLike(v.toString()) + "'" + ",");
+								valueBuffer.append("'"
+										+ Security.encodeSQLLike(v.toString())
+										+ "'" + ",");
 							} else if (v instanceof Date) {
-								valueBuffer.append("'" + DEFAULT_DATE_FORMAT.format(v) + "'"
+								valueBuffer.append("'"
+										+ DEFAULT_DATE_FORMAT.format(v) + "'"
 										+ ",");
 							} else {
 								valueBuffer.append(v + ",");
@@ -154,20 +166,19 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 	}
 
-    private String filterKey(String fieldName){
-        MyTable table = this.cls.getAnnotation(MyTable.class);
-        if (table == null) {
-            return MySqlFilterKeyUtils.getFilterKey(fieldName);
-        } else {
-            if("mysql".equals(table.filterKey())){
-                return MySqlFilterKeyUtils.getFilterKey(fieldName);
-            }else {
-                return fieldName;
-            }
-        }
-    }
+	private String filterKey(String fieldName) {
+		MyTable table = this.cls.getAnnotation(MyTable.class);
+		if (table == null) {
+			return MySqlFilterKeyUtils.getFilterKey(fieldName);
+		} else {
+			if ("mysql".equals(table.filterKey())) {
+				return MySqlFilterKeyUtils.getFilterKey(fieldName);
+			} else {
+				return fieldName;
+			}
+		}
+	}
 
-	@Override
 	public int insert(T obj) {
 		StringBuffer keyBuffer = new StringBuffer();
 		StringBuffer valueBuffer = new StringBuffer();
@@ -209,7 +220,11 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 							String where = null;
 							if (v != null) {
 								if (v instanceof String) {
-									where = primaryKey + "=" + "'" + Security.encodeSQLLike(v.toString()) + "'";
+									where = primaryKey
+											+ "="
+											+ "'"
+											+ Security.encodeSQLLike(v
+													.toString()) + "'";
 								} else {
 									where = primaryKey + "=" + v;
 								}
@@ -229,21 +244,22 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return null;
 	}
 
-    private List<String> filter;
+	private List<String> filter;
 
-    private boolean checkUpdateField(String field){
-        List<String> fields = getNotUpdateField();
-        boolean flag = true;
-        for (String f : fields){
-            if(f.equalsIgnoreCase(field)){
-                flag = false;
-                break;
-            }
-        }
-        return flag;
-    }
+	private boolean checkUpdateField(String field) {
+		List<String> fields = getNotUpdateField();
+		boolean flag = true;
+		for (String f : fields) {
+			if (f.equalsIgnoreCase(field)) {
+				flag = false;
+				break;
+			}
+		}
+		return flag;
+	}
 
-	private void recursiveKvs(Object obj, Class cls, String primaryKey,StringBuffer kvs) {
+	private void recursiveKvs(Object obj, Class cls, String primaryKey,
+			StringBuffer kvs) {
 		Field[] fields = cls.getDeclaredFields();
 		for (Field field : fields) {
 			Transient tst = field.getAnnotation(Transient.class);
@@ -254,8 +270,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			String firstChar = fieldName.substring(0, 1);
 			String name = fieldName.replaceFirst(firstChar,
 					firstChar.toUpperCase());
-			if (!fieldName.equals(primaryKey)
-                    && checkUpdateField(fieldName)) {
+			if (!fieldName.equals(primaryKey) && checkUpdateField(fieldName)) {
 				try {
 					Method[] methods = cls.getMethods();
 					for (Method method : methods) {
@@ -263,13 +278,18 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 							Object v = method.invoke(obj, new Object[] {});
 							if (v != null) {
 								if (v instanceof String) {
-									kvs.append(filterKey(fieldName) + "=" + "'" + Security.encodeSQLLike(v.toString()) + "'"
-											+ ",");
+									kvs.append(filterKey(fieldName)
+											+ "="
+											+ "'"
+											+ Security.encodeSQLLike(v
+													.toString()) + "'" + ",");
 								} else if (v instanceof Date) {
 									kvs.append(filterKey(fieldName) + "=" + "'"
-											+ DEFAULT_DATE_FORMAT.format(v) + "'" + ",");
+											+ DEFAULT_DATE_FORMAT.format(v)
+											+ "'" + ",");
 								} else {
-									kvs.append(filterKey(fieldName) + "=" + v + ",");
+									kvs.append(filterKey(fieldName) + "=" + v
+											+ ",");
 								}
 							}
 							break;
@@ -286,29 +306,26 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		}
 	}
 
-	@Override
 	public int update(T obj) {
-        setFilterField(null);
+		setFilterField(null);
 		String primaryKey = getPrimaryKey();
 		String where = recursiveWhere(obj, obj.getClass(), primaryKey);
-		return updatePub(obj,primaryKey,where);
+		return updatePub(obj, primaryKey, where);
 	}
 
-    @Override
-    public int update(T obj,List<String> filter){
-        setFilterField(filter);
-        String primaryKey = getPrimaryKey();
-        String where = recursiveWhere(obj, obj.getClass(), primaryKey);
-        return updatePub(obj,primaryKey,where);
-    }
+	public int update(T obj, List<String> filter) {
+		setFilterField(filter);
+		String primaryKey = getPrimaryKey();
+		String where = recursiveWhere(obj, obj.getClass(), primaryKey);
+		return updatePub(obj, primaryKey, where);
+	}
 
-    @Override
-    public int update(T obj,List<String> filter,GenericQueryParam param){
-        setFilterField(filter);
-        return updatePub(obj,null,this.getWhereByQueryParam(param));
-    }
+	public int update(T obj, List<String> filter, GenericQueryParam param) {
+		setFilterField(filter);
+		return updatePub(obj, null, this.getWhereByQueryParam(param));
+	}
 
-	private int updatePub(T obj,String primaryKey,String where){
+	private int updatePub(T obj, String primaryKey, String where) {
 		StringBuffer kvs = new StringBuffer();
 		recursiveKvs(obj, obj.getClass(), primaryKey, kvs);
 		String key = kvs.toString();
@@ -325,29 +342,28 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return this.genericDao.update(entity);
 	}
 
-	@Override
 	public int delete(String id) {
 		BaseDeleteEntity entity = new BaseDeleteEntity(getTableName(),
-				getPrimaryKey() + "=" + "'"+ Security.encodeSQLLike(id)+"'");
+				getPrimaryKey() + "=" + "'" + Security.encodeSQLLike(id) + "'");
 		return this.genericDao.delete(entity);
 	}
 
-	@Override
 	public T findOne(String id) {
 		return findOne(id, null);
 	}
 
 	private T findOneByFileds(String id, String fileds) {
 		BaseFindFieldsEntity entity = new BaseFindFieldsEntity(getTableName(),
-				getPrimaryKey() + "=" + "'"+ Security.encodeSQLLike(id) + "'", fileds);
+				getPrimaryKey() + "=" + "'" + Security.encodeSQLLike(id) + "'",
+				fileds);
 		Map map = this.genericDao.selectOneByFields(entity);
 		T obj = null;
 		try {
-			if(map!=null&&!map.isEmpty()){
+			if (map != null && !map.isEmpty()) {
 				obj = this.cls.newInstance();
 				BeanUtils.populate(obj, map);
 				return obj;
-			}else{
+			} else {
 				return null;
 			}
 		} catch (Exception e) {
@@ -358,80 +374,102 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	private String getWhereByQueryParam(GenericQueryParam param) {
 		StringBuffer buff = new StringBuffer();
-		Iterator<Entry<QueryKey, Object>> it =  param.entrySet().iterator();
-		while(it.hasNext()){
-			Entry<QueryKey,Object> entry = it.next(); 
+		Iterator<Entry<QueryKey, Object>> it = param.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<QueryKey, Object> entry = it.next();
 			Object v = entry.getValue();
-			QueryKey queryKey =  entry.getKey();
+			QueryKey queryKey = entry.getKey();
 			String suffix = " ";
 			String prefix = queryKey.getPrefix().value();
-			if(it.hasNext()){
+			if (it.hasNext()) {
 				suffix = queryKey.getSuffix().value();
-			}else if(queryKey.getSuffix() == QueryKey.Suffix.R_KH){
+			} else if (queryKey.getSuffix() == QueryKey.Suffix.R_KH) {
 				suffix = QueryKey.Suffix.R_KH.value();
 			}
 			if (v != null) {
 				if (v instanceof String) {
-					if(queryKey.getOperator().equals(QueryKey.Operators.LIKE)){
-						buff.append(prefix + queryKey.getKey()+" "
-								+ queryKey.getOperator().value() + " '%"+ Security.encodeSQLLike(v.toString()) +"%'" + " "+suffix+" ");
-					}else if(queryKey.getOperator().equals(QueryKey.Operators.PRELIKE)){
-                        buff.append(prefix + queryKey.getKey()+" like '%"+ Security.encodeSQLLike(v.toString()) + "' "+suffix+" ");
-                    }else if(queryKey.getOperator().equals(QueryKey.Operators.LASTLIKE)){
-                        buff.append(prefix + queryKey.getKey()+" like '"+ Security.encodeSQLLike(v.toString()) +"%'" + " "+suffix+" ");
-                    }else if(queryKey.getOperator().equals(QueryKey.Operators.DEFINELIKE)){
-                        buff.append(prefix + queryKey.getKey()+" like '"+ Security.encodeSQLLike(v.toString()) +"'" + " "+suffix+" ");
-                    }else{
+					if (queryKey.getOperator().equals(QueryKey.Operators.LIKE)) {
+						buff.append(prefix + queryKey.getKey() + " "
+								+ queryKey.getOperator().value() + " '%"
+								+ Security.encodeSQLLike(v.toString()) + "%'"
+								+ " " + suffix + " ");
+					} else if (queryKey.getOperator().equals(
+							QueryKey.Operators.PRELIKE)) {
+						buff.append(prefix + queryKey.getKey() + " like '%"
+								+ Security.encodeSQLLike(v.toString()) + "' "
+								+ suffix + " ");
+					} else if (queryKey.getOperator().equals(
+							QueryKey.Operators.LASTLIKE)) {
+						buff.append(prefix + queryKey.getKey() + " like '"
+								+ Security.encodeSQLLike(v.toString()) + "%'"
+								+ " " + suffix + " ");
+					} else if (queryKey.getOperator().equals(
+							QueryKey.Operators.DEFINELIKE)) {
+						buff.append(prefix + queryKey.getKey() + " like '"
+								+ Security.encodeSQLLike(v.toString()) + "'"
+								+ " " + suffix + " ");
+					} else {
 						buff.append(prefix + queryKey.getKey() + ""
-								+ queryKey.getOperator().value() + " '" + Security.encodeSQLLike(v.toString())
-								+ "'" + " "+suffix+" ");
+								+ queryKey.getOperator().value() + " '"
+								+ Security.encodeSQLLike(v.toString()) + "'"
+								+ " " + suffix + " ");
 					}
 				} else if (v instanceof Date) {
 					buff.append(prefix + queryKey.getKey() + " "
 							+ queryKey.getOperator().value() + " '"
-							+ DEFAULT_DATE_FORMAT.format(v) + "'" + " "+suffix+" ");
-				}else if(v instanceof Collection){
-					Collection coll = (Collection)v;
+							+ DEFAULT_DATE_FORMAT.format(v) + "'" + " "
+							+ suffix + " ");
+				} else if (v instanceof Collection) {
+					Collection coll = (Collection) v;
 					Iterator collIt = coll.iterator();
 					StringBuffer sb = new StringBuffer("(");
-					while(collIt.hasNext()){
+					while (collIt.hasNext()) {
 						Object obj = collIt.next();
 						String suf = "";
-						if(collIt.hasNext()){
+						if (collIt.hasNext()) {
 							suf = ",";
 						}
-						if(obj instanceof String){
-							sb.append(" '" + Security.encodeSQLLike(obj.toString())
-									+ "'"+suf);
-						}else if(obj instanceof Date){
+						if (obj instanceof String) {
+							sb.append(" '"
+									+ Security.encodeSQLLike(obj.toString())
+									+ "'" + suf);
+						} else if (obj instanceof Date) {
 							sb.append(" '" + DEFAULT_DATE_FORMAT.format(obj)
-									+ "'"+suf);
-						}else{
-							sb.append(obj
-									+ suf);
+									+ "'" + suf);
+						} else {
+							sb.append(obj + suf);
 						}
 					}
 					sb.append(")");
-					buff.append(prefix + queryKey.getKey() +" " + queryKey.getOperator().value()+" "+ sb.toString());
-				}else if(v instanceof String[]){
+					buff.append(prefix + queryKey.getKey() + " "
+							+ queryKey.getOperator().value() + " "
+							+ sb.toString());
+				} else if (v instanceof String[]) {
 					StringBuffer sb = new StringBuffer("(");
-					sb.append(StringUtils.arrayToDelimitedString((String[])v, ",")).append(")");
-					buff.append(prefix + queryKey.getKey() +" " + queryKey.getOperator().value()+" "+ sb.toString());
-				}else {
-					buff.append(prefix + queryKey.getKey()+" "
-							+ queryKey.getOperator().value() + " " + Security.encodeSQLLike(v.toString()) + " "+suffix+" ");
+					sb.append(
+							StringUtils.arrayToDelimitedString((String[]) v,
+									",")).append(")");
+					buff.append(prefix + queryKey.getKey() + " "
+							+ queryKey.getOperator().value() + " "
+							+ sb.toString());
+				} else {
+					buff.append(prefix + queryKey.getKey() + " "
+							+ queryKey.getOperator().value() + " "
+							+ Security.encodeSQLLike(v.toString()) + " "
+							+ suffix + " ");
 				}
-			}else{
-				if(queryKey.getOperator().equals(QueryKey.Operators.ISNULL)||queryKey.getOperator().equals(QueryKey.Operators.NOTNULL)){
-					buff.append(prefix + queryKey.getKey()+" "
-							+ queryKey.getOperator().value() +suffix+" ");
+			} else {
+				if (queryKey.getOperator().equals(QueryKey.Operators.ISNULL)
+						|| queryKey.getOperator().equals(
+								QueryKey.Operators.NOTNULL)) {
+					buff.append(prefix + queryKey.getKey() + " "
+							+ queryKey.getOperator().value() + suffix + " ");
 				}
 			}
 		}
 		return buff.toString();
 	}
 
-	@Override
 	public int count(GenericQueryParam param) {
 		String where = getWhereByQueryParam(param);
 		BaseComplexEntity entity = new BaseComplexEntity(getTableName(), where,
@@ -439,9 +477,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return this.genericDao.selectCount(entity);
 	}
 
-	@Override
 	public List<T> find(GenericQueryParam param) {
-		return find(param,null);
+		return find(param, null);
 	}
 
 	private List<T> findByFields(GenericQueryParam param, String fields) {
@@ -459,26 +496,26 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			orderBy = orderBy.substring(0, orderBy.length() - 1);
 			entity.setOrderBy(orderBy);
 		}
-		if(param.isNeedPaging()){
-            int offset = 0;
-            int pageSize = param.getPageSize();
-            if (param.getOffset() != 0){
-                offset = param.getOffset();
-            }else{
-                int page = param.getPage();
-                offset = page * pageSize;
-            }
+		if (param.isNeedPaging()) {
+			int offset = 0;
+			int pageSize = param.getPageSize();
+			if (param.getOffset() != 0) {
+				offset = param.getOffset();
+			} else {
+				int page = param.getPage();
+				offset = page * pageSize;
+			}
 			RowBounds rowBounds = new RowBounds(offset, pageSize);
 			entity.setRowBounds(rowBounds);
 		}
 		List<Map> list = this.genericDao.selectListByFields(entity);
-		if(list == null || list.size() == 0){
+		if (list == null || list.size() == 0) {
 			return new ArrayList<T>();
 		}
 		if (list != null && list.size() > 0) {
 			try {
 				for (Map map : list) {
-					if(map == null)
+					if (map == null)
 						continue;
 					T obj = this.cls.newInstance();
 					BeanUtils.populate(obj, map);
@@ -492,7 +529,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return result;
 	}
 
-	@Override
 	public T findOne(String id, String[] fields) {
 		if (fields == null || fields.length == 0) {
 			return findOneByFileds(id, "*");
@@ -504,7 +540,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return findOneByFileds(id, buff.substring(0, buff.length() - 1));
 	}
 
-	@Override
 	public List<T> find(GenericQueryParam param, String[] fields) {
 		StringBuffer buff = new StringBuffer();
 		if (fields == null || fields.length == 0) {
@@ -516,47 +551,43 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return this.findByFields(param, buff.substring(0, buff.length() - 1));
 	}
 
-	@Override
 	public int delete(Object id) {
 		return this.delete(String.valueOf(id));
 	}
 
-	@Override
 	public T findOne(Object id) {
 		return this.findOne(String.valueOf(id));
 	}
 
-	@Override
 	public T findOne(Object id, String[] fields) {
-		return this.findOne(String.valueOf(id),fields);
+		return this.findOne(String.valueOf(id), fields);
 	}
 
-	@Override
 	public int delete(GenericQueryParam param) {
 		String where = getWhereByQueryParam(param);
-		BaseDeleteEntity entity = new BaseDeleteEntity(getTableName(),where);
+		BaseDeleteEntity entity = new BaseDeleteEntity(getTableName(), where);
 		return this.genericDao.delete(entity);
 	}
 
-	@Override
 	public int update(T obj, GenericQueryParam param) {
-        setFilterField(null);
-		return updatePub(obj,null,this.getWhereByQueryParam(param));
+		setFilterField(null);
+		return updatePub(obj, null, this.getWhereByQueryParam(param));
 	}
 
-	@Override
 	public void insertAll(List<T> objs) {
 		String keys = null;
 		List<String> values = new ArrayList<String>();
-		for(T obj : objs){
+		for (T obj : objs) {
 			StringBuffer keyBuffer = new StringBuffer();
 			StringBuffer valueBuffer = new StringBuffer();
 			this.recursiveInsert(obj, obj.getClass(), keyBuffer, valueBuffer);
-			if(keys == null){
+			if (keys == null) {
 				keys = keyBuffer.toString();
-				keys = keys.length() > 0 ? keys.substring(0, keys.length() - 1) : null;
+				keys = keys.length() > 0 ? keys.substring(0, keys.length() - 1)
+						: null;
 				if (keys == null) {
-					throw new SqlStatementException("insert into table(null) exception ");
+					throw new SqlStatementException(
+							"insert into table(null) exception ");
 				}
 			}
 			String value = valueBuffer.toString();
@@ -568,8 +599,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			values.add(value);
 		}
-		BaseInsertAllEntity entity = new BaseInsertAllEntity(getTableName(), keys,
-				values);
+		BaseInsertAllEntity entity = new BaseInsertAllEntity(getTableName(),
+				keys, values);
 		this.genericDao.insertAll(entity);
 	}
 }

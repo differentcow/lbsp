@@ -1,9 +1,9 @@
 package com.lbsp.promotion.core.service.privilege;
 
+import java.util.List;
+
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.response.OperateResource;
-
-import java.util.List;
 
 public interface PrivilegeService<T> extends BaseService<T> {
 

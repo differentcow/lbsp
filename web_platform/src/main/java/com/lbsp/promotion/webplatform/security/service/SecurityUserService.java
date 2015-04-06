@@ -20,7 +20,6 @@ public class SecurityUserService implements UserDetailsService,Serializable {
 	 */
 	private static final long serialVersionUID = -1293075779433963127L;
 
-	@Override
 	public UserDetails loadUserByUsername(String userName)
 			throws UsernameNotFoundException {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

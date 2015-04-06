@@ -1,11 +1,11 @@
 package com.lbsp.promotion.core.service.feedback;
 
+import java.util.List;
+
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Feedback;
 import com.lbsp.promotion.entity.response.FeedbackRsp;
-
-import java.util.List;
 
 public interface FeedbackService<T> extends BaseService<T> {
 
