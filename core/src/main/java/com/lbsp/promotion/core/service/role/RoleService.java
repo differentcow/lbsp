@@ -1,10 +1,11 @@
 package com.lbsp.promotion.core.service.role;
 
-import com.lbsp.promotion.core.service.BaseService;
-import com.lbsp.promotion.entity.model.Role;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import com.lbsp.promotion.core.service.BaseService;
+import com.lbsp.promotion.entity.model.Role;
 
 public interface RoleService<T> extends BaseService<T> {
 

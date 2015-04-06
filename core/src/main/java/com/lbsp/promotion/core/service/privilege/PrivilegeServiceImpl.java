@@ -1,14 +1,15 @@
 package com.lbsp.promotion.core.service.privilege;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lbsp.promotion.core.dao.PrivilegeDao;
 import com.lbsp.promotion.core.service.BaseServiceImpl;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.Privilege;
 import com.lbsp.promotion.entity.response.OperateResource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PrivilegeServiceImpl extends BaseServiceImpl<Privilege> implements

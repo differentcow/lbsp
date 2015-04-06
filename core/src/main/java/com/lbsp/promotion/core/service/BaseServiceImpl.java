@@ -1,13 +1,14 @@
 package com.lbsp.promotion.core.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.lbsp.promotion.core.base.dao.BaseDao;
 import com.lbsp.promotion.core.base.dao.BaseDaoImpl;
 import com.lbsp.promotion.core.dao.GenericDao;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 public abstract class BaseServiceImpl<T> implements BaseService<T>,
 		InitializingBean {
@@ -61,8 +62,6 @@ public abstract class BaseServiceImpl<T> implements BaseService<T>,
 		return this.baseDao.count(param);
 	}
 
-	
-	
 	@Override
 	public List<T> findAll(GenericQueryParam param) {
 		param.setNeedPaging(false);
@@ -72,7 +71,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T>,
 	@Override
 	public List<T> findAll(GenericQueryParam param, String[] fields) {
 		param.setNeedPaging(false);
-		return find(param,fields);
+		return find(param, fields);
 	}
 
 	@Override
@@ -89,10 +88,10 @@ public abstract class BaseServiceImpl<T> implements BaseService<T>,
 	@Override
 	public int updateAll(List<T> objs) {
 		int resultCount = 0;
-		for(T obj : objs){
+		for (T obj : objs) {
 			this.update(obj);
 			resultCount++;
-			
+
 		}
 		return resultCount;
 	}
@@ -115,7 +114,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T>,
 	@Override
 	public T findOne(GenericQueryParam param) {
 		List<T> list = this.baseDao.find(param);
-		if(list != null  && list.size()>0){
+		if (list != null && list.size() > 0) {
 			return list.get(0);
 		}
 		return null;
@@ -123,20 +122,20 @@ public abstract class BaseServiceImpl<T> implements BaseService<T>,
 
 	@Override
 	public T findOne(GenericQueryParam param, String[] fields) {
-		List<T> list =  this.baseDao.find(param, fields);
-		if(list != null  && list.size()>0){
+		List<T> list = this.baseDao.find(param, fields);
+		if (list != null && list.size() > 0) {
 			return list.get(0);
 		}
 		return null;
 	}
 
-    @Override
-     public int update(T obj,List<String> filter,GenericQueryParam param){
-        return this.baseDao.update(obj,filter,param);
-    }
+	@Override
+	public int update(T obj, List<String> filter, GenericQueryParam param) {
+		return this.baseDao.update(obj, filter, param);
+	}
 
-    @Override
-    public int update(T obj,List<String> filter){
-        return this.baseDao.update(obj,filter);
-    }
+	@Override
+	public int update(T obj, List<String> filter) {
+		return this.baseDao.update(obj, filter);
+	}
 }

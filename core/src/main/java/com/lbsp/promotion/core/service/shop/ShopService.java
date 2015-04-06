@@ -1,11 +1,11 @@
 package com.lbsp.promotion.core.service.shop;
 
+import java.util.List;
+
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Shop;
 import com.lbsp.promotion.entity.response.ShopRsp;
-
-import java.util.List;
 
 /**
  *

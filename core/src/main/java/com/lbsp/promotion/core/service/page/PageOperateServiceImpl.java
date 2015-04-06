@@ -1,12 +1,13 @@
 package com.lbsp.promotion.core.service.page;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.lbsp.promotion.core.service.BaseServiceImpl;
 import com.lbsp.promotion.entity.model.PageOperate;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.SortCond;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PageOperateServiceImpl extends BaseServiceImpl<PageOperate> implements

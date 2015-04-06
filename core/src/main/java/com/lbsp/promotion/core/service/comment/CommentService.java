@@ -1,11 +1,11 @@
 package com.lbsp.promotion.core.service.comment;
 
+import java.util.List;
+
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Comment;
 import com.lbsp.promotion.entity.response.CommentRsp;
-
-import java.util.List;
 
 public interface CommentService<T> extends BaseService<T> {
 

@@ -1,17 +1,18 @@
 package com.lbsp.promotion.core.service.shop;
 
-import com.lbsp.promotion.core.dao.ShopDao;;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lbsp.promotion.core.dao.ShopDao;
 import com.lbsp.promotion.core.service.BaseServiceImpl;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Shop;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.QueryKey;
 import com.lbsp.promotion.entity.response.ShopRsp;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  *
