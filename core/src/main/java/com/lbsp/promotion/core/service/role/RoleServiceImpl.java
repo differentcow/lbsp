@@ -12,12 +12,11 @@ import com.lbsp.promotion.entity.model.Role;
 
 @Service
 public class RoleServiceImpl extends BaseServiceImpl<Role> implements
-        RoleService<Role> {
+		RoleService<Role> {
 	@Autowired
-    private RoleDao roleDao;
+	private RoleDao roleDao;
 
-    @Override
-    public List<Role> getRolesByUserId(@Param("userId") Integer userId) {
-        return roleDao.getRolesByUserId(userId);
-    }
+	public List<Role> getRolesByUserId(@Param("userId") Integer userId) {
+		return roleDao.getRolesByUserId(userId);
+	}
 }

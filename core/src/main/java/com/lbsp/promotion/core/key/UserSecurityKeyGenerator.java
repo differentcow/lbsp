@@ -1,13 +1,12 @@
 package com.lbsp.promotion.core.key;
 
-import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
-@Service("userSecurityKeyGenerator")
-public class UserSecurityKeyGenerator implements KeyGenerate{
+import org.springframework.stereotype.Service;
 
-	@Override
+@Service("userSecurityKeyGenerator")
+public class UserSecurityKeyGenerator implements KeyGenerate {
+
 	public String generate() {
 		return UUID.randomUUID().toString().replace("-", "");
 	}
