@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.comment;
+package com.lbsp.promotion.coreplatform.controller.mng.comment;
 
 import com.lbsp.promotion.core.service.comment.CommentService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;

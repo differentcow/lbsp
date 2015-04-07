@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.sys.param;
+package com.lbsp.promotion.coreplatform.controller.mng.sys.param;
 
 import com.lbsp.promotion.core.service.param.ParameterService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;

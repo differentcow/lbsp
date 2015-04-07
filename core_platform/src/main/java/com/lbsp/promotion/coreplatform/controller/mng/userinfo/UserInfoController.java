@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.user.userinfo;
+package com.lbsp.promotion.coreplatform.controller.mng.userinfo;
 
 import com.lbsp.promotion.core.service.user.UserService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;

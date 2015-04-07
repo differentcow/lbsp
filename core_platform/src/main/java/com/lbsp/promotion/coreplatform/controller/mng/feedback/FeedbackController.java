@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.feedback;
+package com.lbsp.promotion.coreplatform.controller.mng.feedback;
 
 import com.lbsp.promotion.core.service.feedback.FeedbackService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;

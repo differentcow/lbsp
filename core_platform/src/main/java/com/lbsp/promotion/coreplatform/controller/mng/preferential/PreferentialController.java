@@ -1,11 +1,9 @@
-package com.lbsp.promotion.coreplatform.controller.preferential;
+package com.lbsp.promotion.coreplatform.controller.mng.preferential;
 
 import com.lbsp.promotion.core.service.preferential.PreferentialService;
-import com.lbsp.promotion.coreplatform.controller.base.BaseController;
 import com.lbsp.promotion.coreplatform.controller.base.BaseUploadController;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
-import com.lbsp.promotion.entity.model.Customer;
 import com.lbsp.promotion.entity.model.Preferential;
 import com.lbsp.promotion.entity.response.PreferentialRsp;
 import com.lbsp.promotion.util.validation.Validation;

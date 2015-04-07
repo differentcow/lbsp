@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.category;
+package com.lbsp.promotion.coreplatform.controller.mng.category;
 
 import com.lbsp.promotion.core.service.category.CategoryService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;

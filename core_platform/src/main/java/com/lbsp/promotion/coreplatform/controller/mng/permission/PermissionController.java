@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.permission;
+package com.lbsp.promotion.coreplatform.controller.mng.permission;
 
 import com.lbsp.promotion.core.service.user.UserService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;

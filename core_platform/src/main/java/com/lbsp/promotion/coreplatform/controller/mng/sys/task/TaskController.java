@@ -1,4 +1,4 @@
-package com.lbsp.promotion.coreplatform.controller.sys.task;
+package com.lbsp.promotion.coreplatform.controller.mng.sys.task;
 
 import com.lbsp.promotion.core.service.task.TaskQueueService;
 import com.lbsp.promotion.core.service.task.TaskService;
