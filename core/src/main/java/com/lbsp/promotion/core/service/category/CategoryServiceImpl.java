@@ -18,10 +18,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 ;
 
@@ -179,7 +176,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements
                     result = this.update(c);
                     map.put(c.getName(),c);
                 }else{
-                    mapParent.put(mapMark.get(pId)+c.getId(),c);
+                    mapParent.put(mapMark.get(pId)+"-"+c.getId(),c);
                 }
                 if (result == 0){
                     transactionManager.rollback(status);
@@ -212,20 +209,29 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements
             return true;
         }
         Map<String,Category> newMap = new HashMap<String, Category>();
+        List<String> mark = new ArrayList<String>();
         for(Map.Entry<String,Category> m : map.entrySet()){
-            if (mapParent.get(m.getKey()) != null){
-                Category c = mapParent.get(m.getKey());
-                c.setParent_id(m.getValue().getId());
-                String queryCode = m.getValue().getQuery_code()+"-"+c.getId();
-                c.setQuery_code(queryCode);
-                result = this.update(c);
-                if(result == 0){
-                    return false;
+            Iterator<Map.Entry<String, Category>> it = map.entrySet().iterator();
+            while (it.hasNext()){
+                Map.Entry<String, Category> entry = it.next();
+                String key = entry.getKey();
+                if(key.split("-")[0].equals(m.getKey())){
+                    Category c = entry.getValue();
+                    c.setParent_id(m.getValue().getId());
+                    String queryCode = m.getValue().getQuery_code()+"-"+c.getId();
+                    c.setQuery_code(queryCode);
+                    result = this.update(c);
+                    if(result == 0){
+                        return false;
+                    }
+                    mark.add(key);
+                    newMap.put(m.getKey(),c);
+                    count++;
                 }
-                newMap.put(m.getKey(),c);
-                mapParent.remove(m.getKey());
-                count++;
             }
+        }
+        for (String m : mark){
+            mapParent.remove(m);
         }
         boolean flag = true;
         if (count < size){
