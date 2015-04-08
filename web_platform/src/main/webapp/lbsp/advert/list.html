@@ -17,19 +17,20 @@
     <div class="panel-heading" style="background-color: #65CEA7;color: #ffffff;">
         <h3 class="panel-title">
             <i class="fa fa-circle-o"></i>
-            <span i18n="preferential.label">优惠</span>
+            <span i18n="advert.label">收藏</span>
         </h3>
     </div>
     <div class="panel-body">
         <form id="theForm" class="form-horizontal" method="post">
             <div class="form-group">
-                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="preferential.label.shop">商铺</label>
+                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="advert.label.customer" >客户:</label>
                 <div class="col-sm-3  col-lg-3 col-xs-3 col-md-4">
-                    <input id="shop" data-bind="value: shop" class="form-control" type="text" maxlength="30">
+                	<input id="name" data-bind="value: customer" class="form-control" type="text" maxlength="30">
                 </div>
-                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="preferential.label.title">标题</label>
+                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="advert.label.type">类型:</label>
                 <div class="col-sm-3  col-lg-3 col-xs-3 col-md-2">
-                    <input id="title" data-bind="value: title" class="form-control" type="text" maxlength="30">
+                    <select id="type" class="form-control" name="type" style="cursor: pointer;"
+                            data-bind="options:typeOptions,optionsText:'text',optionsValue:'val',value: type,optionsCaption: sel_text()"></select>
                 </div>
             </div>
             <div class="form-group">
@@ -41,17 +42,17 @@
                         <input type="text" class="form-control dpd2" name="end_date" data-bind="value: end_dateStr" readonly="readonly" data-date-format="yyyy-mm-dd">
                     </div>
                 </div>
-                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="preferential.label.type">类型:</label>
+                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="advert.label.status">类型:</label>
                 <div class="col-sm-3  col-lg-3 col-xs-3 col-md-2">
-                    <select id="type" class="form-control" name="type" style="cursor: pointer;"
-                            data-bind="options:typeOptions,optionsText:'text',optionsValue:'val',value: type,optionsCaption: sel_text()"></select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="preferential.label.status">状态</label>
-                <div class="col-sm-3  col-lg-3 col-xs-3 col-md-4">
                     <select id="status" class="form-control" name="status" style="cursor: pointer;"
                             data-bind="options:statusOptions,optionsText:'text',optionsValue:'val',value: status,optionsCaption: sel_text()"></select>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-1 col-lg-1 col-xs-3 control-label" i18n="advert.label.title" >客户:</label>
+                <div class="col-sm-3  col-lg-3 col-xs-3 col-md-4">
+                    <input id="title" data-bind="value: title" class="form-control" type="text" maxlength="30">
                 </div>
                 <div class="col-sm-1 col-lg-1 col-xs-1 col-md-1">
                     <button id="search" class="btn btn-default" i18n="common.btn.nospace.queryBtn" type="button">查询</button>
@@ -63,20 +64,18 @@
                     <button id="delete" class="btn btn-default" type="button" i18n="common.btn.deleteBtn">删除</button>
                 </div>
             </div>
-
         </form>
         <div class="adv-table">
             <table class="display table table-bordered table-striped" id="dynamic-table">
                 <thead>
                 <tr>
                     <th width="5%"><input style="margin-left:10px;cursor:pointer;" onclick="eachCheckBox(this);" type="checkbox"></th>
-                    <th width="20%" i18n="preferential.list.title">标题</th>
-                    <th width="15%" i18n="preferential.list.shop">店铺</th>
-                    <th width="6%" i18n="preferential.list.type">类型</th>
-                    <th width="6%" i18n="preferential.list.status">状态</th>
-                    <th width="20%" i18n="preferential.list.start">开始日期</th>
-                    <th width="20%" i18n="preferential.list.end">结束日期</th>
-                    <th width="8%" i18n="common.sys.operate.header">操作</th>
+                    <th width="25%" i18n="advert.list.title">标题</th>
+                    <th width="10%" i18n="advert.list.type">类型</th>
+                    <th width="10%" i18n="advert.list.status">状态</th>
+                    <th width="20%" i18n="advert.list.customer">客户</th>
+                    <th width="20%" i18n="common.label.createdate">创建日期</th>
+                    <th width="10%" i18n="common.sys.operate.header">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -101,23 +100,9 @@
         </div>
     </div>
 </div>
-<!-- comment Modal -->
-<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-iframe">
-        <div class="modal-content">
-            <div class="modal-header"  style="background-color: #424F63;color: #ffffff">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" i18n="comment.label">文件上传</h4>
-            </div>
-            <div class="modal-body">
-                <iframe id="comment_iframe" frameborder="0" style="overflow: hidden;"></iframe>
-            </div>
-        </div>
-    </div>
-</div>
 <!--common scripts for all pages-->
 <script type="text/javascript" src="../../static/shared/js/require.js"></script>
 <script type="text/javascript" src="../../static/config.js"></script>
-<script type="text/javascript" src="../../static/js/viewmodels/lbsp/preferential/preferentialListViewModel.js"></script>
+<script type="text/javascript" src="../../static/js/viewmodels/lbsp/advert/advertListViewModel.js"></script>
 </body>
 </html>

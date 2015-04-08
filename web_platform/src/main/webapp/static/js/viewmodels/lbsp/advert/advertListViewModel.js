@@ -1,32 +1,32 @@
 /**
  * Created by Barry.
  */
-requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-bootstrap','bootstrap','bootstrap-datepicker'],
-		function($,ko,feedbackService,util){
+requirejs(['jquery','knockout','advertService','commonUtil','amplify','DT-bootstrap','bootstrap','bootstrap-datepicker'],
+		function($,ko,advertService,util){
+  var link_info = parent.app.getI18nMessage('common.select.type.link');
+  var code_info = parent.app.getI18nMessage('common.select.type.code');
   var sys_info = parent.app.getI18nMessage('common.sys.info');
   var sys_error = parent.app.getI18nMessage('common.sys.error');
   var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
-  var yes = parent.app.getI18nMessage('common.sys.label.yes');
-  var no = parent.app.getI18nMessage('common.sys.label.no');
-  var title_label = parent.app.getI18nMessage('common.sys.label.title');
-  var content_label = parent.app.getI18nMessage('common.sys.label.content');
-  var anonymous = parent.app.getI18nMessage('common.select.anonymous');
-  var registCustomer = parent.app.getI18nMessage('common.select.customer');
+  var yes = parent.app.getI18nMessage('common.select.type.on');
+  var no = parent.app.getI18nMessage('common.select.type.off');
+  var code_label = parent.app.getI18nMessage('advert.label.code');
+  var desc_label = parent.app.getI18nMessage('advert.label.desc');
+  var title_label = parent.app.getI18nMessage('advert.label.title');
   var atlease_tip = parent.app.getI18nMessage('common.sys.select.atleast.one');
-  var FeedbackListViewModel = function() {
+  var AdvertListViewModel = function() {
     var ep = this;
     this.sel_text = ko.observable('-Select-');
-    this.name = ko.observable('');
     this.title = ko.observable('');
     this.type = ko.observable('');
     this.typeOptions = ko.observableArray([]);
     this.start_dateStr = ko.observable('');
     this.end_dateStr = ko.observable('');
     this.params = new Array();
-    this.paramAdd = 'addfeedback';
-    this.paramDel = 'delfeedback';
+    this.paramAdd = 'addadvert';
+    this.paramDel = 'deladvert';
     this.delIds = ko.observable('');
-    this.paramModify = 'modifyfeedback';
+    this.paramModify = 'modifyadvert';
     this.viewDel = ko.observable(false);
     this.viewAdd = ko.observable(false);
     this.canAdd = false;
@@ -67,6 +67,7 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
         ep.seti18nText();
         ep.initAuth();
         ep.loadTypeList();
+        ep.loadStatusList();
         ep.datePickerInit();
     };
     //初始化Date Picker
@@ -95,13 +96,19 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
         this.text = text;
         this.val = value;
     };
+    this.customer = ko.observable('');
+    this.status = ko.observable();
+    this.statusOptions = ko.observableArray([]);
+    this.loadStatusList = function(){
+          ep.statusOptions.push(new SelectModel(yes,1));
+          ep.statusOptions.push(new SelectModel(no,0));
+    };
     this.loadTypeList = function(){
-        ep.typeOptions.push(new SelectModel(registCustomer,1));
-        ep.typeOptions.push(new SelectModel(anonymous,0));
+        ep.typeOptions.push(new SelectModel(link_info,'L'));
+        ep.typeOptions.push(new SelectModel(code_info,'C'));
     };
     this.loadRef = function(self,id){
         if($(self).prop('tag') == '-'){
-//            $('#expand_'+id).remove();
             $('#expand_'+id).hide();
             $(self).prop('tag','+');
             util.adjustIframeHeight();
@@ -113,12 +120,18 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
                 util.adjustIframeHeight();
                 return;
             }
-            $.when(feedbackService.getDetailById(id)).done(function (response) {
+            $.when(advertService.getDetailById(id)).done(function (response) {
                 if(response.state.code==200000) {
-                    console.log('删除成功');
+                    console.log('操作成功');
                     $(self).prop('tag','-');
-                    var html = title_label + ":"+response.result.title + '<br>'+content_label+':'+response.result.content;
-                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="5"><p>'+html+'</p></td></tr>');
+                    var html = '<table><tr><td>'+title_label+response.result.title + '</td></tr>';
+                    if(response.result.type == 'L'){
+                        html += '<tr><td><img src="'+All580.imgBaseUrl+response.result.pic_path+'"></td></tr>';
+                    }else{
+                        html += '<tr><td>'+code_label+response.result.event+'</td></tr>';
+                    }
+                    html += '<tr><td>'+desc_label+response.result.description+'</td></tr></table>'
+                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="6">'+html+'</td></tr>');
                     $('#expand_'+id).slideToggle('slow');
                     util.adjustIframeHeight();
                 }else{
@@ -136,11 +149,12 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
 
     this.setUpTable = function () {
       var settings = All580.dataTable;
-      settings['sAjaxSource'] = All580.serverName + '/service/core/feedback|lst';
+      settings['sAjaxSource'] = All580.serverName + '/service/core/advert|lst';
       settings['fnServerParams'] = function (aoData) {
-        aoData.push({ "name": "name", "value": ep.params['name']});
+        aoData.push({ "name": "customer", "value": ep.params['customer']});
         aoData.push({ "name": "title", "value": ep.params['title']});
         aoData.push({ "name": "type", "value": ep.params['type']});
+        aoData.push({ "name": "status", "value": ep.params['status']});
         aoData.push({ "name": "from", "value": ep.params['from']});
         aoData.push({ "name": "to", "value": ep.params['to']});
       };
@@ -161,39 +175,50 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
                 return '<span tag="+" class="label" style="margin:10px;cursor: pointer;background-color: #65CEA7;color: #ffffff;" onclick="eventHandle(\'' + obj.aData.id + '\',this);" >'+short_title+'</span>';
             }
         },  //点击可查看反馈意见
-        { 	//匿名
+        { 	//类型
             'sDefaultContent': '',
             'fnRender': function (obj) {
-                if(typeof obj.aData.anonymous_user == 'undefined'){
-                    return '<span class="label label-info">'+no+'</span>';
+                if(obj.aData.type == 'L'){
+                    return '<span class="label label-info">'+'链接'+'</span>';
                 }else{
-                    return '<span class="label label-info">'+yes+'</span>';
+                    return '<span class="label label-info">'+'代码'+'</span>';
                 }
             }
         },
-        { 	//提交人
+        { 	//状态
             'sDefaultContent': '',
             'fnRender': function (obj) {
-                if(typeof obj.aData.anonymous_user == 'undefined'){
-                    return obj.aData.customer;
+                if(obj.aData.status == 1){
+                    return '<span class="label label-success">'+yes+'</span>';
                 }else{
-                    return obj.aData.anonymous_user;
+                    return '<span class="label label-danger">'+no+'</span>';
                 }
             }
         },
+        { 'mData': 'customer', 'sDefaultContent': ''}, //客户
 		{ 	//创建时间
         	'sDefaultContent': '',
         	'fnRender': function (obj) {
         		return All580.DPGlobal.formatDateTime(obj.aData.create_time, 'yyyy-MM-dd HH:mm:ss');
         	}
-		}
+		},
+        { 	//操作
+            'sDefaultContent': '',
+            'fnRender': function (obj) {
+                if(ep.canModify)
+                    return '<a href="edit.html?id='+obj.aData.id+'">编辑</a>';
+                else
+                    return '不可编辑';
+            }
+        }
       ];
       var dataTable = $('#dynamic-table').dataTable(settings);
         ep.datatable(dataTable);
       $('#search').click(function() {
-          ep.params['name']=ep.name();
+          ep.params['customer']=ep.customer();
           ep.params['title']=ep.title();
           ep.params['type']=ep.type();
+          ep.params['status']=ep.status();
           ep.params['from']=ep.start_dateStr();
           ep.params['to']=ep.end_dateStr();
           dataTable.fnDraw();
@@ -201,13 +226,14 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
 
     };
     this.delParam = function (obj) {
-        var deferred = feedbackService.deleteFeedback(obj);
+        var deferred = advertService.deleteAdvert(obj);
         $.when(deferred).done(function (response) {
             if(response.state.code==200000) {
                 console.log('删除成功');
-                ep.params['name']=ep.name();
+                ep.params['customer']=ep.customer();
                 ep.params['title']=ep.title();
                 ep.params['type']=ep.type();
+                ep.params['status']=ep.status();
                 ep.params['from']=ep.start_dateStr();
                 ep.params['to']=ep.end_dateStr();
                 ep.datatable().fnDraw();
@@ -221,7 +247,7 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
         });
     };
   };
-  var epList = new FeedbackListViewModel();
+  var epList = new AdvertListViewModel();
   epList.init();
   ko.applyBindings(epList);
 
@@ -231,6 +257,11 @@ requirejs(['jquery','knockout','feedbackService','commonUtil','amplify','DT-boot
 
   $(document).ready(function(){
 	  epList.setUpTable();
+
+      $('#add').click(function(){
+          window.location.href = 'edit.html';
+      });
+
       $('#sure_btn').click(function(){
           $('#myModal').modal('toggle');
           epList.delParam(epList.delIds());

@@ -34,7 +34,7 @@ public interface AdvertService<T> extends BaseService<T> {
 	 * @param size
 	 * @return 
 	 */
-	PageResultRsp getPageList(Long from,Long to,Integer start,Integer size);
+	PageResultRsp getPageList(String title,String customer,Integer status,String type,Long from,Long to,Integer start,Integer size);
 
 	/**
 	 *

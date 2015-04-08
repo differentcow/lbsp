@@ -58,7 +58,11 @@ public class AdvertController extends BaseController {
 	@ResponseBody
 	public Object list(@RequestParam(value = "iDisplayStart", required=false,defaultValue=DEFAULT_LIST_PAGE_INDEX) Integer startRecord,
 						@RequestParam(value = "iDisplayLength", required=false,defaultValue=DEFAULT_LIST_PAGE_SIZE) Integer maxRecords,
-						@RequestParam(value = "from", required=false) Long from,
+                        @RequestParam(value = "title", required=false) String title,
+                        @RequestParam(value = "customer", required=false) String customer,
+                        @RequestParam(value = "type", required=false) String type,
+                        @RequestParam(value = "status", required=false) Integer status,
+                        @RequestParam(value = "from", required=false) Long from,
 						@RequestParam(value = "to", required=false) Long to) {
 
 		if (Validation.isEmpty(startRecord) || startRecord < GenericConstants.DEFAULT_LIST_PAGE_INDEX)
@@ -68,7 +72,7 @@ public class AdvertController extends BaseController {
 		if (maxRecords > GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE)
 			maxRecords = GenericConstants.DEFAULT_LIST_PAGE_MAX_SIZE;
 
-		PageResultRsp page = service.getPageList(from,to,startRecord,maxRecords);
+		PageResultRsp page = service.getPageList(title,customer,status,type,from,to,startRecord,maxRecords);
 		return this.createBaseResult("query success", page.getResult(),page.getPageInfo());
 	}
 

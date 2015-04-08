@@ -14,6 +14,7 @@
     <menu funcId="shop" parentId="lbsp" index="5" name="商铺" type="menu" url="/lbsp/shop/list.html" oper="viewshop"></menu>
     <menu funcId="preferential" parentId="lbsp" index="6" name="优惠" type="menu" url="/lbsp/preferential/list.html" oper="viewpreferential"></menu>
     <menu funcId="category" parentId="lbsp" index="7" name="分类" type="menu" url="/lbsp/category/list.html" oper="viewcategory"></menu>
+    <menu funcId="advert" parentId="lbsp" index="8" name="广告" type="menu" url="/lbsp/advert/list.html" oper="viewadvert"></menu>
 
     <menu funcId="interadmin" icon="fa fa-building-o" parentId="root" index="3" name="接口管理" target="interFrame" type="menu" url=""></menu>
     <menu funcId="interreg" parentId="interadmin" index="1" name="接口信息" type="menu" url="/interface/regist/list.html" oper="viewinter"></menu>

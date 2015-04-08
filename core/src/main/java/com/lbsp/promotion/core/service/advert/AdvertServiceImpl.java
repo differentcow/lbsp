@@ -7,6 +7,7 @@ import com.lbsp.promotion.entity.model.Advert;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.QueryKey;
 import com.lbsp.promotion.entity.query.SortCond;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,9 +50,17 @@ public class AdvertServiceImpl extends BaseServiceImpl<Advert> implements
 	 * @param size
 	 * @return 
 	 */
-	public PageResultRsp getPageList(Long from,Long to,Integer start,Integer size){
+	public PageResultRsp getPageList(String title,String customer,Integer status,String type, Long from,Long to,Integer start,Integer size){
 		GenericQueryParam param = new GenericQueryParam();
-		if(from != null)
+		if(StringUtils.isNotBlank(title))
+            param.put(new QueryKey("title", QueryKey.Operators.LIKE),title);
+        if(StringUtils.isNotBlank(customer))
+            param.put(new QueryKey("customer", QueryKey.Operators.LIKE),customer);
+        if(status != null)
+            param.put(new QueryKey("status", QueryKey.Operators.EQ),status);
+        if(StringUtils.isNotBlank(type))
+            param.put(new QueryKey("type", QueryKey.Operators.EQ),type);
+        if(from != null)
 			param.put(new QueryKey("create_time", QueryKey.Operators.GTE),from);
 		if(to != null)
 			param.put(new QueryKey("create_time", QueryKey.Operators.LTE),to);
