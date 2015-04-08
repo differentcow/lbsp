@@ -83,6 +83,7 @@ requirejs.config({
     'customerService':'js/http/customerService',
     'shopService':'js/http/shopService',
     'preferentialService':'js/http/preferentialService',
+    'categoryService':'js/http/categoryService',
     //validate Msg
     'validateMsg': 'js/util/message_cn',//jquery validator 中文message
     //配置Util

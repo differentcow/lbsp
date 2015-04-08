@@ -11,8 +11,9 @@
   <menu funcId="feedback" parentId="lbsp" index="2" name="Feedback" type="menu" url="/lbsp/feedback/list.html" oper="viewfeedback"></menu>
   <menu funcId="collection" parentId="lbsp" index="3" name="Collection" type="menu" url="/lbsp/collection/list.html" oper="viewcollection"></menu>
   <menu funcId="customer" parentId="lbsp" index="4" name="Customer" type="menu" url="/lbsp/customer/list.html" oper="viewcustomer"></menu>
-    <menu funcId="shop" parentId="lbsp" index="5" name="Shop" type="menu" url="/lbsp/shop/list.html" oper="viewshop"></menu>
-    <menu funcId="preferential" parentId="lbsp" index="6" name="Preferential" type="menu" url="/lbsp/preferential/list.html" oper="viewpreferential"></menu>
+  <menu funcId="shop" parentId="lbsp" index="5" name="Shop" type="menu" url="/lbsp/shop/list.html" oper="viewshop"></menu>
+  <menu funcId="preferential" parentId="lbsp" index="6" name="Preferential" type="menu" url="/lbsp/preferential/list.html" oper="viewpreferential"></menu>
+  <menu funcId="category" parentId="lbsp" index="7" name="Category" type="menu" url="/lbsp/category/list.html" oper="viewcategory"></menu>
 
   <menu funcId="interadmin" icon="fa fa-building-o" parentId="root" index="3" name="Interface Admin" target="interFrame" type="menu" url=""></menu>
   <menu funcId="interreg" parentId="interadmin" index="1" name="Interface" type="menu" url="/interface/regist/list.html" oper="viewinter"></menu>

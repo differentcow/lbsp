@@ -15,8 +15,7 @@ public class Category extends BaseModel {
 	private Integer priority;
 	private String query_code;
 
-
-	public void setName(String name) {
+    public void setName(String name) {
 		this.name = name;
 	}
 

@@ -10,6 +10,15 @@ public class BaseResult<T> {
     private Map<String,Object> state;
 	private T result;
     private PageInfoRsp pageInfo;
+    private boolean isOnlyResult;
+
+    public boolean isOnlyResult() {
+        return isOnlyResult;
+    }
+
+    public void setOnlyResult(boolean isOnlyResult) {
+        this.isOnlyResult = isOnlyResult;
+    }
 
     public BaseResult() {
 		super();

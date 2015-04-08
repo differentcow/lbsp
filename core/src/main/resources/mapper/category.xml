@@ -10,4 +10,30 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		</foreach>
 	</delete>
 
+    <select id="getDetailById" resultType="CategoryRsp">
+        select c.*,c2.name as parentName
+        from category c left join category c2 on c.parent_id = c2.id
+        where c.id = #{id}
+    </select>
+
+
+    <select id="getTreeNodeByParent" resultType="CategoryRsp">
+      select c.*
+        <if test="parentId != null">
+            , c2.name as parentName
+        </if>
+        from category c
+      <if test="parentId != null">
+        inner join category c2 on c.parent_id = c2.id
+      </if>
+        where 1=1
+        <if test="parentId != null">
+            and c.parent_id = #{parentId}
+        </if>
+        <if test="parentId == null">
+            and (c.parent_id is null or c.parent_id = 0)
+        </if>
+        order by c.priority asc
+    </select>
+
 </mapper>

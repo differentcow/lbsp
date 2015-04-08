@@ -2,17 +2,19 @@ package com.lbsp.promotion.coreplatform.controller.mng.category;
 
 import com.lbsp.promotion.core.service.category.CategoryService;
 import com.lbsp.promotion.coreplatform.controller.base.BaseController;
+import com.lbsp.promotion.entity.base.BaseResult;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.Category;
+import com.lbsp.promotion.entity.request.CategoryOperate;
+import com.lbsp.promotion.entity.response.CategoryRsp;
+import com.lbsp.promotion.entity.response.TreeNode;
 import com.lbsp.promotion.util.validation.Validation;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +32,23 @@ public class CategoryController extends BaseController {
 	private CategoryService<Category> service;
 
 
+
+    /**
+     * 获取分类信息结构
+     *
+     * @return
+     */
+    @RequestMapping(value = "/tree", method = RequestMethod.GET)
+    @ResponseBody
+    public Object tree(HttpServletRequest request,
+                       @RequestParam(value = "id",required = false)Integer id){
+        TreeNode node = service.getTreeNodeByParent(id);
+        BaseResult result = this.createBaseResult("query success", node);
+        result.setOnlyResult(true);
+        return result;
+    }
+
+
 	/**
 	 *
 	 * 通过ID获取信息
@@ -40,7 +59,7 @@ public class CategoryController extends BaseController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object detail(@PathVariable(value = "id") Integer id) {
-		Category rsp = service.getDetailById(id);
+		CategoryRsp rsp = service.getDetailById(id);
 		return this.createBaseResult("query success", rsp);
 	}
 
@@ -82,9 +101,8 @@ public class CategoryController extends BaseController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Object save(HttpServletRequest request, @RequestBody Category obj) {
-		setCommonInfo(obj,request);
-		if(service.saveCategory(obj)){
+	public Object save(HttpServletRequest request, @RequestBody CategoryOperate obj) {
+		if(service.saveBatchCategory(obj.getSaveOperateList(),getSessionUserId(request))){
 			return this.createBaseResult("add success", true);
 		}else{
 			return this.createBaseResult("add failure", false);
@@ -101,9 +119,9 @@ public class CategoryController extends BaseController {
 	 */
 	@RequestMapping(value = "/upt", method = RequestMethod.PUT)
 	@ResponseBody
-	public Object update(HttpServletRequest request, @RequestBody Category obj) {
-		setCommonInfo(obj,request);
-		if(service.updateCategory(obj)){
+	public Object update(HttpServletRequest request, @RequestBody CategoryOperate obj) {
+        List<Category> list = obj.getEditOperateList();
+		if(service.updateBatchCategory(list,getSessionUserId(request))){
 			return this.createBaseResult("update success", true);
 		}else{
 			return this.createBaseResult("update failure", false);
@@ -114,26 +132,13 @@ public class CategoryController extends BaseController {
 	 *
 	 * 删除信息
 	 *
-	 * @param ids
+	 * @param obj
 	 * @return 
 	 */
-	@RequestMapping(value = "/del", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/del", method = RequestMethod.POST)
 	@ResponseBody
-	public Object delete(@RequestParam("ids")String ids) {
-		String[] idStr = ids.split(",");
-		boolean flag = false;
-		if(idStr.length == 1 && StringUtils.isNumeric(ids)){
-			flag = service.deleteCategory(Integer.parseInt(ids));
-		}else{
-			List<Integer> idAry = new ArrayList<Integer>();
-			for (String id : idStr){
-				if(StringUtils.isNumeric(id)){
-					idAry.add(Integer.valueOf(id));
-				}
-			}
-			flag = service.batchDeleteCategory(idAry);
-		}
-		if(flag){
+	public Object delete(HttpServletRequest request,@RequestBody CategoryOperate obj) {
+		if(service.deleteBatchCategory(obj.getDeleteOperateList())){
 			return this.createBaseResult("delete success", true);
 		}else{
 			return this.createBaseResult("delete failure", false);

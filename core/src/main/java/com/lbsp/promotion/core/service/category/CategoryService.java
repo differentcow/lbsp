@@ -3,6 +3,8 @@ package com.lbsp.promotion.core.service.category;
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Category;
+import com.lbsp.promotion.entity.response.CategoryRsp;
+import com.lbsp.promotion.entity.response.TreeNode;
 
 import java.util.List;
 
@@ -15,6 +17,14 @@ import java.util.List;
 public interface CategoryService<T> extends BaseService<T> {
 
 
+    /**
+     * 根据父节点查询分类信息
+     *
+     * @param parentId
+     * @return
+     */
+    TreeNode getTreeNodeByParent(Integer parentId);
+
 	/**
 	 *
 	 * 根据ID查询详细信息
@@ -22,7 +32,7 @@ public interface CategoryService<T> extends BaseService<T> {
 	 * @param id
 	 * @return 
 	 */
-	Category getDetailById(Integer id);
+	CategoryRsp getDetailById(Integer id);
 
 	/**
 	 *
@@ -45,6 +55,15 @@ public interface CategoryService<T> extends BaseService<T> {
 	 */
 	boolean saveCategory(Category category );
 
+    /**
+     *
+     * 保存信息
+     *
+     * @param categorys
+     * @return
+     */
+    boolean saveBatchCategory(List<Category> categorys,Integer userId);
+
 	/**
 	 *
 	 * 更新信息
@@ -53,6 +72,15 @@ public interface CategoryService<T> extends BaseService<T> {
 	 * @return 
 	 */
 	boolean updateCategory(Category category );
+
+    /**
+     *
+     * 更新信息
+     *
+     * @param categorys
+     * @return
+     */
+    boolean updateBatchCategory(List<Category> categorys,Integer userId);
 
 	/**
 	 *
@@ -71,5 +99,13 @@ public interface CategoryService<T> extends BaseService<T> {
 	 * @return 
 	 */
 	boolean batchDeleteCategory(List<Integer> ids);
+
+    /**
+     * 批量删除
+     *
+     * @param categorys
+     * @return
+     */
+    boolean deleteBatchCategory(List<Category> categorys);
 
 }

@@ -14,7 +14,6 @@ import org.apache.commons.httpclient.methods.multipart.ByteArrayPartSource;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -23,14 +22,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author Barry
@@ -83,7 +83,7 @@ public class ThroughCorePlatformController {
 		if((Integer)result.getState().get("code") == ExceptionCode.AuthKeyNotExistException){
 			securityContextLogoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
 		}
-		return result;
+		return result.isOnlyResult()?result.getResult():result;
 	}
 
 	@RequestMapping(value = "/{url}", method = RequestMethod.POST)
