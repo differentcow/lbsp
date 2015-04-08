@@ -540,3 +540,6 @@ select 'role',1, 'function',id,'E',1427126487098,1427126487098,1,1 from function
 
 -- ----------------------add----------------------
 update function_operate set method = 'POST' where url = '/category/del' and code = 'delcategory';
+update function_operate set url = '/category/tree' where url = '/category/lst' and code = 'viewcategory';
+insert into category (`name`,`parent_id`,`depth`,`status`,`priority`,`query_code`,`create_user`,`create_time`,`update_user`,`update_time`)
+values ('其他',null,1,1,1,'1',1,(UNIX_TIMESTAMP(now()) * 1000),1,(UNIX_TIMESTAMP(now()) * 1000));

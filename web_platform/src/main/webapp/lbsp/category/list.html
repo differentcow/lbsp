@@ -25,68 +25,68 @@
     <div class="panel-heading" style="background-color: #65CEA7;color: #ffffff;">
         <h3 class="panel-title">
             <i class="fa fa-circle-o"></i>
-            分类
+            <span i18n="category.label">分类</span>
         </h3>
     </div>
      <div class="panel-body">
-        <legend>分类信息</legend>
+        <legend i18n="category.label.info">分类信息</legend>
         <form class="form-horizontal adminex-form" id="submitMenu" method="post">
             <div class="form-group" data-bind="visible:viewEdit() || viewDel() || viewAdd()">
                 <label class="col-sm-2 col-md-2 col-lg-2">&nbsp;</label>
                 <div class="col-sm-3 col-sm-3 col-lg-3">
-                    <button type="button" class="btn btn-default btn-sm" id="apply" data-bind="click:apply">&nbsp;&nbsp;&nbsp;&nbsp;应&nbsp;&nbsp;用&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <button type="button" class="btn btn-default btn-sm" id="apply" data-bind="click:apply" i18n="common.btn.applyBtn">&nbsp;</button>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 col-lg-2 col-md-2 control-label"><span class="icon-require">*</span>分类结构</label>
+                <label class="col-sm-2 col-lg-2 col-md-2 control-label"><span class="icon-require">*</span><span i18n="category.struct">分类结构</span></label>
 	            <div class="col-sm-3 col-md-3 col-lg-3" style="margin-top: 5px;">
 				    <div id="tree"></div>
                     <div class="btn-group btn-group-sm dropup" style="margin-top: 10px;">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" data-bind="visible:viewAdd()">
-                                新增
+                                <span i18n="common.sys.add.label">新增</span>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#"data-bind="click:function(){add(1);}">同级节点</a></li>
-                                <li><a href="#"data-bind="click:function(){add(2);},visible:viewSub()">子级节点</a></li>
+                                <li><a href="#"data-bind="click:function(){add(1);}" i18n="category.same.level">同级节点</a></li>
+                                <li><a href="#"data-bind="click:function(){add(2);},visible:viewSub()" i18n="category.sub.level">子级节点</a></li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-default" data-bind="click:function(){del(1);},visible:viewDel()">删除</button>
-                        <button type="button" class="btn btn-default" data-bind="click:function(){move(1);},visible:viewEdit()">向上</button>
-                        <button type="button" class="btn btn-default" data-bind="click:function(){move(2);},visible:viewEdit()">向下</button>
+                        <button type="button" class="btn btn-default" data-bind="click:function(){del(1);},visible:viewDel()" i18n="common.sys.label.delStatus">删除</button>
+                        <button type="button" class="btn btn-default" data-bind="click:function(){move(1);},visible:viewEdit()" i18n="common.sys.label.up">向上</button>
+                        <button type="button" class="btn btn-default" data-bind="click:function(){move(2);},visible:viewEdit()" i18n="common.sys.label.down">向下</button>
                     </div>
 
                 </div>
                 <div class="col-sm-7 col-md-7 col-lg-6" style="margin-top: 5px;" data-bind="visible:firstLoad()">
                     <div class="form-group form-group-sm" data-bind="visible:viewEdit() || addTypeView()">
-                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span>名称：</label>
+                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="category.name">名称：</span></label>
                         <div class="col-sm-6 col-sm-8 col-lg-6">
                             <input name="name" id="name" data-bind="value: categoryView.name" class="form-control input-sm" type="text" maxlength="30">
                         </div>
                     </div>
                     <div class="form-group form-group-sm" data-bind="visible:!viewEdit() && !addTypeView()">
-                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"> 名称：</label>
+                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span i18n="category.name">名称：</span></label>
                         <div class="col-sm-6 col-sm-8 col-lg-6 form-control-static" data-bind="text:categoryView.name"> </div>
                     </div>
                     <div class="form-group form-group-sm">
-                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"> 父级类别：</label>
+                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span i18n="category.parent.level">父级类别：</span></label>
                         <div class="col-sm-6 col-sm-8 col-lg-6 form-control-static" data-bind="text:categoryView.parentName"> </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span>状态</label>
+                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="category.status">状态</span></label>
                         <div class="col-sm-4 col-sm-6 col-lg-4">
                             <select class="form-control" name="out_join" style="cursor: pointer;"
                                     data-bind="options:statusOptions,optionsText:'text',optionsValue:'val',value: categoryView.status"></select>
                         </div>
                     </div>
                     <div class="form-group form-group-sm" data-bind="visible:!viewEdit() && !addTypeView()">
-                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"> 状态：</label>
+                        <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span i18n="category.status">状态：</span></label>
                         <div class="col-sm-6 col-sm-8 col-lg-6 form-control-static" data-bind="text:categoryView.status"> </div>
                     </div>
                     <div clss="form-group" data-bind="visible:viewEdit() || addTypeView()">
                         <div class="col-sm-offset-2 col-lg-offset-2 col-md-offset-2">
-                            <button type="button" class="btn btn-default btn-group-sm" data-bind="click:edit">确认</button>
+                            <button type="button" class="btn btn-default btn-group-sm" data-bind="click:edit" i18n="common.btn.nospace.sureBtn">确认</button>
                         </div>
                     </div>
                 </div>
@@ -102,12 +102,12 @@
                 <button type="button" class="close" data-dismiss="modal"><span id="close_icon" aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">警&nbsp;&nbsp;告</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" i18n="common.sys.delete.alert">
                 确定删除选定项吗？
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="sure_btn" data-bind="click:function(){del(0);}">确定</button>
-                <button type="button" class="btn btn-default"  data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="sure_btn" data-bind="click:function(){del(0);}" i18n="common.btn.nospace.sureBtn">确定</button>
+                <button type="button" class="btn btn-default"  data-dismiss="modal" i18n="common.btn.nospace.closeBtn">关闭</button>
             </div>
         </div>
     </div>
@@ -117,7 +117,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #424F63;color: #ffffff;">
-                <h4 class="modal-title">系统信息</h4>
+                <h4 class="modal-title" i18n="common.sys.info">系统信息</h4>
             </div>
             <div class="modal-body" id="body-content-modal">
 

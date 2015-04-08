@@ -6,6 +6,8 @@ import com.lbsp.promotion.entity.base.BaseResult;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.Category;
+import com.lbsp.promotion.entity.query.GenericQueryParam;
+import com.lbsp.promotion.entity.query.QueryKey;
 import com.lbsp.promotion.entity.request.CategoryOperate;
 import com.lbsp.promotion.entity.response.CategoryRsp;
 import com.lbsp.promotion.entity.response.TreeNode;
@@ -31,6 +33,24 @@ public class CategoryController extends BaseController {
 	@Autowired
 	private CategoryService<Category> service;
 
+
+    /**
+     * 获取分类信息结构
+     *
+     * @return
+     */
+    @RequestMapping(value = "/name", method = RequestMethod.GET)
+    @ResponseBody
+    public Object checkName(HttpServletRequest request,
+                       @RequestParam(value = "name",required = false)String name){
+        GenericQueryParam param = new GenericQueryParam();
+        param.put(new QueryKey("name", QueryKey.Operators.EQ),name);
+        if(service.count(param) > 0){
+            return this.createBaseResult("check name", true);
+        }else{
+            return this.createBaseResult("check name", false);
+        }
+    }
 
 
     /**

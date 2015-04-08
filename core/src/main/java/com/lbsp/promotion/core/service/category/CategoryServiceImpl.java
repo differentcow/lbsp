@@ -211,7 +211,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements
         Map<String,Category> newMap = new HashMap<String, Category>();
         List<String> mark = new ArrayList<String>();
         for(Map.Entry<String,Category> m : map.entrySet()){
-            Iterator<Map.Entry<String, Category>> it = map.entrySet().iterator();
+            Iterator<Map.Entry<String, Category>> it = mapParent.entrySet().iterator();
             while (it.hasNext()){
                 Map.Entry<String, Category> entry = it.next();
                 String key = entry.getKey();
@@ -225,7 +225,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements
                         return false;
                     }
                     mark.add(key);
-                    newMap.put(m.getKey(),c);
+                    newMap.put(c.getName(),c);
                     count++;
                 }
             }
@@ -234,7 +234,7 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements
             mapParent.remove(m);
         }
         boolean flag = true;
-        if (count < size){
+        if (count < size && newMap.size() != 0){
             flag = updateQueryCodeWhenSave(newMap,mapParent);
         }
         return flag;

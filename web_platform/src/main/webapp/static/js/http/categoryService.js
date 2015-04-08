@@ -9,6 +9,10 @@ define(['jquery'],function($){
           var url = this.service + 'core/category|'+id;
           return $.getJSON(url);
       },
+      checkName : function(name){
+          var url = this.service + 'core/category|name?name='+name;
+          return $.getJSON(url);
+      },
       operate : function(obj,type){
           var url = this.service+'core/category|'+type;
           if(type == 'add') {

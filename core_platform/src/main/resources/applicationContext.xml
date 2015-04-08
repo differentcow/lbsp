@@ -33,6 +33,7 @@
                             <value>/userInfo/isAuthing</value>
                             <value>/param/types</value>
                             <value>/task/tasks</value>
+                            <value>/category/name</value>
                         </list>
                     </property>
                 </bean>

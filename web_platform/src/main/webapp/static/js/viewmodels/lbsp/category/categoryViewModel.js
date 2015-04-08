@@ -5,6 +5,16 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
     function ($, ko, mapping, categoryService, amplify, util){
   var off_type = parent.app.getI18nMessage('common.select.type.off');
   var on_type = parent.app.getI18nMessage('common.select.type.on');
+  var sys_info = parent.app.getI18nMessage('common.sys.info');
+  var name_tip = parent.app.getI18nMessage('category.sys.name.exist');
+  var name_required = parent.app.getI18nMessage('category.sys.name.require');
+  var none_operate = parent.app.getI18nMessage('category.sys.operate.none');
+  var add_success = parent.app.getI18nMessage('category.sys.add.success');
+  var edit_success = parent.app.getI18nMessage('category.sys.edit.success');
+  var del_success = parent.app.getI18nMessage('category.sys.del.success');
+  var operating_tip = parent.app.getI18nMessage('category.sys.operating.loading');
+  var operate_success = parent.app.getI18nMessage('common.sys.submit.success');
+  var atleast_category = parent.app.getI18nMessage('category.sys.atleast.choose.one');
   var CategoryListViewModel = function() {
     this.name = ko.observable('');
     this.code = ko.observable('');
@@ -49,21 +59,21 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
         if(me.tree.saveList.length == 0
             && me.tree.editList.length == 0
             && me.tree.delList.length == 0){
-            parent.amplify.publish('status.alerts','系统信息','您还没有进行任何操作！!');
+            parent.amplify.publish('status.alerts',sys_info,none_operate);
             return;
         }
         var ary = [];
         if(me.tree.saveList.length > 0){
-            ary.push({obj:mapping.toJSON({saveOperateList:me.tree.saveList}),type:"add",msg:"新增操作保存成功"});
+            ary.push({obj:mapping.toJSON({saveOperateList:me.tree.saveList}),type:"add",msg:add_success});
         }
         if(me.tree.editList.length > 0){
-            ary.push({obj:mapping.toJSON({editOperateList:me.tree.editList}),type:"upt",msg:"更新操作保存成功"});
+            ary.push({obj:mapping.toJSON({editOperateList:me.tree.editList}),type:"upt",msg:edit_success});
         }
         if(me.tree.delList.length > 0){
-            ary.push({obj:mapping.toJSON({deleteOperateList:me.tree.delList}),type:"del",msg:"删除操作保存成功"});
+            ary.push({obj:mapping.toJSON({deleteOperateList:me.tree.delList}),type:"del",msg:del_success});
         }
         $('#myModal2').modal('toggle');
-        $('#body-content-modal').text('正在保存操作，请稍候.......');
+        $('#body-content-modal').text(operating_tip);
         $('#myModal2').off('click.dismiss.bs.modal');
         me.submitStep(ary,0);
     }
@@ -75,15 +85,30 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
                 console.log('成功');
                 $('#myModal2').modal('toggle');
                 self.location.href="list.html";
-                parent.amplify.publish('status.alerts','系统信息','操作成功!');
+                parent.amplify.publish('status.alerts',sys_info,operate_success);
             }else{
                 me.submitStep(data,++i);
             }
         });
         me.handler.handler();
     }
+      this.seti18nText = function(){
+          $('title,label,span,div,th,a').each(function(){
+              var attr = $(this).attr('i18n');
+              if(attr !=null && attr != ''){
+                  $(this).text(parent.app.getI18nMessage(attr));
+              }
+          });
+          $('h4,button').each(function(){
+              var attr = $(this).attr('i18n');
+              if(attr !=null && attr != ''){
+                  $(this).html(parent.app.getI18nMessage(attr));
+              }
+          });
+      };
     //初始化
     this.init = function () {
+        me.seti18nText();
         me.initAuth();
         me.loadStatusList();
         me.firstLoad(false);
@@ -125,6 +150,10 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
     };
     this.add = function(type){
         var node = me.tree.getSelectedNode();
+        if(typeof node == 'undefined' || node == null){
+            parent.amplify.publish('status.alerts', sys_info, atleast_category);
+            return;
+        }
         var flag = me.tree.getTreeObj().getOpenState(node.id);
         if(!flag && type == 2 && !me.tree.isNewNode(node.id)){   //未打开节点，并且添加的是子节点
             me.tree.getTreeObj().openItem(node.id);
@@ -136,6 +165,11 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
         }
     };
     this.del = function(type){
+        var node = me.tree.getSelectedNode();
+        if(typeof node == 'undefined' || node == null){
+            parent.amplify.publish('status.alerts', sys_info, atleast_category);
+            return;
+        }
         if(type == 0){
             me.tree.delNode();
             me.firstLoad(false);
@@ -146,11 +180,19 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
     this.edit = function(){
         //检验
         if(typeof me.categoryView.name() == 'undefined' || me.categoryView.name().replace(/(^\s*)|(\s*$)/g,'') == ''){
-            parent.amplify.publish('status.alerts', '系统信息', '名称是必填项.');
+            parent.amplify.publish('status.alerts', sys_info, name_required);
             return;
         }
-        var param = {name:me.categoryView.name(),status:me.categoryView.status()};
-        me.tree.editNode(param);
+        me.handler.setDeferred(categoryService.checkName(me.categoryView.name()));
+        me.handler.setResponceFunc(function(data){
+            if(!data){
+                var param = {name:me.categoryView.name(),status:me.categoryView.status()};
+                me.tree.editNode(param);
+            }else{
+                parent.amplify.publish('status.alerts',sys_info, name_tip);
+            }
+        });
+        me.handler.handler();
     };
     this.move = function(type){
         if(type == 1){
@@ -409,7 +451,7 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
       };
       //删除节点
       this.delNode  = function(){
-          var node = me.getSelectedNode();
+
           var obj = {};
           if(me.savePoint[node.id] != null){
               me.saveList.splice(me.savePoint[node.id],1);
@@ -425,7 +467,12 @@ requirejs([ 'jquery', 'knockout', 'knockout-mapping','categoryService', 'amplify
       };
       //移动节点
       this.moveNode = function(mode){
-          var src = me.getSelectedNode().id;
+          var node = me.getSelectedNode();
+          if(typeof node == 'undefined' || node == null){
+              parent.amplify.publish('status.alerts', sys_info, atleast_category);
+              return;
+          }
+          var src = node.id;
           var target = null;
           if(mode == 'up_strict'){
             target = me.getArountNodeWithLevel('previous',src);
