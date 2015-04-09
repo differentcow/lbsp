@@ -12,6 +12,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 
     <select id="getListCount" resultType="int">
         select count(1)  from preferential p inner  join shop s on p.shop_id = s.id
+        inner join preferential_category pc on pc.preferential_id = p.id
+        inner join category c on c.id = pc.category_id
         where 1=1
         <if test="shop != null and shop != ''">
             and s.shop_name like "%"#{shop}"%"
@@ -34,7 +36,9 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getList" resultType="PreferentialRsp">
-        select p.*,s.shop_name as shopName  from preferential p inner  join shop s on p.shop_id = s.id
+        select p.*,s.shop_name as shopName,c.name as category_name,c.id as category_id  from preferential p inner  join shop s on p.shop_id = s.id
+        inner join preferential_category pc on pc.preferential_id = p.id
+        inner join category c on c.id = pc.category_id
         where 1=1
         <if test="shop != null and shop != ''">
             and s.shop_name like "%"#{shop}"%"
@@ -61,8 +65,37 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getDetailById" resultType="PreferentialRsp">
-        select p.*,s.shop_name as shopName  from preferential p inner  join shop s on p.shop_id = s.id
+        select p.*,s.shop_name as shopName,c.name as category_name,c.id as category_id
+        from preferential p inner  join shop s on p.shop_id = s.id
+        inner join preferential_category pc on pc.preferential_id = p.id
+        inner join category c on c.id = pc.category_id
         where p.id = #{id}
     </select>
+
+    <select id="getLastId" resultType="int">
+        SELECT LAST_INSERT_ID();
+    </select>
+
+    <insert id="savePreferentialWithCategory">
+        insert into preferential_category(preferential_id,category_id,create_user,create_time,update_user,update_time)
+        values (#{pre.id},#{pre.category_id},#{pre.create_user},#{pre.create_time},#{pre.update_user},#{pre.update_time})
+    </insert>
+
+    <update id="updatePreferentialWithCategory">
+        update preferential_category set preferential_id = #{id},category_id = #{category_id},update_user = #{user},update_time = #{time}
+        where preferential_id = #{org_id} and category_id = #{org_category_id}
+    </update>
+
+    <delete id="deletePreferentialWithCategory">
+        delete from preferential_category where preferential_id = #{id}
+    </delete>
+
+    <delete id="deleteBatchPreferentialWithCategory">
+        delete from preferential_category
+        where preferential_id in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
 </mapper>

@@ -63,12 +63,6 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
                 var date = new Date(ev.date);
                 var date_str =  All580.DPGlobal.formatDateTime(date, 'yyyy-MM-dd hh:mm:ss');
                 me.pView.start_time_s(date_str);
-                /*if (ev.date.valueOf() > checkout.date.valueOf()) {
-                    date.setDate(date.getDate() + 1);
-                    checkout.setValue(date);
-                }
-                checkin.hide();*/
-//                $('.dpd1').datetimepicker('hide');
                 $('.dpd2')[0].focus();
             }).data('datepicker');
             //end
@@ -136,6 +130,11 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
             var iframe_src = '../../common/commonShop.html';
             $('#shop_iframe').prop('src',iframe_src);
             $('#myModal').modal('toggle');
+        };
+        this.showCategory = function(){
+            var iframe_src = '../../common/commonCategory.html';
+            $('#category_iframe').prop('src',iframe_src);
+            $('#categoryModal').modal('toggle');
         };
         this.changeUpload = function(){
             me.pView.pic_path('');
@@ -209,6 +208,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
         this.type = ko.observable();
         this.was_price = ko.observable();
         this.id = ko.observable();
+        this.org_id = ko.observable();
+        this.org_category_id = ko.observable();
         this.now_price = ko.observable('');
         this.off = ko.observable('');
         this.status = ko.observable();
@@ -223,17 +224,23 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
         this.description = ko.observable('');
         this.statusStr = ko.observable('');
         this.statusView = ko.observable(false);
+        this.category_name = ko.observable('');
+        this.category_id = ko.observable();
         this.setEmpty = function(){
             me.title('');
             me.type('');
             me.was_price('');
             me.id();
+            me.org_id();
+            me.org_category_id();
             me.now_price('');
             me.description('');
             me.off('');
             me.pic_path('');
             me.status();
             me.mark('');
+            me.category_name(parent.app.getI18nMessage("common.sys.select.text"));
+            me.category_id();
             me.start_time();
             me.end_time();
             me.start_time_s('');
@@ -247,6 +254,12 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
           if (typeof data != 'undefined') {
             if (typeof data.id != 'undefined') {
               me.id(data.id);
+            }
+            if (typeof data.org_id != 'undefined') {
+                me.org_id(data.org_id);
+            }
+            if (typeof data.org_category_id != 'undefined') {
+                me.org_category_id(data.org_category_id);
             }
             if (typeof data.title != 'undefined') {
               me.title(data.title);
@@ -266,6 +279,14 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
             if (typeof data.status != 'undefined') {
               me.status(data.status);
             }
+              if (typeof data.category_name != 'undefined') {
+                  me.category_name(data.category_name);
+              }else{
+                  me.category_name(parent.app.getI18nMessage("common.sys.select.text"));
+              }
+              if (typeof data.category_id != 'undefined') {
+                  me.category_id(data.category_id);
+              }
               if (typeof data.pic_path != 'undefined') {
                   me.pic_path(All580.imgBaseUrl+data.pic_path);
               }
@@ -348,6 +369,11 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
                   $('label[for=shop_name]').css('display','inline-block');
                   return;
               }
+              var _category = model.pView.category_id();
+              if(_category == null || _category == ''){
+                  $('label[for=category_name]').css('display','inline-block');
+                  return;
+              }
               var s_t = model.pView.start_time_s();
               var e_t = model.pView.end_time_s();
               if(s_t == null || s_t == '' || e_t == null || e_t == ''){
@@ -367,6 +393,16 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'preferentialService','file
       );
       $('#uploadFile').change(function(){
           model.changeUpload();
+      });
+      $('#category_iframe_btn').click(function(){
+          var _return = window.frames['category_iframe'].returnVal;
+          if(typeof _return == 'undefined'){
+              parent.amplify.publish('status.alerts',sys_info,parent.app.getI18nMessage('common.sys.select.atleast.one'));
+              return ;
+          }
+          model.pView.category_id(_return.id);
+          model.pView.category_name(_return.name);
+          $('#categoryModal').modal('toggle');
       });
       $('#sure_btn').click(function(){
           var _return = window.frames['shop_iframe'].returnVal;

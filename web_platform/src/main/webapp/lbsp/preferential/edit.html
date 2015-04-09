@@ -37,6 +37,8 @@
                 <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="preferential.label.title">标题：</span></label>
                 <div class="col-md-6 col-sm-8 col-lg-6">
                     <input tag="data" id="title" name="title" data-bind="value: pView.title" class="form-control" type="text" maxlength="30" autofocus required>
+                    <input tag="data" id="org_category_id" name="org_category_id" data-bind="value: pView.org_category_id" type="hidden"/>
+                    <input tag="data" id="org_id" name="org_id" data-bind="value: pView.org_id" type="hidden"/>
                 </div>
             </div>
             <div class="form-group">
@@ -58,6 +60,14 @@
                     <a href="#" data-bind="text:pView.shopName,click:showShop" id="shop_name" name="shop_name"></a>
                     <input tag="data" id="shop_id" name="shop_id" data-bind="value: pView.shop_id" type="hidden"/>
                     <label for="shop_name" class="error" style="display: none;">请选择商铺</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-2 col-lg-2 control-label"><span class="icon-require">*</span><span i18n="preferential.label.category">注册用户：</span></label>
+                <div class="col-md-6 col-sm-8 col-lg-6" style="padding-top: 8px;">
+                    <a href="#" data-bind="text:pView.category_name,click:showCategory" id="category_name" name="category_name"></a>
+                    <input tag="data" id="category_id" name="category_id" data-bind="value: pView.category_id" type="hidden"/>
+                    <label for="category_name" class="error" style="display: none;">请选择分类</label>
                 </div>
             </div>
             <div class="form-group" data-bind="visible:!viewActive()">
@@ -143,6 +153,24 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" id="sure_btn" i18n="common.btn.nospace.sureBtn">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" i18n="common.btn.nospace.closeBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-iframe" style="width: 320px;">
+        <div class="modal-content">
+            <div class="modal-header"  style="background-color: #424F63;color: #ffffff">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" i18n="category.label">文件上传</h4>
+            </div>
+            <div class="modal-body">
+                <iframe id="category_iframe" name="category_iframe" frameborder="0" style="overflow: hidden;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="category_iframe_btn" i18n="common.btn.nospace.sureBtn">确定</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal" i18n="common.btn.nospace.closeBtn">关闭</button>
             </div>
         </div>

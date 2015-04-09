@@ -2,7 +2,6 @@ package com.lbsp.promotion.core.service.preferential;
 
 import com.lbsp.promotion.core.service.BaseService;
 import com.lbsp.promotion.entity.base.PageResultRsp;
-import com.lbsp.promotion.entity.model.Preferential;
 import com.lbsp.promotion.entity.response.PreferentialRsp;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public interface PreferentialService<T> extends BaseService<T> {
 	 * @param preferential
 	 * @return 
 	 */
-	boolean savePreferential(Preferential preferential );
+	boolean savePreferential(PreferentialRsp preferential );
 
 	/**
 	 *
@@ -57,7 +56,7 @@ public interface PreferentialService<T> extends BaseService<T> {
 	 * @param preferential
 	 * @return 
 	 */
-	boolean updatePreferential(Preferential preferential );
+	boolean updatePreferential(PreferentialRsp preferential );
 
 	/**
 	 *

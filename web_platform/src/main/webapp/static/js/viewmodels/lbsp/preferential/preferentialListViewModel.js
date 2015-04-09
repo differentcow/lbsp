@@ -8,7 +8,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
   var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
   var yes = parent.app.getI18nMessage('common.sys.label.yes');
   var no = parent.app.getI18nMessage('common.sys.label.no');
-  var title_label = parent.app.getI18nMessage('common.sys.label.title');
+  var title_label = parent.app.getI18nMessage('preferential.label.title');
   var active_pre = parent.app.getI18nMessage('common.sys.select.active.preferential');
   var cut_off = parent.app.getI18nMessage('common.sys.select.cut.off');
   var over_tip = parent.app.getI18nMessage('common.sys.select.over');
@@ -140,13 +140,13 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
                     if(_type == 'O'){
                         html += '<tr><td>' + was_price_label + response.result.was_price + '</td></tr>';
                         html += '<tr><td>' + now_price_label + response.result.now_price + '</td></tr>';
-                        html += '<tr><td>' + off_tip+response.result.off + '</td></tr>'
+                        html += '<tr><td>' + off_tip + (response.result.off * 100) + '%</td></tr>'
                     }else if(_type == 'A'){
                         html += '<tr><td>' + desc_label + response.result.description + '</td></tr>';
                     }
                     html += '<tr><td>' + mark_tip+response.result.mark + '</td></tr>'
                     html += '<tr><td><a href="javascript:void(0)" onclick="viewComment(\''+response.result.id+'\')" >'+comment_tip + '</a></td></tr></table>';
-                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="8">'+html+'</td></tr>');
+                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="9">'+html+'</td></tr>');
                     $('#expand_'+id).slideToggle('slow');
 //                    util.adjustIframeHeight();
                 }else{
@@ -194,7 +194,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
         { 	//类型
             'sDefaultContent': '',
             'fnRender': function (obj) {
-                if(typeof obj.aData.type == 'A'){
+                if(obj.aData.type == 'A'){
                     return '<span class="label label-info">'+active_pre+'</span>';
                 }else{
                     return '<span class="label label-info">'+cut_off+'</span>';
@@ -211,6 +211,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
                 }
             }
         },
+        { 'mData': 'category_name', 'sDefaultContent': ''}, //分类
         { 	//开始时间
             'sDefaultContent': '',
             'fnRender': function (obj) {

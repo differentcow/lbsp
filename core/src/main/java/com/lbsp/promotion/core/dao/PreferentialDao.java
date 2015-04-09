@@ -68,4 +68,54 @@ public interface PreferentialDao {
      */
     PreferentialRsp getDetailById(@Param("id")Integer id);
 
+    /**
+     * 保存映射关系
+     *
+     * @param pre
+     * @return
+     */
+    int savePreferentialWithCategory(@Param("pre")PreferentialRsp pre);
+
+    /**
+     * 更新映射关系
+     *
+     * @param org_id
+     * @param id
+     * @param category_id
+     * @param org_category_id
+     * @param user
+     * @param time
+     * @return
+     */
+    int updatePreferentialWithCategory(@Param("org_id")Integer org_id,
+                                       @Param("id")Integer id,
+                                       @Param("category_id")Integer category_id,
+                                       @Param("org_category_id")Integer org_category_id,
+                                       @Param("user")Integer user,
+                                       @Param("time")Long time);
+
+    /**
+     * 删除映射关系
+     *
+     * @param id
+     * @return
+     */
+    int deletePreferentialWithCategory(@Param("id")Integer id);
+
+
+    /**
+     *
+     * 批量删除映射关系
+     *
+     * @param ids
+     * @return
+     */
+    int deleteBatchPreferentialWithCategory(@Param("ids")List<Integer> ids);
+
+    /**
+     * 获取最近插入数据的自增ID
+     *
+     * @return
+     */
+    int getLastId();
 }
