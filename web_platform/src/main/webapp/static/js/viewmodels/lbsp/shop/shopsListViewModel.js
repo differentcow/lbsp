@@ -59,6 +59,9 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
           ep.viewModify(true);
       }
     };
+      this.adjustPic = function(){
+          util.adjustIframeHeight();
+      };
       this.seti18nText = function(){
           $('title,label,span,div,th').each(function(){
               var attr = $(this).attr('i18n');
@@ -105,7 +108,7 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
 
       this.buildHtml = function(data){
         var html =  '<table>' +
-                     '<tr><td><img src="'+All580.imgBaseUrl+data.pic_path+'"></td></tr>' +
+                     '<tr><td><img src="'+All580.imgBaseUrl+data.pic_path+'" onload="loadPic()"/></td></tr>' +
                      '<tr><td>'+longitude+data.longitude+'&nbsp;&nbsp;'+latitude+data.latitude+'</td></tr>' +
                      '<tr><td>'+customerName+data.customerName+'&nbsp;&nbsp;'+areaCode+data.area_code+'</td></tr>' +
                      '<tr><td>'+desc+(typeof data.description == 'undefined'?'':data.description)+'</td></tr>' +
@@ -122,6 +125,7 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
               if(typeof  tmp != 'undefined' && tmp != null){
                   $('#expand_'+id).show();
                   $(self).prop('tag','-');
+                  util.adjustIframeHeight();
                   return;
               }
               $.when(shopService.getDetailById(id)).done(function (response) {
@@ -131,7 +135,7 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
                       var html = ep.buildHtml(response.result);
                       $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="9"><p>' + html + '</p></td></tr>');
                       $('#expand_'+id).slideToggle('slow');
-                      util.adjustIframeHeight();
+//                      util.adjustIframeHeight();
                   }else{
                       parent.amplify.publish('status.alerts',sys_info,submit_error);
                       console.log(response.msg);
@@ -256,9 +260,12 @@ requirejs(['jquery','knockout','shopService','commonUtil','amplify','DT-bootstra
   epList.init();
   ko.applyBindings(epList);
 
- window.operateEvent = function(id,self){
-     return epList.loadRef(self,id);
- }
+window.operateEvent = function(id,self){
+    return epList.loadRef(self,id);
+}
+window.loadPicture = function(){
+    return epList.adjustPic();
+}
 
   $(document).ready(function(){
 	  epList.setUpTable();
@@ -303,4 +310,8 @@ function eventHandle(id,self){
 function showSellImg(path){
     $('#img_sell').attr('src',All580.imgBaseUrl + path);
     $('#sellModal').modal('toggle');
+}
+
+function loadPic(){
+    window.loadPicture();
 }

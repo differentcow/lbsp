@@ -12,6 +12,8 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
     var deny = parent.app.getI18nMessage('shop.select.status.deny');
     var open = parent.app.getI18nMessage('shop.select.status.open');
     var wait = parent.app.getI18nMessage('shop.select.status.wait');
+    var upload_error = parent.app.getI18nMessage('common.sys.upload.pic.error');
+    var choose_upload = parent.app.getI18nMessage('common.sys.upload.pic.select');
     var ShopViewModel = function () {
         var me = this;
         this.isEdit = ko.observable();
@@ -108,7 +110,7 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
                 $('#'+id).attr('name','uploadFile');
                 fileUploadService.upload(id,'shop/upload',{type:id},me.uploadSuccess, me.uploadFailed);
             }else{
-                parent.amplify.publish('status.alerts','请选择要上传的图片','系统信息');
+                parent.amplify.publish('status.alerts',choose_upload,sys_info);
             }
         };
         this.showCustomer = function(){
@@ -138,14 +140,14 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
                 }
 
             }else{
-                parent.amplify.publish('status.alerts','上传图片失败',data.msg);
+                parent.amplify.publish('status.alerts',upload_error,data.msg);
                 console.log('upload failed code '+data.state.code);
                 $("#edit").removeAttr("disabled","disabled");
                 $("#add").removeAttr("disabled","disabled");
             }
         };
         this.uploadFailed = function(data,status, e){
-            parent.amplify.publish('status.alerts','上传图片失败','系统错误');
+            parent.amplify.publish('status.alerts',upload_error,sys_error);
             $("#edit").removeAttr("disabled","disabled");
             $("#add").removeAttr("disabled","disabled");
         };
@@ -254,7 +256,6 @@ requirejs(['jquery', 'knockout', 'knockout-mapping', 'shopService','fileUploadSe
 
             }
             if (typeof data.description != 'undefined') {
-//              var date_str =  All580.DPGlobal.formatDateTime(data.create_time, 'yyyy-MM-dd HH:mm:ss');
               me.description(data.description);
             }
             if (typeof data.status != 'undefined') {
