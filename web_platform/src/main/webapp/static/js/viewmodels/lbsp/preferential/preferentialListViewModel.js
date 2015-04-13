@@ -8,7 +8,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
   var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
   var yes = parent.app.getI18nMessage('common.sys.label.yes');
   var no = parent.app.getI18nMessage('common.sys.label.no');
-  var title_label = parent.app.getI18nMessage('common.sys.label.title');
+  var title_label = parent.app.getI18nMessage('preferential.label.title');
   var active_pre = parent.app.getI18nMessage('common.sys.select.active.preferential');
   var cut_off = parent.app.getI18nMessage('common.sys.select.cut.off');
   var over_tip = parent.app.getI18nMessage('common.sys.select.over');
@@ -110,6 +110,9 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
         ep.statusOptions.push(new SelectModel(over_tip,0));
         ep.statusOptions.push(new SelectModel(active_tip,1));
     };
+    this.adjustPic = function(){
+        util.adjustIframeHeight();
+    };
     this.loadTypeList = function(){
         ep.typeOptions.push(new SelectModel(cut_off,'O'));
         ep.typeOptions.push(new SelectModel(active_pre,'A'));
@@ -132,20 +135,20 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
                     console.log('操作成功');
                     $(self).prop('tag','-');
                     var _type = $(self).attr('type');
-                    var html = '<table style="margin-left: 10px;"><tr><td><img src="'+All580.imgBaseUrl+response.result.pic_path+'"/></td></tr>';
+                    var html = '<table style="margin-left: 10px;"><tr><td><img src="'+All580.imgBaseUrl+response.result.pic_path+'"  onload="loadPic()"/></td></tr>';
                     html += '<tr><td>'+title_label + response.result.title + '</td></tr>';
                     if(_type == 'O'){
                         html += '<tr><td>' + was_price_label + response.result.was_price + '</td></tr>';
                         html += '<tr><td>' + now_price_label + response.result.now_price + '</td></tr>';
-                        html += '<tr><td>' + off_tip+response.result.off + '</td></tr>'
+                        html += '<tr><td>' + off_tip + (response.result.off * 100) + '%</td></tr>'
                     }else if(_type == 'A'){
                         html += '<tr><td>' + desc_label + response.result.description + '</td></tr>';
                     }
                     html += '<tr><td>' + mark_tip+response.result.mark + '</td></tr>'
                     html += '<tr><td><a href="javascript:void(0)" onclick="viewComment(\''+response.result.id+'\')" >'+comment_tip + '</a></td></tr></table>';
-                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="8">'+html+'</td></tr>');
+                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="9">'+html+'</td></tr>');
                     $('#expand_'+id).slideToggle('slow');
-                    util.adjustIframeHeight();
+//                    util.adjustIframeHeight();
                 }else{
                     parent.amplify.publish('status.alerts',sys_info,submit_error);
                     console.log(response.msg);
@@ -191,7 +194,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
         { 	//类型
             'sDefaultContent': '',
             'fnRender': function (obj) {
-                if(typeof obj.aData.type == 'A'){
+                if(obj.aData.type == 'A'){
                     return '<span class="label label-info">'+active_pre+'</span>';
                 }else{
                     return '<span class="label label-info">'+cut_off+'</span>';
@@ -208,6 +211,7 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
                 }
             }
         },
+        { 'mData': 'category_name', 'sDefaultContent': ''}, //分类
         { 	//开始时间
             'sDefaultContent': '',
             'fnRender': function (obj) {
@@ -269,9 +273,12 @@ requirejs(['jquery','knockout','preferentialService','commonUtil','amplify','DT-
   epList.init();
   ko.applyBindings(epList);
 
-  window.operateEvent = function(id,self){
-      return epList.loadRef(self,id);
-  }
+window.operateEvent = function(id,self){
+    return epList.loadRef(self,id);
+}
+window.loadPicture = function(){
+    return epList.adjustPic();
+}
 
   $(document).ready(function(){
 	  epList.setUpTable();
@@ -316,4 +323,8 @@ function viewComment(id){
 }
 function eventHandle(id,self){
     window.operateEvent(id,self);
+}
+
+function loadPic(){
+    window.loadPicture();
 }

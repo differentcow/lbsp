@@ -1,15 +1,17 @@
 package com.lbsp.promotion.coreplatform.controller.mng.advert;
 
 import com.lbsp.promotion.core.service.advert.AdvertService;
-import com.lbsp.promotion.coreplatform.controller.base.BaseController;
+import com.lbsp.promotion.coreplatform.controller.base.BaseUploadController;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.constants.GenericConstants;
 import com.lbsp.promotion.entity.model.Advert;
 import com.lbsp.promotion.util.validation.Validation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -23,12 +25,18 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/advert")
-public class AdvertController extends BaseController {
+public class AdvertController extends BaseUploadController {
 
 
 	@Autowired
 	private AdvertService<Advert> service;
 
+    @Value("${fileupload.path}")
+    private String resourceRootPath;
+    @Value("${fileupload.advert.dir}")
+    private String resourceRootDir;
+    @Value("${fileupload.src.path}")
+    private String resourceSrcPath;
 
 	/**
 	 *
@@ -43,6 +51,24 @@ public class AdvertController extends BaseController {
 		Advert rsp = service.getDetailById(id);
 		return this.createBaseResult("query success", rsp);
 	}
+
+    /**
+     * 上传图片
+     *
+     * @return
+     */
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public Object uploadAdvertPic(HttpServletRequest request,
+                                  @RequestParam(value = "uploadFile",required = false) MultipartFile file){
+        String filename = "";
+        try {
+            filename = upload(file,resourceRootPath,resourceRootDir,resourceSrcPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this.createBaseResult("query success", filename);
+    }
 
 	/**
 	 *

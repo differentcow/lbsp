@@ -59,6 +59,9 @@ requirejs(['jquery','knockout','customerService','commonUtil','amplify','DT-boot
     this.viewModify = ko.observable(false);
     this.isUpdate = ko.observable(false);
     this.store = {};
+    this.adjustPic = function(){
+        util.adjustIframeHeight();
+    };
     this.buildExpand = function(obj){
         var id='new',name='',account='',gender=-1,stauts=-1,type='',key='',email='',mobile='',src='',srcPath='',imgId='';
         var flag = false;
@@ -72,7 +75,7 @@ requirejs(['jquery','knockout','customerService','commonUtil','amplify','DT-boot
             '<td rowspan="6" width="20%">'+
                 '<table style="width: 100%">'+
                     '<tr>'+
-                        '<td><img id="'+id+'_img" src="'+src+'"><span style="display: none;" template="'+id+'_result">'+pic_tip+'</span></td>'+
+                        '<td><img id="'+id+'_img" src="'+src+'" onload="loadPic()" /><span style="display: none;" template="'+id+'_result">'+pic_tip+'</span></td>'+
                             '</tr>'+
                         '<tr>'+
                             '<td align="center"><a href="javascript:void(0);" onclick="uploadPic(\''+imgId+'\')">'+edit_tip+'</a></td>'+
@@ -271,13 +274,14 @@ requirejs(['jquery','knockout','customerService','commonUtil','amplify','DT-boot
             if(typeof  tmp != 'undefined' && tmp != null){
                 $('#expand_'+id).show();
                 $(self).prop('tag','-');
+                util.adjustIframeHeight();
                 return;
             }
             var data = ep.store[id];
             var html = ep.buildExpand(data);
             $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="7">'+html+'</td></tr>');
             $('#expand_'+id).show();
-            util.adjustIframeHeight();
+//            util.adjustIframeHeight();
         }
     };
     this.resetPwd = function(id){
@@ -413,6 +417,9 @@ requirejs(['jquery','knockout','customerService','commonUtil','amplify','DT-boot
   window.adjustParentHeight = function(){
     return epList.adjusHeight();
   }
+  window.loadPicture = function(){
+    return epList.adjustPic();
+  }
 
   window.detailClick = function(type,id){
       if(type == 1){
@@ -497,4 +504,7 @@ function viewCollection(id){
     var iframe_src = '../../common/commonCollection.html?id=' + id;
     $('#collection_iframe').prop('src',iframe_src);
     $('#collectionModal').modal('toggle');
+}
+function loadPic(){
+    window.loadPicture();
 }

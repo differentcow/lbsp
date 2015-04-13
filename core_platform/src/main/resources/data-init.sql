@@ -543,3 +543,7 @@ update function_operate set method = 'POST' where url = '/category/del' and code
 update function_operate set url = '/category/tree' where url = '/category/lst' and code = 'viewcategory';
 insert into category (`name`,`parent_id`,`depth`,`status`,`priority`,`query_code`,`create_user`,`create_time`,`update_user`,`update_time`)
 values ('其他',null,1,1,1,'1',1,(UNIX_TIMESTAMP(now()) * 1000),1,(UNIX_TIMESTAMP(now()) * 1000));
+insert into function_operate(code,`name`,page_id,url,base_url,method,path_param,sort_index,create_time,update_time,create_user,update_user)
+VALUES ('modifyadvert','编辑广告',19,'/advert/upload',NULL,'POST',0,6,1427032133107,1427032133107,1,1);
+insert into privilege(privilege_master,privilege_master_value,privilege_access,privilege_access_value,privilege_operation,create_time,update_time,create_user,update_user)
+select 'role',1, 'function',id,'E',1427126487098,1427126487098,1,1 from function_operate where url in ('/advert/upload');

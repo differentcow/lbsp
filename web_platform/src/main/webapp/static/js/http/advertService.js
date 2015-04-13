@@ -15,6 +15,24 @@ define(['jquery'],function($){
     getDetailById : function(id){
         var url = this.service + 'core/advert|'+id;
         return $.getJSON(url);
+    },
+    modifyAdvert : function(obj){
+        var url = this.service+'core/advert|upt';
+        return $.ajax({
+            url: url,
+            type: "PUT",
+            data: obj,
+            contentType : 'application/json'
+        });
+    },
+    addAdvert : function(obj){
+        var url = this.service+'core/advert|add';
+        return $.ajax({
+            url: url,
+            type: "POST",
+            data: obj,
+            contentType : 'application/json'
+        });
     }
   };
 });

@@ -126,14 +126,14 @@ requirejs(['jquery','knockout','advertService','commonUtil','amplify','DT-bootst
                     $(self).prop('tag','-');
                     var html = '<table><tr><td>'+title_label+response.result.title + '</td></tr>';
                     if(response.result.type == 'L'){
-                        html += '<tr><td><img src="'+All580.imgBaseUrl+response.result.pic_path+'"></td></tr>';
+                        html += '<tr><td><img src="'+All580.imgBaseUrl+response.result.pic_path+'" onload="loadPic()" /></td></tr>';
                     }else{
                         html += '<tr><td>'+code_label+response.result.event+'</td></tr>';
                     }
                     html += '<tr><td>'+desc_label+response.result.description+'</td></tr></table>'
-                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="6">'+html+'</td></tr>');
+                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="7">'+html+'</td></tr>');
                     $('#expand_'+id).slideToggle('slow');
-                    util.adjustIframeHeight();
+//                    util.adjustIframeHeight();
                 }else{
                     parent.amplify.publish('status.alerts',sys_info,submit_error);
                     console.log(response.msg);
@@ -143,6 +143,9 @@ requirejs(['jquery','knockout','advertService','commonUtil','amplify','DT-bootst
                 console.log(error);
             });
         }
+    };
+    this.adjustPic = function(){
+      util.adjustIframeHeight();
     };
 
     this.datatable = ko.observable();
@@ -254,6 +257,9 @@ requirejs(['jquery','knockout','advertService','commonUtil','amplify','DT-bootst
   window.operateEvent = function(id,self){
       return epList.loadRef(self,id);
   }
+  window.loadPicture = function(){
+      return epList.adjustPic();
+  }
 
   $(document).ready(function(){
 	  epList.setUpTable();
@@ -290,6 +296,10 @@ function eachCheckBox(_self){
     $('input[name=foreach_chk_data]').each(function(){
         $(this).prop('checked',_chk);
     });
+}
+
+function loadPic(){
+    window.loadPicture();
 }
 
 function eventHandle(id,self){

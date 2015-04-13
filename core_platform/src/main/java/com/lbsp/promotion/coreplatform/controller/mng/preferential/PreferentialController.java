@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +68,9 @@ public class PreferentialController extends BaseUploadController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object detail(@PathVariable(value = "id") Integer id) {
-		Preferential rsp = service.getDetailById(id);
+		PreferentialRsp rsp = service.getDetailById(id);
+        rsp.setOrg_id(rsp.getId());
+        rsp.setOrg_category_id(rsp.getCategory_id());
 		return this.createBaseResult("query success", rsp);
 	}
 
@@ -115,6 +118,10 @@ public class PreferentialController extends BaseUploadController {
 	@ResponseBody
 	public Object save(HttpServletRequest request, @RequestBody PreferentialRsp obj) {
 		setCommonInfo(obj,request);
+        if ("O".equals(obj.getType())){
+            float off= new BigDecimal(obj.getNow_price()).divide(new BigDecimal(obj.getWas_price()),1, BigDecimal.ROUND_HALF_UP).floatValue();
+            obj.setOff(String.valueOf(off));
+        }
 		if(service.savePreferential(obj)){
 			return this.createBaseResult("add success", true);
 		}else{
@@ -134,6 +141,10 @@ public class PreferentialController extends BaseUploadController {
 	@ResponseBody
 	public Object update(HttpServletRequest request, @RequestBody PreferentialRsp obj) {
 		setCommonInfo(obj,request);
+        if ("O".equals(obj.getType())){
+            float off= new BigDecimal(obj.getNow_price()).divide(new BigDecimal(obj.getWas_price()),1, BigDecimal.ROUND_HALF_UP).floatValue();
+            obj.setOff(String.valueOf(off));
+        }
 		if(service.updatePreferential(obj)){
 			return this.createBaseResult("update success", true);
 		}else{

@@ -1,18 +1,19 @@
 package com.lbsp.promotion.core.service.preferential;
 
-import com.lbsp.promotion.core.dao.PreferentialDao;;
+import com.lbsp.promotion.core.dao.PreferentialDao;
 import com.lbsp.promotion.core.service.BaseServiceImpl;
 import com.lbsp.promotion.entity.base.PageResultRsp;
 import com.lbsp.promotion.entity.model.Preferential;
 import com.lbsp.promotion.entity.query.GenericQueryParam;
 import com.lbsp.promotion.entity.query.QueryKey;
-import com.lbsp.promotion.entity.query.SortCond;
 import com.lbsp.promotion.entity.response.PreferentialRsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+;
 
 /**
  *
@@ -69,7 +70,7 @@ public class PreferentialServiceImpl extends BaseServiceImpl<Preferential> imple
 	 * @return 
 	 */
 	@Transactional
-	public boolean savePreferential(Preferential preferential ) {
+	public boolean savePreferential(PreferentialRsp preferential) {
 		Long currentTime = System.currentTimeMillis();
 		if (preferential.getCreate_time() == null){
 			preferential.setCreate_time(currentTime);
@@ -77,8 +78,37 @@ public class PreferentialServiceImpl extends BaseServiceImpl<Preferential> imple
 		if (preferential.getUpdate_time() == null){
 			preferential.setUpdate_time(currentTime);
 		}
-		return this.insert(preferential) > 0;
+        Preferential p = buildPreferential(preferential);
+        int result =  this.insert(p);
+        if (result > 0){
+            Integer id = preferentialDao.getLastId();
+            preferential.setId(id);
+            preferentialDao.savePreferentialWithCategory(preferential);
+        }
+        return false;
 	}
+
+    private Preferential buildPreferential(PreferentialRsp rsp){
+        Preferential p = new Preferential();
+        p.setUpdate_user(rsp.getUpdate_user());
+        p.setDescription(rsp.getDescription());
+        p.setEnd_time(rsp.getEnd_time());
+        p.setMark(rsp.getMark());
+        p.setNow_price(rsp.getNow_price());
+        p.setOff(rsp.getOff());
+        p.setPic_path(rsp.getPic_path());
+        p.setShop_id(rsp.getShop_id());
+        p.setStart_time(rsp.getStart_time());
+        p.setStatus(rsp.getStatus());
+        p.setTitle(rsp.getTitle());
+        p.setType(rsp.getType());
+        p.setWas_price(rsp.getWas_price());
+        p.setUpdate_time(rsp.getUpdate_time());
+        p.setId(rsp.getId());
+        p.setCreate_time(rsp.getCreate_time());
+        p.setCreate_user(rsp.getCreate_user());
+        return p;
+    }
 
 	/**
 	 *
@@ -88,12 +118,23 @@ public class PreferentialServiceImpl extends BaseServiceImpl<Preferential> imple
 	 * @return 
 	 */
 	@Transactional
-	public boolean updatePreferential(Preferential preferential ) {
+	public boolean updatePreferential(PreferentialRsp preferential ) {
 		Long currentTime = System.currentTimeMillis();
 		if (preferential.getUpdate_time() == null){
 			preferential.setUpdate_time(currentTime);
 		}
-		return this.update(preferential) > 0;
+        int result = preferentialDao.updatePreferentialWithCategory(preferential.getOrg_id(),
+                preferential.getId(),
+                preferential.getCategory_id(),
+                preferential.getOrg_category_id(),
+                preferential.getUpdate_user(),
+                preferential.getUpdate_time());
+        if(result > 0){
+            Preferential p = buildPreferential(preferential);
+            return this.update(p) > 0;
+        }
+
+		return false;
 	}
 
 	/**
@@ -105,9 +146,13 @@ public class PreferentialServiceImpl extends BaseServiceImpl<Preferential> imple
 	 */
 	@Transactional
 	public boolean deletePreferential(Integer id) {
-		GenericQueryParam param = new GenericQueryParam();
-		param.put(new QueryKey("id", QueryKey.Operators.EQ),id);
-		return this.delete(param) > 0;
+        int result = preferentialDao.deletePreferentialWithCategory(id);
+        if (result > 0){
+            GenericQueryParam param = new GenericQueryParam();
+            param.put(new QueryKey("id", QueryKey.Operators.EQ),id);
+            return this.delete(param) > 0;
+        }
+		return false;
 	}
 
 	/**
@@ -119,7 +164,11 @@ public class PreferentialServiceImpl extends BaseServiceImpl<Preferential> imple
 	 */
 	@Transactional
 	public boolean batchDeletePreferential(List<Integer> ids){
-		return preferentialDao.batchDelete(ids) > 0;
+        int result = preferentialDao.deleteBatchPreferentialWithCategory(ids);
+        if (result > 0){
+            return preferentialDao.batchDelete(ids) > 0;
+        }
+		return false;
 	}
 
 }
