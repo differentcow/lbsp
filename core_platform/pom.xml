@@ -17,6 +17,14 @@
     <dependencies>
         <!-- Uses Castor for XML -->
         <dependency>
+            <groupId>MiPush</groupId>
+            <artifactId>MiPush</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.codehaus.castor</groupId>
             <artifactId>castor</artifactId>
         </dependency>

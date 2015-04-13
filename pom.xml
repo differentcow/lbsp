@@ -55,6 +55,9 @@
         <asm.version>3.3.1</asm.version>
         <ehcache.version>2.9.0</ehcache.version>
         <solrj.version>4.8.1</solrj.version>
+        <solrj.version>4.8.1</solrj.version>
+        <json-simple.version>1.1.1</json-simple.version>
+        <MiPush.version>1.0</MiPush.version>
     </properties>
 
     <dependencies>
@@ -70,6 +73,16 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>MiPush</groupId>
+                <artifactId>MiPush</artifactId>
+                <version>${MiPush.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.json-simple</groupId>
+                <artifactId>json-simple</artifactId>
+                <version>${json-simple.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.jaxrs</groupId>
                 <artifactId>jackson-jaxrs-json-provider</artifactId>
