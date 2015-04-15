@@ -49,6 +49,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
 		
 		/** 查询出用户基本信息 */
 		User tUser = userDao.getUserByAccount(account, Params.GenericStatus.ENABLED);
+        if(tUser == null){
+            return new UserRsp();
+        }
 		if(!passwordEncoder.matches(password, tUser.getPassword())){
 			throw new PasswordErrorException("密码错误");
 		}

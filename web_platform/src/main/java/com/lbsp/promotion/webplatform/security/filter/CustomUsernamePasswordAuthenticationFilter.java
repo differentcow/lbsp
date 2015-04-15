@@ -40,7 +40,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends
 		// 验证用户账号与密码是否正确
 		username = username.trim();
 		BaseResult<UserRsp> result =  this.permissionService.checkUserNamePwd(username, password);
-		if(result.getResult() == null){
+		if(result == null || result.getResult() == null){
 			throw new UserNameOrPwdNotExistException("login.error.certify");
 		}
 		// UsernamePasswordAuthenticationToken实现 Authentication

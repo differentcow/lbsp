@@ -49,7 +49,8 @@ public class PermissionController extends BaseController{
             res.setPageList(result.getPageList());
 			SessionMap.getSessionMapInstance().put(res.getUser().getSecurity_key(), res);
 		} else {
-			throw new UserNameNotExistException("用户名或密码错误");
+//			throw new UserNameNotExistException("用户名或密码错误");
+            return this.createBaseResult(500098,"登陆失败",result);
 		}
 		return this.createBaseResult("登陆成功",result);
 	}

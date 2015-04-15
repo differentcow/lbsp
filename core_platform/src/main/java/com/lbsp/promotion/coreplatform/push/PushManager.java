@@ -53,7 +53,21 @@ public class PushManager {
     }
 
     /**
-     * 根据Alias推送消息
+     * 根据Alias推送消息（单条）
+     *
+     * @param m
+     * @throws Exception
+     */
+    public void sendMessageByAlias(PushMessage m) throws Exception{
+        Constants.useOfficial();
+        Sender sender = new Sender(secretKey);
+        Message message = buildMessage(m.getTitle(),m.getPalload(),
+                    m.getDescription(),m.getTranslateWay(),m.getVoiceType());
+        sender.sendToAlias(message,m.getAlias(), retimes); //根据alias，发送消息到指定设备上，重试retimes。
+    }
+
+    /**
+     * 根据Alias推送消息（集合）
      *
      * @param msgs
      * @throws Exception
