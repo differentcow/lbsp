@@ -1,0 +1,38 @@
+/**
+ * Created by 自动创建工具 on ${date}.
+ */
+define(['jquery'],function($){
+  return {
+    service:All580.serverName+'/service/',
+    delete${upperModule}:function(ids){
+      var url = this.service+'core/${module}|del?ids='+ids;
+      return $.ajax({
+          url: url,
+          type: "DELETE",
+          contentType : 'application/json'
+      });
+    },
+    getDetailById : function(id){
+        var url = this.service + 'core/${module}|'+id;
+        return $.getJSON(url);
+    },
+    modify${upperModule} : function(obj){
+        var url = this.service+'core/${module}|upt';
+        return $.ajax({
+            url: url,
+            type: "PUT",
+            data: obj,
+            contentType : 'application/json'
+        });
+    },
+    add${upperModule} : function(obj){
+        var url = this.service+'core/${module}|add';
+        return $.ajax({
+            url: url,
+            type: "POST",
+            data: obj,
+            contentType : 'application/json'
+        });
+    }
+  };
+});

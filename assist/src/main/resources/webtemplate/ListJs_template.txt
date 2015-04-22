@@ -1,0 +1,275 @@
+/**
+ * Created by 自动创建工具 on ${date}.
+ */
+requirejs(['jquery','knockout','${module}Service',[if:isParamType]'paramsService'[/if],'commonUtil','amplify','DT-bootstrap','bootstrap','bootstrap-datepicker'],
+		function($,ko,${module}Service,[if:isParamType]paramsService[/if],util){
+  var sys_info = parent.app.getI18nMessage('common.sys.info');
+  var sys_error = parent.app.getI18nMessage('common.sys.error');
+  var submit_error = parent.app.getI18nMessage('common.sys.submit.fail');
+  var yes = parent.app.getI18nMessage('common.sys.label.yes');
+  var no = parent.app.getI18nMessage('common.sys.label.no');
+  var anonymous = parent.app.getI18nMessage('common.select.anonymous');
+  var atlease_tip = parent.app.getI18nMessage('common.sys.select.atleast.one');
+  var shop_label = parent.app.getI18nMessage('collection.shop.type.label');
+  var promotion_label = parent.app.getI18nMessage('collection.promotion.type.label');
+  var ${upperModule}ListViewModel = function() {
+    var me = this;
+    this.sel_text = ko.observable('-Select-');
+    this.name = ko.observable('');
+    this.title = ko.observable('');
+    this.type = ko.observable('');
+    this.typeOptions = ko.observableArray([]);
+    this.start_dateStr = ko.observable('');
+    this.end_dateStr = ko.observable('');
+    this.params = new Array();
+    this.paramAdd = 'add${module}';
+    this.paramDel = 'del${module}';
+    this.delIds = ko.observable('');
+    this.paramModify = 'modify${module}';
+    this.viewDel = ko.observable(false);
+    this.viewAdd = ko.observable(false);
+    this.canAdd = false;
+    this.canDel = ko.observable('');
+    this.canModify = false;
+    this.viewModify = ko.observable(false);
+    this.isUpdate = ko.observable(false);
+    this.initAuth = function () {
+      if (parent.app.checkAuth(me.paramAdd)) {
+          me.canAdd = true;
+          me.viewAdd(true);
+      }
+      if (parent.app.checkAuth(me.paramDel)) {
+          me.canDel = true;
+          me.viewDel(true);
+      }
+      if (parent.app.checkAuth(me.paramModify)) {
+          me.canModify = true;
+          me.viewModify(true);
+      }
+    };
+      this.seti18nText = function(){
+          $('title,label,span,div,th').each(function(){
+              var attr = $(this).attr('i18n');
+              if(attr !=null && attr != ''){
+                  $(this).text(parent.app.getI18nMessage(attr));
+              }
+          });
+          $('h4,button').each(function(){
+              var attr = $(this).attr('i18n');
+              if(attr !=null && attr != ''){
+                  $(this).html(parent.app.getI18nMessage(attr));
+              }
+          });
+      };
+    this.init = function () {
+        me.sel_text(parent.app.getI18nMessage("common.sys.select.text"));
+        me.seti18nText();
+        me.initAuth();
+        me.loadTypeList();
+		[if:hasDate]
+        me.datePickerInit();
+		[/if]
+    };
+	[if:hasDate]
+    //初始化Date Picker
+    this.datePickerInit = function(){
+        //start
+        var checkin = $('.dpd1').datepicker().on('changeDate', function (ev) {
+            var date = new Date(ev.date);
+            var date_str =  All580.DPGlobal.formatDateTime(date, 'yyyy-MM-dd');
+            me.start_dateStr(date_str);
+            if (ev.date.valueOf() > checkout.date.valueOf()) {
+                date.setDate(date.getDate() + 1);
+                checkout.setValue(date);
+            }
+            checkin.hide();
+            $('.dpd2')[0].focus();
+        }).data('datepicker');
+        //end
+        var checkout = $('.dpd2').datepicker().on('changeDate', function (ev) {
+            var date = new Date(ev.date);
+            var date_str =  All580.DPGlobal.formatDateTime(date, 'yyyy-MM-dd');
+            me.end_dateStr(date_str);
+            checkout.hide();
+        }).data('datepicker');
+    };
+	[/if]
+    var SelectModel = function (text, value) {
+        this.text = text;
+        this.val = value;
+    };
+    this.loadTypeList = function(){
+        me.typeOptions.push(new SelectModel(shop_label,'S'));
+        me.typeOptions.push(new SelectModel(promotion_label,'G'));
+    };
+	[if:isDetail]
+	this.adjustPic = function(){
+      util.adjustIframeHeight();
+    };
+    this.loadRef = function(self,id){
+        if($(self).prop('tag') == '-'){
+            $('#expand_'+id).hide();
+            $(self).prop('tag','+');
+            util.adjustIframeHeight();
+        }else{
+            var tmp = document.getElementById('expand_'+id);
+            if(typeof  tmp != 'undefined' && tmp != null){
+                $('#expand_'+id).show();
+                $(self).prop('tag','-');
+                util.adjustIframeHeight();
+                return;
+            }
+            $.when(${module}Service.getDetailById(id)).done(function (response) {
+                if(response.state.code==200000) {
+                    console.log('操作成功');
+                    $(self).prop('tag','-');
+                    var html = '<table><tr><td>'+title_label+response.result.title + '</td></tr>';
+                    if(response.result.type == 'L'){
+                        html += '<tr><td><img src="'+All580.imgBaseUrl+response.result.pic_path+'" onload="loadPic()" /></td></tr>';
+                    }else{
+                        html += '<tr><td>'+code_label+response.result.event+'</td></tr>';
+                    }
+                    html += '<tr><td>'+desc_label+response.result.description+'</td></tr></table>'
+                    $(self).parent().parent().after('<tr style="display:none;" id="expand_'+id+'"><td colspan="7">'+html+'</td></tr>');
+                    $('#expand_'+id).slideToggle('slow');
+                }else{
+                    parent.amplify.publish('status.alerts',sys_info,submit_error);
+                    console.log(response.msg);
+                }
+            }).fail(function (error) {
+                parent.amplify.publish('status.alerts',sys_info,sys_error);
+                console.log(error);
+            });
+        }
+    };
+	[/if]
+    this.datatable = ko.observable();
+    this.setUpTable = function () {
+      var settings = All580.dataTable;
+      settings['sAjaxSource'] = All580.serverName + '/service/core/${module}|lst';
+      settings['fnServerParams'] = function (aoData) {
+        aoData.push({ "name": "name", "value": me.params['name']});
+        aoData.push({ "name": "type", "value": me.params['type']});
+        aoData.push({ "name": "from", "value": me.params['from']});
+        aoData.push({ "name": "to", "value": me.params['to']});
+      };
+      settings['fnDrawCallback'] = function(){
+    	  util.adjustIframeHeight();
+      };
+      settings['aoColumns'] = [
+        {   //checkbox
+        	'sDefaultContent': '',
+        	'fnRender': function (obj) {
+               return '<input style=\'margin-left:10px;cursor:pointer;\' name=\'foreach_chk_data\' type=\'checkbox\'id=\''+obj.aData.id+'\' >';
+        	}
+        },
+        { 'mData': 'customerName','sDefaultContent': ''}, //所属人
+        {//收藏类型
+            'sDefaultContent': '',
+            'fnRender': function (obj) {
+                if(typeof obj.aData.type == 'S'){
+                    return '<span class="label label-info">'+shop_label+'</span>';
+                }else{
+                    return '<span class="label label-info">'+promotion_label+'</span>';
+                }
+            }
+        },
+        {//收藏内容
+            'sDefaultContent': '',
+            'fnRender': function (obj) {
+                if(typeof obj.aData.type == 'S'){
+                    return obj.aData.shopName;
+                }else{
+                    return obj.aData.title;
+                }
+            }
+        },
+		{ 	//创建时间
+        	'sDefaultContent': '',
+        	'fnRender': function (obj) {
+        		return All580.DPGlobal.formatDateTime(obj.aData.create_time, 'yyyy-MM-dd HH:mm:ss');
+        	}
+		}
+      ];
+      var dataTable = $('#dynamic-table').dataTable(settings);
+        me.datatable(dataTable);
+      $('#search').click(function() {
+          me.params['name']=me.name();
+          me.params['type']=me.type();
+          me.params['from']=me.start_dateStr();
+          me.params['to']=me.end_dateStr();
+          dataTable.fnDraw();
+      });
+
+    };
+    this.delObject = function (obj) {
+        var deferred = ${module}Service.delete${upperModule}(obj);
+        $.when(deferred).done(function (response) {
+            if(response.state.code==200000) {
+                console.log('删除成功');
+                me.params['name']=me.name();
+                me.params['type']=me.type();
+                me.params['from']=me.start_dateStr();
+                me.params['to']=me.end_dateStr();
+                me.datatable().fnDraw();
+            }else{
+                parent.amplify.publish('status.alerts',sys_info,submit_error);
+                console.log(response.msg);
+            }
+        }).fail(function (error) {
+            parent.amplify.publish('status.alerts',sys_info,sys_error);
+            console.log(error);
+        });
+    };
+  };
+  var model = new ${upperModule}ListViewModel();
+  model.init();
+  ko.applyBindings(model);
+  [if:isDetail]
+  window.operateEvent = function(id,self){
+      return model.loadRef(self,id);
+  }
+  window.loadPicture = function(){
+      return epList.adjustPic();
+  }
+  [/if]
+  $(document).ready(function(){
+	  model.setUpTable();
+      $('#sure_btn').click(function(){
+          $('#myModal').modal('toggle');
+          model.delObject(model.delIds());
+      });
+
+      //删除事件
+      $('#delete').click(function(e){
+          var ary = [];
+          $('input[name=foreach_chk_data]').each(function(){
+              if($(this).prop('checked')){
+                  ary.push($(this).prop('id'));
+              }
+          });
+          if(ary.length <= 0){
+              parent.amplify.publish('status.alerts',sys_info,atlease_tip);
+              return;
+          }
+          model.delIds(ary.toString());
+          $('#myModal').modal('toggle');
+      });
+  });
+});
+
+function eachCheckBox(_self){
+    var _chk = $(_self).prop('checked');
+    $('input[name=foreach_chk_data]').each(function(){
+        $(this).prop('checked',_chk);
+    });
+}
+[if:isDetail]
+function loadPic(){
+    window.loadPicture();
+}
+
+function eventHandle(id,self){
+    window.operateEvent(id,self);
+}
+[/if]
